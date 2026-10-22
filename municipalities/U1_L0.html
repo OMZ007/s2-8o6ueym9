@@ -1,22 +1,2067 @@
 <!doctype html>
+<!--
+================================================================================
+AI DESIGN BRIEF · SAMAI 2 page template  (hidden — never rendered)
+Full rules: ../SAMAI2-DESIGN-GUIDE.md — the FOUNDATION (read it first; it wins over this summary).
+Every element has a fixed PATTERN there (hero, trail, cards, terms explorer, quiz…):
+when you meet one, apply its pattern; never redesign it. Most complete reference
+page: redesign/U4_L0.html — start new pages from it.
+
+WHAT THIS IS
+- One self-contained Arabic RTL HTML page per programme item. Pages are linked in order:
+  user-approved previous/next links at the end of each original page (2026-10-08).
+- This file is the reference. New pages reuse its tokens, components and motion
+  exactly, so every page looks generated at the same time by the same hand.
+
+HARD RULES
+1. Educational text is locked: copy approved titles/lessons/paragraphs exactly —
+   never add, drop, reword or "improve" a character. UI labels (counts like
+   "درسان", kickers) may be written/corrected. Never invent content.
+2. Use only the :root tokens. No raw colours, radii, spacings or shadows.
+   Text colours: --ink #1F2A37 · --text-primary #002366 · --text #384250 ·
+   --muted #6C737F · --on #FFF · --on-2 #FFF 80% · --on-3 #FFF 70%. Nothing else.
+   Surfaces: white page + navy tints (--navy-50…900). Accent: --brand-teal only.
+   Questions / quizzes / self-checks always wear the GREEN family (--a-50…900),
+   same shapes and states, so they never read as explanation.
+3. Radius 8 (chips, rows, icon tiles, buttons) · 12 (cards, panels) · 20 (hero).
+   Space on the 4px scale (--space-1…8). Controls 32 / 40 / 48 px.
+4. Font: IBM Plex Sans Arabic. Icons: Font Awesome 6.5 solid, decorative
+   (aria-hidden). No emoji, no illustrations of people, no playful colours.
+5. Header = copy the .bar block verbatim (logo data-URI, sticky, 3px brand line).
+   First line inside the hero = the .trail (programme › unit › lesson), plain
+   text, built from PAGE.trail; the last step is this page's level, its name is h1.
+6. Full width: --gutter 80px (40 ≤1100, 24 ≤860, 16 ≤560). Never a max-width.
+7. Motion: calm, formal, meaningful, one accent colour; pause off-screen;
+   everything still under prefers-reduced-motion. No bounce, no confetti.
+8. Clickable things (and only those) get hover/active states + keyboard focus.
+9. Content lives in one data object (PROGRAM / UNIT) in the script; markup is built
+   from it with the el() helper. Keep that split.
+10. Before delivering: no horizontal scroll 320→2560px, no clipped text,
+    AA contrast, text diffed against the approved source.
+================================================================================
+-->
 <html lang="ar" dir="rtl">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<title>سماي 2 — البلديات والإسكان</title>
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@400;600;700&amp;display=swap">
-<link rel="stylesheet" href="../assets/samai.css">
+<meta name="theme-color" content="#FFFFFF">
+<title>سماي 2 — الوحدة 1: الذكاء الاصطناعي في البلديات والإسكان</title>
+<link rel="icon" href="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9Ii01NSAwIDU5MSA1OTEiPjxsaW5lYXJHcmFkaWVudCBpZD0iczJsIiB4MT0iMCIgeTE9IjEiIHgyPSIwIiB5Mj0iMCI+PHN0b3Agb2Zmc2V0PSIwIiBzdG9wLWNvbG9yPSIjOTZDNzREIi8+PHN0b3Agb2Zmc2V0PSIuMzgiIHN0b3AtY29sb3I9IiM0Q0JDOTQiLz48c3RvcCBvZmZzZXQ9Ii44MSIgc3RvcC1jb2xvcj0iIzI2MzU3MCIvPjxzdG9wIG9mZnNldD0iMSIgc3RvcC1jb2xvcj0iIzI2MzU3MCIvPjwvbGluZWFyR3JhZGllbnQ+PHBhdGggZmlsbD0iI2ZmZiIgZD0iTTY4IDY1aDM0MHY0NjVINjh6Ii8+PHBhdGggZmlsbD0idXJsKCNzMmwpIiBkPSJNMTc5IDAgMCAxMDN2NDg4aDQ4MVYwWk03OSAyNTFxLTEtMzkgOS03MiAxMS0zNSAzMi01OSAyMS0yNiA1My00MHQ3My0xNHEzMiAwIDYwIDkgMjggMTEgNTEgMjlhMTM3IDEzNyAwIDAxNDggMTA3IDE1NCAxNTQgMCAwMS0yNSA4NHEtMTEgMTYtMjYgMzAtMTQgMTQtMzEgMjVsLTY3IDQ1YTQwOSA0MDkgMCAwMC00NiA0MGgxOTd2OTRINjl2LTlxMC00MCAxMS02OSAxMi0zMCAzMi01MyAxOS0yMyA0NS00Mmw4NC01OXExNi0xMCAyOS0yMiAxMi0xMiAyMS0yNiA4LTEzIDgtMzEtMS0yOC0xNi00M2E1NSA1NSAwIDAwLTQxLTE2cS0xOCAwLTI4IDgtMTIgNy0xOSAyMS03IDEzLTExIDI5bC0zIDM0djlINzl6Ii8+PC9zdmc+">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@300;400;500;600;700&display=swap">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
 <style>
-body{margin:0;min-height:100vh;display:grid;place-items:center;background:var(--page);font-family:"IBM Plex Sans Arabic",sans-serif;color:var(--primary);text-align:center}
-main{padding:48px 24px}
-h1{margin:0 0 12px;font-size:clamp(26px,4vw,38px)}
-p{margin:0;opacity:.75}
+/* ======================================================================
+   SAMAI 2 · page template — a small design system
+   Every value below comes from the tokens in :root. When building a new
+   page, pick from the scales; do not type raw numbers into components.
+
+   Radius   8  small pieces (chips, tags, icon tiles, buttons, list rows)
+           12  cards and panels
+           20  the hero (the largest radius used anywhere)
+   Space    4 · 8 · 12 · 16 · 20 · 24 · 32 · 48 (a 4px grid)
+   Sizes    32 small control · 40 medium control · 48 large control
+   ====================================================================== */
+:root{
+  /* ---- colour: text (the approved palette — every text colour is one of these) */
+  --ink:#1F2A37;          /* Text Display */
+  --text-primary:#002366; /* Text Primary */
+  --text:#384250;         /* Text Paragraph Primary */
+  --muted:#6C737F;        /* Text Paragraph Secondary */
+  --on:#FFFFFF;           /* Text On Color Primary */
+  --on-2:#FFFFFFCC;       /* Text On Color Secondary (80%) */
+  --on-3:#FFFFFFB3;       /* Text On Color Tertiary (70%) */
+  /* ---- colour: brand accents (header line, signals) */
+  --brand-primary:#2F3068; --brand-teal:#00AD8B; --brand-green:#7FC242;
+  /* ---- colour: surfaces — the navy family (tints of #002366) */
+  --navy-900:#00133D; --navy-800:#002366; --navy-700:#0B3572; --navy-600:#1D4A8C;
+  --navy-300:#A9BAD6; --navy-200:#D3DDEC; --navy-150:#DCE5F2; --navy-100:#E8EEF7; --navy-50:#F4F7FC;
+  --bg:#FFFFFF; --surface:#FFFFFF; --line:#E3E9F2;
+  /* ---- colour: disabled — one neutral grey for every inactive control, in every identity */
+  --disabled-bg:#ECEEF1; --disabled-line:#DFE2E7;
+  /* ---- colour: neutral greys — the body of a question (stem and options) stays neutral so its content reads clearly */
+  --gray-50:#F7F8FA; --gray-100:#F1F3F5; --gray-200:#E2E5EA; --gray-300:#C9CED6;
+  --on-surface-1:#FFFFFF0F; --on-surface-2:#FFFFFF1F; --on-line:#FFFFFF2E; /* glass on navy */
+
+  /* ---- radius */
+  --radius-sm:8px; --radius-md:12px; --radius-lg:20px;
+  /* ---- space */
+  --space-1:4px; --space-2:8px; --space-3:12px; --space-4:16px; --space-5:20px; --space-6:24px; --space-7:32px; --space-8:48px;
+  /* ---- sizes */
+  --control-sm:32px; --control-md:40px; --control-lg:48px;
+  /* ---- type */
+  --font:"IBM Plex Sans Arabic","Segoe UI",Tahoma,sans-serif;
+  --fs-1:13px; --fs-2:14px; --fs-3:15px; --fs-4:16px;
+  /* ---- elevation */
+  --shadow-sm:0 1px 2px #00133D0A,0 4px 12px #00133D0A;
+  --shadow-md:0 12px 28px #00133D17;
+  --shadow-lg:0 20px 44px #00133D2E;
+  /* ---- layout: one gutter for the header and every section; the page always fills the screen */
+  --gutter:80px; --header:68px;
+  /* ---- motion */
+  --ease:cubic-bezier(.2,.7,.2,1);
+}
+*,*::before,*::after{box-sizing:border-box}
+html{scroll-behavior:smooth;scroll-padding-top:calc(var(--header) + var(--space-5))}
+body{margin:0;font-family:var(--font);color:var(--text);background:var(--bg);line-height:1.8;font-size:var(--fs-3);-webkit-font-smoothing:antialiased;overflow-x:clip}
+h1,h2,h3{color:var(--ink);margin:0;line-height:1.4}
+p{margin:0}
+button{font:inherit;color:inherit}
+a{color:var(--text-primary)}
+:focus-visible{outline:3px solid #1D4A8C80;outline-offset:2px;border-radius:var(--radius-sm)}
+ul,ol{margin:0;padding:0;list-style:none}
+.container{width:100%;padding-inline:var(--gutter)}
+
+/* ---- Header (fixed template: identical on every page) -------------------- */
+/* stays at the top while the page scrolls; a soft shadow appears once content passes under it */
+.bar{position:sticky;top:0;z-index:50;background:var(--surface);transition:box-shadow var(--dur-2) var(--ease)}
+.bar.is-stuck{box-shadow:0 6px 18px #00133D14}
+.bar::after{content:"";position:absolute;inset-inline:0;bottom:0;height:3px;background:linear-gradient(to left,var(--brand-primary),var(--brand-teal) 55%,var(--brand-green))}
+.bar-inner{height:var(--header);padding:0 var(--gutter) 3px;display:flex;align-items:center;justify-content:space-between;gap:var(--space-4)}
+.bar-logo{display:block;height:38px;width:auto}
+.bar-meta{display:flex;align-items:center;gap:var(--space-3);color:var(--muted);font-size:var(--fs-2);font-weight:600}
+.bar-meta:empty{display:none}
+
+/* ---- Hero ------------------------------------------------------------------
+   Deep navy, calm and formal. The one moving piece is the programme's six
+   units on a ring, lit in order. One accent only — the brand teal. */
+.hero-wrap{padding-top:var(--space-6)}
+.hero{position:relative;isolation:isolate;display:grid;grid-template-columns:minmax(0,1fr) auto;gap:var(--space-8);align-items:center;padding:var(--space-7) var(--space-8);border-radius:var(--radius-lg);overflow:hidden;color:var(--on);
+  background:radial-gradient(640px 380px at 0% 110%,#00AD8B24,transparent 65%),linear-gradient(135deg,var(--navy-900) 0%,var(--navy-800) 55%,var(--navy-700) 100%);
+  box-shadow:var(--shadow-lg),inset 0 0 0 1px #FFFFFF14}
+/* ---- Trail: where this page sits — programme › unit › lesson (any depth).
+   Plain text, never links: the LMS owns navigation. The last step is this
+   page's own level ("الوحدة الأولى", "الدرس الثالث"); its title is the h1. */
+.trail{display:flex;flex-wrap:wrap;align-items:center;gap:var(--space-1) var(--space-2);margin:0 0 var(--space-3);padding:0;font-size:clamp(14px,1vw,16px);line-height:1.5}
+.trail li{display:inline-flex;align-items:center;gap:var(--space-2);font-weight:500;color:var(--on-2)}
+.trail li:first-child::before{content:"";flex:none;width:12px;height:3px;border-radius:2px;background:var(--brand-teal)}
+.trail li + li::before{content:"\f053";font:var(--fa-font-solid);font-size:10px;color:var(--on-3)}
+.trail li:last-child{font-weight:600;color:var(--on)}
+.hero h1{font-size:clamp(28px,2.7vw,52px);font-weight:700;color:var(--on);line-height:1.3;letter-spacing:0;white-space:nowrap}
+/* key facts: one panel, the number first so it reads at a glance */
+.hero .tags{display:inline-flex;flex-wrap:wrap;margin-top:var(--space-5);padding:var(--space-1);border-radius:var(--radius-md);background:var(--on-surface-1);border:1px solid var(--on-surface-2)}
+.hero .stat{display:flex;align-items:center;gap:var(--space-3);min-height:var(--control-lg);padding:0 var(--space-4)}
+.hero .stat+.stat{border-inline-start:1px solid var(--on-surface-2)}
+.hero .stat i{display:grid;place-items:center;width:var(--control-sm);height:var(--control-sm);border-radius:var(--radius-sm);background:var(--on-surface-2);color:var(--on-2);font-size:var(--fs-2)}
+.hero .stat b{font-size:22px;font-weight:700;line-height:1;color:var(--on);font-variant-numeric:tabular-nums}
+.hero .stat span{font-size:var(--fs-2);font-weight:500;color:var(--on-2)}
+/* the facts sit apart: a small gap, and the divider drawn in the middle of it, so a highlighted fact never touches its neighbour */
+.hero .tags{gap:var(--space-1)}
+.hero .stat{position:relative}
+.hero .stat+.stat{border-inline-start:0}
+.hero .stat+.stat::before{content:"";position:absolute;inset-inline-start:calc(var(--space-1) / -2 - .5px);top:25%;bottom:25%;width:1px;background:var(--on-surface-2)}
+/* the programme's six units on a ring, lit one after the other in order;
+   icons only. The ring is an illustration, so its pieces stay circles. */
+.orbit{--o:228px;position:relative;justify-self:center;width:var(--o);height:var(--o)}
+.orbit svg{position:absolute;inset:0;width:100%;height:100%;overflow:visible}
+.orbit .track{fill:none;stroke:#FFFFFF1F;stroke-width:1.5}
+.orbit .arc{fill:none;stroke:var(--brand-teal);stroke-width:2.5;stroke-linecap:round;transition:stroke-dashoffset 1s var(--ease)}
+.orbit .inner{fill:none;stroke:#FFFFFF14;stroke-width:1;stroke-dasharray:2 7;transform-origin:50% 50%;transform-box:view-box;animation:turn 90s linear infinite}
+.orbit .spoke{stroke:#FFFFFF12;stroke-width:1;transition:stroke var(--dur-5) var(--ease)}
+.orbit .spoke.on{stroke:#00AD8B99}
+@keyframes turn{to{transform:rotate(360deg)}}
+.orbit .core{position:absolute;left:50%;top:50%;display:grid;place-items:center;width:34%;aspect-ratio:1;transform:translate(-50%,-50%);border-radius:50%;background:radial-gradient(circle at 50% 35%,#FFFFFF1F,#FFFFFF08);border:1px solid var(--on-line);color:var(--on);font-size:calc(var(--o) * .11);box-shadow:0 0 0 6px #FFFFFF06}
+.orbit .node{position:absolute;display:grid;place-items:center;width:calc(var(--o) * .18);height:calc(var(--o) * .18);transform:translate(-50%,-50%);border-radius:50%;background:#0A2A5C;border:1px solid #FFFFFF33;color:var(--on-3);font-size:calc(var(--o) * .066);transition:background var(--dur-4) var(--ease),color var(--dur-4) var(--ease),border-color var(--dur-4) var(--ease),box-shadow var(--dur-4) var(--ease),transform var(--dur-4) var(--ease)}
+.orbit .node.done{border-color:#00AD8B99;color:var(--on)}
+.orbit .node.on{background:var(--surface);border-color:var(--surface);color:var(--text-primary);transform:translate(-50%,-50%) scale(1.1);box-shadow:0 0 0 4px #00AD8B38,0 8px 18px #00133D66}
+
+/* ---- Sections ------------------------------------------------------------ */
+.layout{padding-block:var(--space-8)}
+.flow{position:relative}
+.section-head{display:flex;align-items:flex-end;justify-content:space-between;gap:var(--space-4);margin-bottom:var(--space-5)}
+.kicker{display:block;margin-bottom:var(--space-1);font-size:var(--fs-1);font-weight:600;color:var(--muted)}
+.section-head h2{font-size:clamp(22px,2.2vw,28px);font-weight:700;color:var(--text-primary)}
+
+/* ---- Unit cards: open and close ------------------------------------------
+   Closed: a light head in the navy tint. Open (active): the head turns deep
+   navy, the number white, and the lessons drop down. The whole head is one
+   button inside the unit heading (disclosure pattern).                     */
+.path{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:var(--space-5);align-items:start}
+@media (min-width:1600px){.path{grid-template-columns:repeat(3,minmax(0,1fr))}}
+.u-card{--pad:var(--space-6);border-radius:var(--radius-md);background:var(--surface);overflow:hidden;border:1px solid var(--navy-200);box-shadow:var(--shadow-sm);transition:box-shadow var(--dur-3) var(--ease),border-color var(--dur-3) var(--ease)}
+.u-h{margin:0;font:inherit}
+.u-head{display:flex;flex-direction:column;width:100%;padding:0;border:0;background:none;text-align:start;cursor:pointer;font:inherit;color:inherit}
+.u-head:focus-visible{outline:3px solid var(--navy-600);outline-offset:-3px;border-radius:var(--radius-md)}
+.u-band{display:flex;align-items:center;justify-content:space-between;padding:var(--space-5) var(--pad);background:var(--navy-100);transition:background var(--dur-3) var(--ease)}
+.u-num{font-size:40px;font-weight:700;line-height:1;color:var(--text-primary);font-variant-numeric:tabular-nums;transition:color var(--dur-3) var(--ease)}
+.u-ic{display:grid;place-items:center;width:var(--control-md);height:var(--control-md);border-radius:var(--radius-sm);background:var(--surface);border:1px solid var(--navy-200);color:var(--text-primary);font-size:17px;transition:background var(--dur-3) var(--ease),color var(--dur-3) var(--ease),border-color var(--dur-3) var(--ease)}
+.u-main{display:block;padding:var(--space-5) var(--pad)}
+/* titles take only the room they need; cards side by side are evened out in the script */
+.u-title{display:-webkit-box;-webkit-box-orient:vertical;-webkit-line-clamp:2;overflow:hidden;font-size:clamp(19px,1.75vw,22px);font-weight:700;line-height:1.6;color:var(--text-primary)}
+.u-bar{display:flex;align-items:center;justify-content:space-between;gap:var(--space-3);margin-top:var(--space-3);padding-top:var(--space-3);border-top:1px dashed var(--navy-200)}
+/* chip: the same shape wherever a small label appears */
+/* one layer: the icon and the text on the same chip, the same space before the icon as after the text */
+.u-count{display:inline-flex;align-items:center;gap:var(--space-2);min-height:var(--control-sm);padding:0 var(--space-3);border-radius:var(--radius-sm);background:var(--navy-50);font-size:var(--fs-2);font-weight:600;color:var(--text);transition:background var(--dur-3) var(--ease),color var(--dur-3) var(--ease)}
+.u-count::before{content:"\f02d";font:var(--fa-font-solid);font-size:12px;color:var(--muted);transition:color var(--dur-3) var(--ease)}
+.u-bar .chev{display:grid;place-items:center;width:var(--control-md);height:var(--control-md);border-radius:var(--radius-sm);background:var(--navy-50);border:1px solid var(--navy-100);color:var(--text-primary);font-size:var(--fs-1);transition:transform var(--dur-3) var(--ease),background var(--dur-2) var(--ease),color var(--dur-2) var(--ease),border-color var(--dur-2) var(--ease)}
+@media (hover:hover){
+  .u-head:hover .u-band{background:var(--navy-150)}
+  .u-head:hover .chev{border-color:var(--navy-300)}
+}
+/* open = active */
+.unit-row.is-open .u-card{border-color:var(--navy-300);box-shadow:var(--shadow-md)}
+.unit-row.is-open .u-band{background:linear-gradient(135deg,var(--navy-900),var(--navy-800) 60%,var(--navy-700))}
+.unit-row.is-open .u-num{color:var(--on)}
+.unit-row.is-open .u-ic{background:var(--on-surface-2);color:var(--on);border-color:var(--on-line)}
+/* open: the chip takes the lesson-number style (navy, white), so it reads as the key to the lessons below */
+.unit-row.is-open .u-count{background:var(--navy-800);color:var(--on)}
+.unit-row.is-open .u-count::before{color:var(--on)}
+.unit-row.is-open .u-bar .chev{transform:rotate(180deg);background:var(--navy-800);border-color:var(--navy-800);color:var(--on)}
+/* the fold (hidden from assistive tech while closed) */
+.u-fold{display:grid;grid-template-rows:0fr;visibility:hidden;transition:grid-template-rows var(--dur-4) var(--ease),visibility 0s .45s var(--ease)}
+.u-fold>div{overflow:hidden}
+.unit-row.is-open .u-fold{grid-template-rows:1fr;visibility:visible;transition:grid-template-rows var(--dur-4) var(--ease),visibility 0s var(--ease)}
+/* the lessons: a panel of rows, joined by a line through their numbers */
+.u-card .lessons{--row-x:var(--space-4);position:relative;display:grid;align-content:start;gap:var(--space-2);margin:0 var(--space-4) var(--space-4);padding:var(--space-2);border-radius:var(--radius-md);background:var(--navy-50)}
+.u-card .lessons::before{content:"";position:absolute;inset-inline-start:calc(var(--space-2) + var(--row-x) + 20px);top:36px;bottom:36px;width:2px;border-radius:2px;background:var(--navy-200)}
+.u-card .lessons li{position:relative;display:flex;align-items:center;gap:var(--space-3);min-height:56px;padding:var(--space-3) var(--row-x);border-radius:var(--radius-sm);background:var(--surface);border:1px solid var(--navy-100);opacity:0;transform:translateY(6px);transition:opacity var(--dur-2) var(--ease),transform var(--dur-3) var(--ease)}
+.unit-row.is-open .lessons li{opacity:1;transform:none}
+.unit-row.is-open .lessons li:nth-child(2){transition-delay:.06s}
+.unit-row.is-open .lessons li:nth-child(3){transition-delay:.12s}
+.u-card .lessons .num{position:relative;z-index:1;flex:none;display:grid;place-items:center;min-width:var(--control-md);height:var(--control-sm);padding:0 var(--space-2);border-radius:var(--radius-sm);background:var(--navy-800);color:var(--on);font-size:var(--fs-2);font-weight:700;direction:ltr;font-variant-numeric:tabular-nums;box-shadow:0 0 0 4px var(--surface)}
+.u-card .lessons .hl{font-size:var(--fs-4);font-weight:600;line-height:1.6;color:var(--ink)}
+
+/* ---- Shared page pieces (built from the tokens, for unit and lesson pages) --
+   The hero intro, info boxes, numbered lists and chips all reuse the unit-card
+   shapes above: white, --navy-200 border, --radius-md; rows --radius-sm.     */
+.hero .lead{max-width:72ch;margin-top:var(--space-3);font-size:var(--fs-4);line-height:1.9;color:var(--on-2)}
+.section+.section{margin-top:var(--space-8)}
+.section-head p{margin-top:var(--space-1);font-size:var(--fs-2);color:var(--muted)}
+/* info box: a card with a small head (icon in a 40px square) */
+.box{border-radius:var(--radius-md);background:var(--surface);border:1px solid var(--navy-200);box-shadow:var(--shadow-sm);padding:var(--space-6)}
+.box-head{display:flex;align-items:center;gap:var(--space-3);margin-bottom:var(--space-3)}
+.box-head h3{font-size:var(--fs-4);font-weight:700;color:var(--text-primary)}
+.ic-tile{flex:none;display:grid;place-items:center;width:var(--control-md);height:var(--control-md);border-radius:var(--radius-sm);background:var(--navy-50);border:1px solid var(--navy-100);color:var(--text-primary);font-size:var(--fs-4)}
+.box p{font-size:var(--fs-4);line-height:1.95;color:var(--text)}
+/* numbered list: the lessons panel, outside a card */
+.steps{--row-x:var(--space-4);position:relative;display:grid;align-content:start;gap:var(--space-2);padding:var(--space-2);border-radius:var(--radius-md);background:var(--navy-50)}
+.steps::before{content:"";position:absolute;inset-inline-start:calc(var(--space-2) + var(--row-x) + 20px);top:36px;bottom:36px;width:2px;border-radius:2px;background:var(--navy-200)}
+.steps li{position:relative;display:flex;align-items:center;gap:var(--space-3);min-height:56px;padding:var(--space-3) var(--row-x);border-radius:var(--radius-sm);background:var(--surface);border:1px solid var(--navy-100)}
+.steps .num{position:relative;z-index:1;flex:none;display:grid;place-items:center;min-width:var(--control-md);height:var(--control-sm);padding:0 var(--space-2);border-radius:var(--radius-sm);background:var(--navy-800);color:var(--on);font-size:var(--fs-2);font-weight:700;direction:ltr;font-variant-numeric:tabular-nums;box-shadow:0 0 0 4px var(--surface)}
+.steps .txt{font-size:var(--fs-4);font-weight:600;line-height:1.6;color:var(--ink)}
+.steps .ic{flex:none;margin-inline-start:auto;color:var(--muted);font-size:var(--fs-2)}
+/* chip (7.5) */
+.chip{display:inline-flex;align-items:center;gap:var(--space-2);min-height:var(--control-sm);padding:0 var(--space-3);border-radius:var(--radius-sm);background:var(--navy-50);font-size:var(--fs-2);font-weight:600;color:var(--text)}
+.chip i{font-size:12px;color:var(--muted)}
+.u-count.topics::before{content:"\f0ca"}
+/* a real (rare) button */
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:var(--space-2);min-height:var(--control-md);padding:0 var(--space-5);border:0;border-radius:var(--radius-sm);background:var(--navy-800);color:var(--on);font-size:var(--fs-3);font-weight:600;cursor:pointer;transition:background var(--dur-2) var(--ease)}
+.btn:hover{background:var(--navy-700)}
+.btn[hidden]{display:none}
+
+/* ---- Terms: explorer -------------------------------------------------------
+   A list of the unit's terms (tabs) beside one card that shows the chosen
+   term. Reading progress sits on top of the list; every term read gets a
+   check. Prev / next live inside the card (they move between terms only). */
+.explorer{display:grid;grid-template-columns:320px minmax(0,1fr);gap:var(--space-5);align-items:stretch}
+.ex-side{display:flex;flex-direction:column;gap:var(--space-2);padding:var(--space-2);border-radius:var(--radius-md);background:var(--navy-50);border:1px solid var(--navy-100)}
+.ex-read{display:grid;gap:var(--space-2);padding:var(--space-2) var(--space-3) var(--space-3)}
+.ex-read-top{display:flex;align-items:center;justify-content:space-between;gap:var(--space-3);font-size:var(--fs-2);font-weight:600;color:var(--text)}
+.ex-read-top span{display:inline-flex;align-items:center;gap:var(--space-2)}
+.ex-read-top b{font-weight:700;color:var(--text-primary);font-variant-numeric:tabular-nums}
+.ex-read-top i{font-size:12px;color:var(--muted);transition:color var(--dur-2) var(--ease)}
+.ex-read.is-done .ex-read-top i{color:var(--brand-teal)}
+.bar-track{height:4px;border-radius:2px;background:var(--navy-150);overflow:hidden}
+.bar-track i{display:block;height:100%;width:0;border-radius:2px;background:var(--brand-teal);transition:width var(--dur-4) var(--ease)}
+.ex-list{display:grid;gap:var(--space-1)}
+.ex-tab{display:flex;align-items:center;gap:var(--space-3);width:100%;min-height:var(--control-md);padding:var(--space-1) var(--space-3);border:0;border-radius:var(--radius-sm);background:none;text-align:start;font-size:var(--fs-3);font-weight:600;line-height:1.5;color:var(--ink);cursor:pointer;transition:background var(--dur-2) var(--ease),color var(--dur-2) var(--ease)}
+.ex-tab .n{flex:none;display:grid;place-items:center;width:26px;height:26px;border-radius:var(--radius-sm);background:var(--surface);border:1px solid var(--navy-100);font-size:12px;font-weight:700;color:var(--muted);font-variant-numeric:tabular-nums;transition:background var(--dur-2) var(--ease),color var(--dur-2) var(--ease),border-color var(--dur-2) var(--ease)}
+.ex-tab .t{flex:1;min-width:0}
+.ex-tab .ok{flex:none;font-size:12px;color:var(--brand-teal);opacity:0;transition:opacity var(--dur-2) var(--ease)}
+.ex-tab.seen .ok{opacity:1}
+@media (hover:hover){.ex-tab:hover{background:var(--navy-100)}}
+.ex-tab[aria-selected="true"]{background:var(--navy-800);color:var(--on)}
+.ex-tab[aria-selected="true"] .n{background:var(--on-surface-2);border-color:var(--on-line);color:var(--on)}
+.ex-tab[aria-selected="true"] .ok{color:var(--on-2)}
+.ex-panel{display:flex;flex-direction:column;min-height:100%;padding:var(--space-7);border-radius:var(--radius-md);background:var(--surface);border:1px solid var(--navy-200);box-shadow:var(--shadow-sm)}
+.ex-stack{display:grid;padding-bottom:var(--space-7)}
+.ex-item{grid-area:1/1;visibility:hidden}
+.ex-item.is-on{visibility:visible}
+.ex-ar{font-size:clamp(32px,3.2vw,52px);font-weight:700;line-height:1.3;color:var(--text-primary)}
+/* the English name: a chip of its own, not a footnote */
+.ex-en{display:block;margin-top:var(--space-1);font-size:clamp(22px,2vw,32px);font-weight:700;line-height:1.35;color:var(--text-primary);direction:ltr;text-align:right;unicode-bidi:isolate}
+
+
+.ex-def{margin-top:var(--space-6);padding-top:var(--space-6);border-top:1px solid var(--navy-100)}
+.ex-def .label{display:block;margin-bottom:var(--space-3);font-size:var(--fs-2);font-weight:600;color:var(--muted)}
+.ex-def p{max-width:70ch;font-size:clamp(18px,1.45vw,22px);line-height:2;color:var(--text)}
+.ex-nav{display:flex;align-items:stretch;justify-content:space-between;gap:var(--space-3);margin-top:auto;padding-top:var(--space-5);border-top:1px dashed var(--navy-200)}
+/* prev / next name the neighbouring term, so the card needs no position counter */
+.ex-step{display:inline-flex;align-items:center;gap:var(--space-2);min-height:var(--control-md);padding:0 var(--space-4);border:1px solid var(--navy-200);border-radius:var(--radius-sm);background:var(--surface);font-size:var(--fs-3);font-weight:600;color:var(--text-primary);cursor:pointer;transition:background var(--dur-2) var(--ease),border-color var(--dur-2) var(--ease)}
+/* the terms' source note, when a unit has one: quiet text under the explorer */
+.terms-note{display:flex;align-items:flex-start;gap:var(--space-2);max-width:90ch;margin:var(--space-4) 0 0;font-size:var(--fs-1);line-height:1.8;color:var(--muted)}
+.terms-note i{flex:none;margin-top:4px;font-size:12px}
+.terms-note[hidden]{display:none}
+.ex-step i{font-size:var(--fs-1);transition:transform var(--dur-2) var(--ease)}
+@media (hover:hover){
+  .ex-step:hover{background:var(--navy-50);border-color:var(--navy-300)}
+  .ex-step.prev:hover i{transform:translateX(3px)}
+  .ex-step.next:hover i{transform:translateX(-3px)}
+}
+.btn-2{display:inline-flex;align-items:center;justify-content:center;gap:var(--space-2);min-height:var(--control-md);padding:0 var(--space-4);border:1px solid var(--navy-200);border-radius:var(--radius-sm);background:var(--surface);color:var(--text-primary);font-size:var(--fs-3);font-weight:600;cursor:pointer;transition:background var(--dur-2) var(--ease),border-color var(--dur-2) var(--ease)}
+.btn-2 i,.btn i{font-size:var(--fs-1)}
+@media (hover:hover){.btn-2:hover{background:var(--navy-50);border-color:var(--navy-300)}}
+.swap{animation:swap var(--dur-3) var(--ease)}
+@keyframes swap{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+
+/* ---- Self-check: an invite under the explorer, then the quiz in its place -- */
+.qcta{display:grid;grid-template-columns:auto minmax(0,1fr) auto;align-items:center;gap:var(--space-5);margin-top:var(--space-5);padding:var(--space-6);border-radius:var(--radius-md);color:var(--on);background:linear-gradient(135deg,var(--navy-900) 0%,var(--navy-800) 55%,var(--navy-700) 100%);box-shadow:var(--shadow-md)}
+.qcta[hidden]{display:none}
+.qcta-ic{display:grid;place-items:center;width:var(--control-lg);height:var(--control-lg);border-radius:var(--radius-sm);background:var(--on-surface-2);border:1px solid var(--on-line);color:var(--on);font-size:18px}
+.qcta h3{font-size:clamp(19px,1.75vw,22px);font-weight:700;color:var(--on)}
+.qcta p{margin-top:var(--space-1);font-size:var(--fs-3);color:var(--on-2)}
+.qcta .ready{display:none;align-items:center;gap:var(--space-2);margin-top:var(--space-3);min-height:var(--control-sm);padding:0 var(--space-3);border-radius:var(--radius-sm);background:var(--on-surface-2);font-size:var(--fs-2);font-weight:600;color:var(--on)}
+.qcta .ready i{color:var(--brand-teal)}
+.qcta.is-ready .ready{display:inline-flex}
+.btn-on{display:inline-flex;align-items:center;justify-content:center;gap:var(--space-2);min-height:var(--control-lg);padding:0 var(--space-6);border:0;border-radius:var(--radius-sm);background:var(--surface);color:var(--text-primary);font-size:var(--fs-4);font-weight:700;white-space:nowrap;cursor:pointer;transition:background var(--dur-2) var(--ease),box-shadow var(--dur-2) var(--ease)}
+.btn-on i{font-size:var(--fs-1)}
+@media (hover:hover){.btn-on:hover{background:var(--navy-100)}}
+.qcta.is-ready .btn-on{box-shadow:0 0 0 4px #00AD8B59}
+
+.quiz{margin-top:var(--space-5);border-radius:var(--radius-md);background:var(--surface);border:1px solid var(--navy-200);box-shadow:var(--shadow-md);overflow:hidden}
+.quiz[hidden]{display:none}
+.q-head{display:flex;flex-wrap:wrap;align-items:center;gap:var(--space-3) var(--space-5);padding:var(--space-4) var(--space-6);background:var(--navy-50);border-bottom:1px solid var(--navy-100)}
+.q-title{display:flex;align-items:center;gap:var(--space-3);font-size:var(--fs-4);font-weight:700;color:var(--text-primary)}
+.q-title i{display:grid;place-items:center;width:var(--control-sm);height:var(--control-sm);border-radius:var(--radius-sm);background:var(--navy-800);color:var(--on);font-size:var(--fs-1)}
+.q-meta{display:flex;align-items:center;gap:var(--space-4);margin-inline-start:auto}
+.q-step{font-size:var(--fs-2);font-weight:600;color:var(--text)}
+.q-dots{display:flex;gap:var(--space-1)}
+.q-dots i{width:24px;height:6px;border-radius:2px;background:var(--navy-150);transition:background var(--dur-2) var(--ease)}
+.q-dots i.now{background:var(--navy-800)}
+.q-dots i.ok{background:var(--brand-teal)}
+.q-dots i.no{background:var(--e-600)}
+.q-close{display:grid;place-items:center;width:var(--control-md);height:var(--control-md);border:1px solid var(--navy-200);border-radius:var(--radius-sm);background:var(--surface);color:var(--text-primary);cursor:pointer;transition:background var(--dur-2) var(--ease),border-color var(--dur-2) var(--ease)}
+@media (hover:hover){.q-close:hover{background:var(--navy-100);border-color:var(--navy-300)}}
+.q-body{padding:var(--space-7)}
+.q-label{font-size:var(--fs-2);font-weight:600;color:var(--muted)}
+.q-def{margin:var(--space-2) 0 var(--space-6);padding:var(--space-5) var(--space-6);border-radius:var(--radius-sm);background:var(--navy-50);border-inline-start:3px solid var(--navy-800);font-size:clamp(17px,1.4vw,19px);font-weight:600;line-height:1.9;color:var(--ink)}
+/* multiple choice: always one option per row — long or short, three or eight */
+.q-opts{display:grid;grid-template-columns:minmax(0,1fr);gap:var(--space-2)}
+.q-opt{display:flex;align-items:center;gap:var(--space-3);min-height:56px;padding:var(--space-2) var(--space-3);border:1px solid var(--navy-200);border-radius:var(--radius-sm);background:var(--surface);text-align:start;font-size:var(--fs-4);font-weight:600;line-height:1.5;color:var(--ink);cursor:pointer;transition:border-color var(--dur-2) var(--ease),background var(--dur-2) var(--ease),opacity var(--dur-2) var(--ease)}
+.q-opt .l{flex:none;display:grid;place-items:center;width:var(--control-sm);height:var(--control-sm);border-radius:var(--radius-sm);background:var(--navy-50);font-size:var(--fs-2);font-weight:700;color:var(--text-primary);transition:background var(--dur-2) var(--ease),color var(--dur-2) var(--ease)}
+.q-opt .t{flex:1;min-width:0}
+.q-opt .mark{flex:none;font-size:var(--fs-4);opacity:0}
+@media (hover:hover){.q-opt:hover:not(:disabled){border-color:var(--navy-300);background:var(--navy-50)}}
+.q-opt:disabled{cursor:default}
+.q-opt.ok{border-color:var(--brand-teal);box-shadow:inset 0 0 0 1px var(--brand-teal)}
+.q-opt.ok .l{background:var(--brand-teal);color:var(--on)}
+.q-opt.ok .mark{opacity:1;color:var(--brand-teal)}
+.q-opt.no{border-color:var(--navy-300);background:var(--navy-50)}
+.q-opt.no .l{background:var(--muted);color:var(--on)}
+.q-opt.no .mark{opacity:1;color:var(--muted)}
+.q-opt.dim{opacity:.55}
+.q-feed{display:flex;align-items:center;gap:var(--space-2);min-height:var(--control-md);font-size:var(--fs-3);font-weight:600;color:var(--text)}
+.q-feed i{font-size:var(--fs-4)}
+.q-feed.ok{color:var(--text-primary)}
+.q-feed.ok i{color:var(--brand-teal)}
+.q-feed.no i{color:var(--muted)}
+.btn[hidden],.btn-2[hidden]{display:none}
+/* result */
+.q-done{display:none;padding:var(--space-7);text-align:center}
+.quiz.is-done .q-done{display:block}
+.quiz.is-done .q-body{display:none}
+.q-big{font-size:clamp(34px,3vw,44px);font-weight:700;line-height:1.3;color:var(--text-primary)}
+.q-msg{margin-top:var(--space-2);font-size:var(--fs-4);color:var(--text)}
+.q-review{display:flex;flex-wrap:wrap;justify-content:center;gap:var(--space-2);margin:var(--space-6) 0}
+.q-review li{display:inline-flex;align-items:center;gap:var(--space-2);min-height:var(--control-sm);padding:0 var(--space-3);border-radius:var(--radius-sm);background:var(--navy-50);font-size:var(--fs-2);font-weight:600;color:var(--text)}
+.q-review li i{font-size:12px}
+.q-review li.ok i{color:var(--brand-teal)}
+.q-review li.no i{color:var(--muted)}
+.q-done-actions{display:flex;flex-wrap:wrap;justify-content:center;gap:var(--space-3)}
+
+@media (max-width:1100px){
+  .explorer{grid-template-columns:260px minmax(0,1fr)}
+}
+@media (max-width:860px){
+  .explorer{grid-template-columns:minmax(0,1fr)}
+  .ex-side,.ex-panel{min-width:0}
+  /* the list becomes one row of chips that scrolls sideways */
+  .ex-list{display:flex;gap:var(--space-2);overflow-x:auto;scroll-snap-type:x proximity;scrollbar-width:none;padding-bottom:var(--space-1)}
+  .ex-list::-webkit-scrollbar{display:none}
+  .ex-tab{flex:none;width:auto;white-space:nowrap;scroll-snap-align:start;background:var(--surface);border:1px solid var(--navy-100)}
+  .ex-panel,.q-body,.q-done{padding:var(--space-6)}
+  .q-head{padding:var(--space-4)}
+}
+@media (max-width:560px){
+  .qcta{grid-template-columns:auto minmax(0,1fr);padding:var(--space-5)}
+  .qcta .btn-on{grid-column:1/-1}
+  .ex-panel,.q-body,.q-done{padding:var(--space-5)}
+  /* title and close on one row, progress under them */
+  .q-title{flex:1}
+  .q-close{order:2}
+  .q-meta{order:3;width:100%;margin-inline-start:0;justify-content:space-between}
+  .q-def{padding:var(--space-4)}
+  .q-foot .btn{width:100%}
+}
+
+/* ---- Assessment identity: every question / self-check wears green ----------
+   The same shapes, sizes and states as the rest of the page, only the blue
+   family swapped for the green one (tints of the brand teal), so a quiz is
+   never mistaken for explanation. Text colours stay the approved ones. */
+.qcta,.quiz{
+  --a-900:#003A30; --a-800:#00594A; --a-700:#007A62; --a-600:#00AD8B;
+  --a-300:#8ED6C2; --a-200:#C2E9DD; --a-150:#D6F1E8; --a-100:#E3F6F0; --a-50:#F2FBF8;
+  /* wrong answer — a state colour (borders, icons, tints), never a text colour */
+  --e-700:#B42318; --e-600:#D92D20; --e-200:#FECDCA; --e-100:#FEE4E2; --e-50:#FEF3F2;
+}
+/* invite */
+.qcta{background:linear-gradient(135deg,var(--a-900) 0%,var(--a-800) 55%,var(--a-700) 100%);box-shadow:0 12px 28px #003A3029}
+.qcta-ic{background:var(--on-surface-2);border-color:var(--on-line);color:var(--on)}
+.qcta .ready i{color:var(--a-300)}
+.qcta .btn-on{color:var(--ink)}
+@media (hover:hover){.qcta .btn-on:hover{background:var(--a-100)}}
+.qcta.is-ready .btn-on{box-shadow:0 0 0 4px #8ED6C259}
+/* the quiz */
+.quiz{border-color:var(--a-200);box-shadow:0 12px 28px #003A301F}
+.q-head{background:var(--a-50);border-bottom-color:var(--a-100)}
+.q-title{color:var(--ink)}
+.q-title i{background:var(--a-800);color:var(--on)}
+.q-dots i{background:var(--a-150)}
+.q-dots i.now{background:var(--a-800)}
+.q-dots i.ok{background:var(--a-600)}
+.q-dots i.no{background:var(--e-600)}
+.q-close{border-color:var(--a-200);color:var(--ink)}
+@media (hover:hover){.q-close:hover{background:var(--a-100);border-color:var(--a-300)}}
+/* the question body is neutral: the identity lives in the frame (head, progress, button), the content stays clear */
+.q-def{margin:var(--space-3) 0 var(--space-6);padding:0;background:none;border:0;font-size:clamp(18px,1.6vw,22px);font-weight:600;line-height:1.85;color:var(--ink)}
+.q-opt{border-color:var(--gray-200)}
+.q-opt .l{background:var(--gray-100);color:var(--ink)}
+@media (hover:hover){.q-opt:hover:not(:disabled){border-color:var(--gray-300);background:var(--gray-50)}}
+.q-opt.ok{border-color:var(--a-600);box-shadow:inset 0 0 0 1px var(--a-600)}
+.q-opt.ok .l{background:var(--a-700);color:var(--on)}
+.q-opt.ok .mark{color:var(--a-700)}
+.q-opt.no{border-color:var(--e-600);background:var(--surface);box-shadow:inset 0 0 0 1px var(--e-600)}
+.q-opt.no .l{background:var(--e-600);color:var(--on)}
+.q-opt.no .mark{color:var(--e-600)}
+/* footer: the feedback line and the next button share one row that keeps its height,
+   so nothing moves when an answer is chosen; the button is always there — inactive until then */
+.q-foot{display:flex;align-items:center;justify-content:space-between;gap:var(--space-4);margin-top:var(--space-5);padding-top:var(--space-4);border-top:1px dashed var(--gray-200)}
+/* feedback: plain text — no box, no fill; only the icon carries the colour (green right, red wrong) */
+.q-feed{flex:1;min-width:0;display:flex;align-items:flex-start;gap:var(--space-3);min-height:calc(1.7em * 2);margin:0;padding:0;border:0;background:none;font-size:var(--fs-3);font-weight:500;line-height:1.7;color:var(--text)}
+.q-feed.idle{align-items:center;color:var(--muted)}
+/* phones: the feedback line above, the button full width under it */
+@media (max-width:560px){.q-foot{flex-direction:column;align-items:stretch;gap:var(--space-3)}.q-feed{flex:none}}
+.q-feed > i{flex:none;margin-top:3px;font-size:var(--fs-4)}
+.q-feed strong{display:block;font-weight:700;color:var(--ink)}
+.q-feed .ans{font-weight:700;color:var(--ink)}
+.q-feed.ok > i{color:var(--a-700)}
+.q-feed.no > i{color:var(--e-600)}
+.quiz .btn{background:#1B8354}
+@media (hover:hover){.quiz .btn:hover{background:#156B44}}
+.q-next{flex:none;min-height:var(--control-lg);padding:0 var(--space-6)}
+/* inactive: neutral grey, flat, dashed hairline — unlike the filled (primary) and the white outline (secondary) buttons */
+.btn:disabled,.btn:disabled:hover,.btn-2:disabled,.btn-2:disabled:hover,.btn-on:disabled,.btn-on:disabled:hover{background:var(--disabled-bg);border:1px dashed var(--disabled-line);color:var(--muted);box-shadow:none;cursor:not-allowed}
+.btn:disabled i,.btn-2:disabled i,.btn-on:disabled i{opacity:.6}
+/* the instruction line of any question ("أي مصطلح يطابق هذا التعريف؟", "اختر كل ما ينطبق" …): clearly visible,
+   below the question itself — 16px medium (500) body colour, with a green question mark */
+.q-label{display:flex;align-items:center;gap:var(--space-2);font-size:var(--fs-4);font-weight:500;line-height:1.5;color:var(--text)}
+.q-label::before{content:"\f059";font:var(--fa-font-solid);font-size:var(--fs-3);color:var(--a-700)}
+/* the question keeps the height of the longest one in the round (set in the script), so the options never jump */
+.q-def{display:flex;align-items:flex-start}
+.quiz .btn-2{border-color:var(--a-200);color:var(--ink)}
+@media (hover:hover){.quiz .btn-2:hover{background:var(--a-50);border-color:var(--a-300)}}
+.q-big{color:var(--ink)}
+.q-review li{background:var(--a-50)}
+.q-review li.ok i{color:var(--a-700)}
+.q-review li.no{background:var(--e-50)}
+.q-review li.no i{color:var(--e-600)}
+
+/* ---- Unit page: "you are here" ring, goal cards, phones -------------------- */
+/* on a unit or lesson page the ring is still: the current unit is lit and breathes softly,
+   every unit before it carries a small check (passed), the ones after it stay quiet */
+.orbit.is-here .node.done{background:#0A3A5C;border-color:#00AD8BB3;color:var(--on)}
+.orbit.is-here .node.done::before{content:"\f00c";position:absolute;top:-3px;inset-inline-end:-3px;display:grid;place-items:center;width:calc(var(--o) * .08);height:calc(var(--o) * .08);border-radius:50%;background:var(--brand-teal);box-shadow:0 0 0 2px var(--navy-800);font:var(--fa-font-solid);font-size:calc(var(--o) * .04);color:var(--on)}
+.orbit.is-here .spoke.passed{stroke:#00AD8B59}
+/* the route: one station per lesson between a unit and the next — passed (teal), this unit's (brighter), the rest (quiet).
+   Stations and unit icons are buttons: a tap shows their name in a small card (10 s, or until a tap elsewhere / Esc). */
+.orbit .stop{position:absolute;display:grid;place-items:center;width:20px;height:20px;padding:0;border:0;border-radius:50%;background:none;transform:translate(-50%,-50%);cursor:pointer}
+.orbit .stop::before{content:"";width:calc(var(--o) * .03);height:calc(var(--o) * .03);border-radius:50%;background:#FFFFFF2E;transition:background var(--dur-2) var(--ease),transform var(--dur-2) var(--ease)}
+.orbit .stop.passed::before{background:var(--brand-teal)}
+.orbit .stop.ahead::before{background:#FFFFFF99}
+.orbit .stop.now::before{background:var(--on);box-shadow:0 0 0 3px #00AD8B59}
+.orbit .stop.now::after{content:"";position:absolute;width:calc(var(--o) * .03);height:calc(var(--o) * .03);border-radius:50%;border:1.5px solid var(--brand-teal);animation:stop-here 2.6s var(--ease) infinite}
+@keyframes stop-here{0%{opacity:.9;transform:scale(1)}100%{opacity:0;transform:scale(2.8)}}
+.orbit button.node{padding:0;font:inherit;cursor:pointer}
+@media (hover:hover){
+  .orbit .stop:hover::before{transform:scale(1.45)}
+  .orbit button.node:not(.on):hover{border-color:#FFFFFF80;color:var(--on)}
+}
+.orbit .stop:focus-visible,.orbit button.node:focus-visible{outline:2px solid var(--on);outline-offset:2px}
+.orbit .is-picked.stop::before{transform:scale(1.45)}
+/* the name card: white, small, above (or below) what was tapped, kept inside the hero */
+.orbit-tip{position:absolute;z-index:3;max-width:240px;padding:var(--space-2) var(--space-3);border-radius:var(--radius-sm);background:var(--surface);box-shadow:var(--shadow-md);font-size:var(--fs-1);line-height:1.6;text-align:start;opacity:0;transform:translateY(4px);transition:opacity var(--dur-2) var(--ease),transform var(--dur-2) var(--ease);pointer-events:none}
+.orbit-tip.is-on{opacity:1;transform:none}
+.orbit-tip small{display:block;font-size:12px;font-weight:600;color:var(--muted)}
+.orbit-tip b{display:block;font-weight:700;color:var(--text-primary)}
+.orbit.is-here .node.on::after{content:"";position:absolute;inset:-5px;border-radius:50%;border:1px solid var(--brand-teal);animation:here 2.6s var(--ease) infinite}
+@keyframes here{0%{opacity:.8;transform:scale(.92)}100%{opacity:0;transform:scale(1.45)}}
+.hero .lead + .tags{margin-top:var(--space-6)}
+/* card: the one card shape (white, hairline, 12px, soft shadow) */
+.card{background:var(--surface);border:1px solid var(--navy-200);border-radius:var(--radius-md);box-shadow:var(--shadow-sm)}
+.grid-3{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:var(--space-5);align-items:stretch}
+/* four items: four across on wide screens, two on medium, one on phones — never three plus an orphan */
+.grid-4{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:var(--space-5);align-items:stretch}
+@media (max-width:1279px){.grid-4{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media (max-width:860px){.grid-4{grid-template-columns:1fr}}
+.goal{display:flex;align-items:flex-start;gap:var(--space-4);height:100%;padding:var(--space-6)}
+.tile{flex:none;display:grid;place-items:center;width:var(--control-lg);height:var(--control-lg);border-radius:var(--radius-sm);background:var(--navy-100);color:var(--text-primary);font-size:18px}
+.goal p{padding-top:var(--space-1);font-size:var(--fs-4);font-weight:600;line-height:1.75;color:var(--ink)}
+/* a unit usually has three lessons: three cards side by side on wide screens */
+@media (min-width:1101px){#path{grid-template-columns:repeat(var(--cols,3),minmax(0,1fr))}}
+@media (max-width:860px){.grid-3{grid-template-columns:1fr}}
+@media (max-width:560px){
+  .goal{padding:var(--space-4)}
+  /* three facts or more: a short list on phones, so none is left alone on a second row */
+  .hero .tags:has(.stat:nth-child(3)){grid-template-columns:1fr}
+  .hero .tags:has(.stat:nth-child(3)) .stat{justify-content:flex-start;min-height:var(--control-md);padding:0 var(--space-3)}
+  .hero .tags:has(.stat:nth-child(3)) .stat+.stat{border-inline-start:0;border-top:1px solid var(--on-surface-2)}
+  .hero .tags:has(.stat:nth-child(3)) .stat+.stat::before{display:none}
+}
+
+/* ---- Interaction: calm, formal feedback ----------------------------------
+   Clickable things: pointer + a clear change of state. Content surfaces
+   (cards, rows, facts): a quiet highlight on hover — border and shadow deepen,
+   icon tiles tint, at most a 2px lift. Mouse only (never on touch), and off
+   under reduced motion. */
+.card,.tile,.hero .stat,.hero .stat i{transition:background var(--dur-2) var(--ease),color var(--dur-2) var(--ease),border-color var(--dur-2) var(--ease),box-shadow var(--dur-2) var(--ease),transform var(--dur-2) var(--ease)}
+@media (hover:hover){
+  .card.goal:hover{border-color:var(--navy-300);box-shadow:var(--shadow-md);transform:translateY(-2px)}
+  .card.goal:hover .tile{background:var(--navy-800);color:var(--on)}
+  .unit-row:not(.is-open) .u-card:hover{border-color:var(--navy-300);box-shadow:var(--shadow-md)}
+  .u-card .lessons li:hover{background:var(--navy-50);border-color:var(--navy-200)}
+  .hero .stat:hover{background:var(--on-surface-1)}
+  .hero .stat:hover i{background:var(--on-line);color:var(--on)}
+}
+.hero .stat{border-radius:var(--radius-sm)}
+.u-card .lessons li{transition:opacity var(--dur-2) var(--ease),transform var(--dur-3) var(--ease),background var(--dur-2) var(--ease),border-color var(--dur-2) var(--ease)}
+/* hero: a faint light follows the pointer */
+.hero::after{content:"";position:absolute;inset:0;z-index:-1;pointer-events:none;background:radial-gradient(460px 280px at var(--mx,75%) var(--my,30%),#FFFFFF12,transparent 70%);opacity:0;transition:opacity var(--dur-5) var(--ease)}
+.hero.is-lit::after{opacity:1}
+
+/* ---- Footer: a quiet closing band, identical on every page of every programme — one centred line: the platform, its owner and the rights notice (plain text, no links, no logo) */
+.footer{margin-top:var(--space-6);background:var(--navy-50);border-top:1px solid var(--navy-100)}
+.footer .container{display:flex;align-items:center;justify-content:center;min-height:64px;padding-block:var(--space-4);text-align:center}
+.foot-rights{margin:0;font-size:var(--fs-1);line-height:1.7;color:var(--muted)}
+
+/* ---- Motion ------------------------------------------------------------- */
+.js .reveal{opacity:0;transform:translateY(18px);transition:opacity var(--dur-5) var(--ease),transform var(--dur-5) var(--ease)}
+.js .reveal.is-in{opacity:1;transform:none}
+.hero-anim{animation:up .7s var(--ease) both}
+.hero-anim.d1{animation-delay:.08s}.hero-anim.d2{animation-delay:.16s}.hero-anim.d3{animation-delay:.24s}
+@keyframes up{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:none}}
+
+/* ---- Responsive: the scales stay, only the gutter and paddings step down */
+@media (max-width:1100px){
+  :root{--gutter:40px}
+  .hero{gap:var(--space-7);padding:var(--space-7) var(--space-7)}
+  .orbit{--o:196px}
+}
+@media (max-width:860px){
+  :root{--gutter:24px;--header:60px}
+  .hero{grid-template-columns:1fr;padding:var(--space-7) var(--space-6)}
+  .hero h1{white-space:normal;font-size:clamp(26px,5vw,34px)}
+  .orbit{display:none}
+  .path{grid-template-columns:1fr}
+  .section-head{flex-direction:column;align-items:flex-start}
+}
+@media (max-width:560px){
+  :root{--gutter:16px;--header:58px}
+  body{font-size:var(--fs-2)}
+  .bar-logo{height:32px}
+  .hero-wrap{padding-top:var(--space-4)}
+  .hero{padding:var(--space-6) var(--space-5)}
+  .hero .tags{display:grid;grid-template-columns:1fr 1fr}
+  .hero .stat{justify-content:center;gap:var(--space-2);padding:0 var(--space-2)}
+  .u-card{--pad:var(--space-4)}
+  .u-num{font-size:32px}
+  .u-card .lessons{--row-x:var(--space-3);margin:0 var(--space-3) var(--space-3)}
+  .u-card .lessons .hl{font-size:var(--fs-3)}
+  .footer .container{justify-content:center;text-align:center}
+}
+@media (prefers-reduced-motion:reduce){
+  *,*::before,*::after{animation:none!important;transition:none!important}
+  html{scroll-behavior:auto}
+  .js .reveal{opacity:1;transform:none}
+}
+
+/* SAMAI_PAGE_NAV_STYLE_START */
+/* User-approved sequential navigation for the original programme pages. */
+.samai-page-nav{display:flex;align-items:center;justify-content:space-between;gap:var(--space-4);padding-block:var(--space-6);}
+.samai-page-nav__button{display:inline-flex;align-items:center;justify-content:center;gap:var(--space-3);min-height:var(--control-lg);min-inline-size:calc(var(--control-md) * 3);padding:var(--space-3) var(--space-6);border:1px solid var(--navy-200);border-radius:var(--radius-sm);background:var(--surface);color:var(--text-primary);font:inherit;font-weight:600;line-height:1.5;text-decoration:none;cursor:pointer;transition:background var(--dur-2) var(--ease),border-color var(--dur-2) var(--ease);}
+.samai-page-nav__button--next{background:var(--navy-800);border-color:var(--navy-800);color:var(--on);}
+.samai-page-nav__button:focus-visible{outline:3px solid var(--navy-600);outline-offset:2px;}
+.samai-page-nav__button:disabled{background:var(--disabled-bg);border-color:var(--disabled-line);color:var(--muted);cursor:default;}
+@media (hover:hover){
+ .samai-page-nav__button:not(:disabled):hover{background:var(--navy-50);border-color:var(--navy-300);}
+ .samai-page-nav__button--next:not(:disabled):hover{background:var(--navy-900);border-color:var(--navy-900);}
+}
+@media (max-width:560px){.samai-page-nav__button{flex:1;min-inline-size:0;padding-inline:var(--space-4);}}
+/* SAMAI_PAGE_NAV_STYLE_END */
 </style>
+
+<style id="samai-polish">
+/* ==== SAMAI_POLISH_START · design review 2026-10-11 ======================================
+   One motion school (Material-style tokens: a decelerate curve for state and entrances, a
+   symmetric curve for loops, four durations), one icon family (Font Awesome 6 Solid), one
+   type scale. Loaded last, so it settles the shared system for every component. */
+:root{
+  --ease:cubic-bezier(.2,.7,.2,1);          /* state changes and entrances: quick start, soft landing */
+  --ease-in-out:cubic-bezier(.45,0,.55,1);  /* loops and back-and-forth scenes: symmetric and calm */
+  --dur-1:.16s; --dur-2:.24s; --dur-3:.36s; --dur-4:.48s; --dur-5:.6s;
+}
+/* every content swap and panel entrance is the same gesture: rise 8px and fade in */
+@keyframes swap{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+@keyframes xpanel{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+@keyframes fade{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+@keyframes fadeUp{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+@keyframes splitIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+@keyframes simPanelIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+@keyframes simResult{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+@keyframes wrin2{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+@keyframes tourIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+@keyframes pop{from{opacity:0;transform:translateY(8px) scale(.98)}to{opacity:1;transform:none}}
+/* the tour engine's icons are Font Awesome Solid, like every other icon in the programme */
+.tour-ic>i{display:block;width:1em;font-size:1em;line-height:1;text-align:center}
+/* Arabic is a joined script: headings carry no tracking */
+.hero h1{letter-spacing:0}
+
+/* ---- Instructions: what the learner DOES is one pattern, set apart from what they READ ----------------------
+   A quiet chip before the activity: dashed frame, tinted ground, the action-green hand (green = what you do, as in
+   the quizzes and tours). Counters that belong to the activity stay at the row's end, outside the chip. */
+.x-hint{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:var(--space-2) var(--space-4);margin:0 0 var(--space-4);font-size:var(--fs-2);font-weight:600;line-height:1.7;color:var(--text)}
+.x-hint>b.x-do{display:inline-flex;flex:0 1 auto;align-items:center;gap:var(--space-2);max-width:100%;min-width:0;padding:6px var(--space-3);border:1px dashed var(--navy-300);border-radius:var(--radius-sm);background:var(--navy-50);font-size:var(--fs-2);font-weight:600;line-height:1.7;color:var(--text-primary)}
+.x-hint>b.x-do>i{flex:none;font-size:13px;color:#1B8354}
+.x-hint>b.x-do>span{min-width:0}
+.x-hint>b.x-do b,.x-hint>b.x-do strong{font-weight:700}
+.section>.x-hint{margin-top:calc(var(--space-2) * -1)}
+.sec-lead+.x-hint{margin-top:0}
+.section-head.is-untitled{margin:0}
+.sr-only{position:absolute!important;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap;border:0}
+/* the note under the references */
+.refs-note{display:flex;align-items:flex-start;gap:var(--space-2);margin:var(--space-3) 0 0;padding-top:var(--space-3);border-top:1px solid var(--navy-100);font-size:var(--fs-1);line-height:1.8;color:var(--muted)}
+.refs-note>i{flex:none;margin-top:4px;font-size:12px}
+/* quiz: a hidden instruction line is really hidden (the line is a flex row); the opt-in way back */
+.q-label[hidden]{display:none}
+.q-foot .q-prev{flex:none;margin-inline-start:auto}
+.q-foot .q-prev+.q-next{margin-inline-start:0}
+@media (max-width:560px){.q-foot .q-prev,.q-foot .q-prev+.q-next{flex:1 1 0;width:auto;min-width:0;margin:0}}
+
+/* bold is one weight across the programme (the scale stops at 700) */
+b,strong{font-weight:700}
+.tour .tour-btn.st-prev{color:var(--text-primary)}
+
+
+/* the hero's ring pulses on one point only (owner, 2026-10-12): when a lesson is the point, its unit stays lit but still */
+.orbit:has(.stop.now) .node.on::after{animation:none;display:none}
+.lat{white-space:nowrap;unicode-bidi:isolate}
+/* a stat without a number (the dual «درسان») has no empty slot before its word */
+.hero .stat b:empty{display:none}
+
+/* four goals: two by two until each of four columns keeps a readable line (from 1600px, as the other grids) — at
+   1280–1599 a goal was squeezed into five lines of about twelve words */
+@media (min-width:861px) and (max-width:1599px){.grid-4{grid-template-columns:repeat(2,minmax(0,1fr))}}
+/* unit page sections are bands, the lessons' own section language (8.18): white, then a neutral tint, a hairline on each edge */
+:root{--band-y:56px;--band-tint:#FAFAFA;--band-line:#E6E6E6}
+@media (max-width:860px){:root{--band-y:44px}}
+@media (max-width:560px){:root{--band-y:36px}}
+.layout{padding-block:0}
+.layout > .section{margin-inline:calc(var(--gutter) * -1);padding:var(--band-y) var(--gutter);background:var(--surface)}
+.layout > .section + .section{margin-top:0;border-top:1px solid var(--band-line)}
+.layout > .section:nth-child(even){background:var(--band-tint)}
+.layout > .section:last-child{border-bottom:1px solid var(--band-line)}
+.layout > .section:first-child{padding-top:var(--space-8)}
+/* terms: the card's parts enter in reading order — the term, its English name, then its definition (one gesture) */
+.ex-item.swap{animation:none}
+.ex-item.swap>*{animation:swap var(--dur-3) var(--ease) both}
+.ex-item.swap>:nth-child(2){animation-delay:50ms}
+.ex-item.swap>:nth-child(3){animation-delay:100ms}
+/* phones: the sideways term strip fades on the side where more terms wait */
+@media (max-width:860px){
+  .ex-list.more-e{-webkit-mask-image:linear-gradient(to right,transparent,#000 48px);mask-image:linear-gradient(to right,transparent,#000 48px)}
+  .ex-list.more-s{-webkit-mask-image:linear-gradient(to left,transparent,#000 48px);mask-image:linear-gradient(to left,transparent,#000 48px)}
+  .ex-list.more-s.more-e{-webkit-mask-image:linear-gradient(to right,transparent,#000 48px,#000 calc(100% - 48px),transparent);mask-image:linear-gradient(to right,transparent,#000 48px,#000 calc(100% - 48px),transparent)}
+}
+
+/* ---- the hero's ring, refined (owner, 2026-10-12) ---- */
+/* the route: one faint line through every unit and station, so the dots read as stops on one way */
+.orbit .track{fill:none;stroke:#FFFFFF1F;stroke-width:1.5}
+.hero.is-lesson .orbit .track{stroke:#00236621}
+/* the route runs UNDER every station: a station is solid — a step clearer than the line, laid on the hero's own ground
+   at the ring — so the line never shows through it, nor through the lit station's or the lit unit's halo */
+.orbit{--ring-ground:#001D4E}
+.hero.is-lesson .orbit{--ring-ground:#EFF4FA}
+.orbit .stop::before{background:linear-gradient(#FFFFFF3D,#FFFFFF3D),var(--ring-ground)}
+.orbit .stop.ahead::before{background:linear-gradient(#FFFFFF99,#FFFFFF99),var(--ring-ground)}
+.hero.is-lesson .orbit .stop::before{background:linear-gradient(#00236629,#00236629),var(--ring-ground)}
+.orbit .stop.now::before,.hero.is-lesson .orbit .stop.now::before{box-shadow:0 0 0 3px #00AD8B59,0 0 0 3px var(--ring-ground)}
+.orbit .node.on{box-shadow:0 0 0 4px #00AD8B38,0 0 0 4px var(--ring-ground),0 8px 18px #00133D66}
+.hero.is-lesson .orbit .node.on{box-shadow:0 0 0 4px #00AD8B38,0 0 0 4px var(--ring-ground),0 8px 18px #0023662E}
+.orbit.is-here .node.done::before,.hero.is-lesson .orbit.is-here .node.done::before{box-shadow:0 0 0 2px var(--ring-ground)}
+/* the stations sit above the units' ripple; the lit station's ripple passes under its neighbours */
+.orbit .stop{z-index:2}
+.orbit .stop.now{z-index:1}
+/* unit icons scale with the ring (the buttons' font:inherit had pinned them at 15px), 40% of the circle */
+.orbit button.node{font-size:calc(var(--o) * .072)}
+/* dark heroes: the unit circles take the centre's soft light from above (lit, passed and light-hero units set their own) */
+.orbit .node{background-image:radial-gradient(circle at 50% 28%,#FFFFFF1A,#FFFFFF00 72%)}
+/* ---- the terms explorer's ends (2026-10-13) ---- */
+.ex-step:disabled,.ex-step:disabled:hover{background:var(--disabled-bg);border:1px dashed var(--disabled-line);color:var(--muted);cursor:not-allowed}
+.ex-step:disabled i{opacity:.6;transform:none}
+/* ---- the engine's hand, as the lessons draw it (2026-10-18: the unit pages had none) ---- */
+.auto-hand{position:absolute;z-index:5;left:0;top:0;font-size:30px;line-height:1;color:var(--ink);text-shadow:0 0 2px #fff,0 0 2px #fff,0 0 3px #fff,0 3px 8px #00133D40;pointer-events:none;opacity:0;transform:translate(0,6px);transition:left var(--dur-4) var(--ease),top var(--dur-4) var(--ease),opacity var(--dur-2) var(--ease),transform var(--dur-1) var(--ease)}
+.auto-hand.is-on{opacity:1;transform:none}
+.auto-hand.is-press{transform:scale(.82)}
+.auto-hand.is-fixed{position:fixed;z-index:2147483000}
+
+/* ==== t179 responsive shared layer ==== */
+/* (1) text first — the stacked state of the groups decided here (t192's .tf-stack does the rest) */
+.x-hint>b.x-do.is-tf{flex-direction:column;align-items:flex-start;gap:var(--space-1)}
+.u-card .lessons.is-tf::before{display:none}
+.u-card .lessons.is-tf li{flex-direction:column;align-items:flex-start;justify-content:center;gap:var(--space-2)}
+.refs .steps.is-tf::before{display:none}
+.refs .steps.is-tf li a{display:grid;grid-template-columns:auto minmax(0,1fr) auto;grid-template-areas:"n . i" "t t t";align-items:center;row-gap:var(--space-2)}
+.refs .steps.is-tf li a>.num{grid-area:n}
+.refs .steps.is-tf li a>.txt{grid-area:t}
+.refs .steps.is-tf li a>.ic{grid-area:i}
+.refs-note.is-tf{flex-direction:column;align-items:flex-start;gap:var(--space-1)}
+.refs-note.is-tf>i{margin-top:0}
+/* the quiz: the letter on its own line, the state mark at the end of that line (a short thing that never wraps), the
+   answer under them at the full width; the feedback's mark above its words; the instruction's mark above it */
+.quiz.tf-opts .q-opts>.q-opt{display:grid;grid-template-columns:auto minmax(0,1fr) auto;grid-template-areas:"l . m" "t t t";align-items:center;row-gap:var(--space-2)}
+.quiz.tf-opts .q-opts>.q-opt>.l{grid-area:l}
+.quiz.tf-opts .q-opts>.q-opt>.t{grid-area:t}
+.quiz.tf-opts .q-opts>.q-opt>.mark{grid-area:m}
+.quiz.tf-feed .q-feed:not(.idle){flex-direction:column;gap:var(--space-1)}
+.quiz.tf-feed .q-feed:not(.idle)>i{margin-top:0}
+.quiz.tf-label .q-label{flex-direction:column;align-items:flex-start;gap:var(--space-1)}
+/* the tour's command: its hand above the words when a step's words wrap (decided for the whole tour) */
+.tour.tf-cmd .tour-cmd{flex-direction:column;align-items:flex-start;gap:var(--space-1)}
+/* t192's stacked cards, finished for the shared ones: no top nudge left on the goal's words, a smaller tile on phones */
+.goal.tf-stack>p{padding-top:0}
+.take.tf-stack>.tile{grid-row:auto}
+@media (max-width:560px){.goal.tf-stack>.tile{width:40px;height:40px}}
+
+/* (2) one-piece chips; long words never push a column wider */
+.u-count,.x-count,.tour-counter{flex:none;max-width:100%}
+.q-step{flex:none;white-space:nowrap}
+.q-dots{flex:0 1 auto;min-width:0}
+.q-dots i{flex:0 1 24px;min-width:8px}
+@media (max-width:860px){.xp .ex-tab{max-width:min(260px,100%)}}
+.u-main,.u-title,.goal p,.take h3,.take p,.next-note p,.note-box>span,.bridge-line>span,.q-opt .t,.q-def,.refs .steps .txt,.ex-panel{min-width:0;overflow-wrap:break-word}
+/* the simulated application's composer: each control is one piece on one line; the row wraps when it has no room */
+.win-row{flex-wrap:wrap;row-gap:var(--space-2);min-width:0}
+.win-row>.win-ctl{flex:none;white-space:nowrap;max-width:100%}
+.win-composer,.ic-body>*{min-width:0}
+.ic-body{grid-template-columns:minmax(0,1fr)}
+/* the application's window on a narrow phone (its own width, not the page's): tighter edges so its controls keep one row;
+   and when its title bar and composer alone are taller than the device's screen, the window scrolls instead of cutting */
+.tour .tour-screen.win{container-type:inline-size}
+@media (max-width:600px),(max-height:500px){.tour .tour-screen.win{overflow-x:hidden;overflow-y:auto}}
+@container (max-width:280px){
+  .win-top{padding:8px 10px;padding-inline-end:42px}
+  .win-chat{padding:var(--space-2)}
+  .win-composer{padding:8px}
+  .win-row{gap:4px}
+  .win-row>.win-ctl{padding:0 7px}
+  .win-row>.win-plus{width:30px;height:30px;padding:0}
+  .win-row>.win-send{width:32px;height:32px}
+}
+
+/* (3) touch: small controls answer a 44px finger (the pressable box grows, the look stays) */
+.tour-go{min-height:44px}
+@media (pointer:coarse),(max-width:600px){
+  .toc-btn,.tour-ok,.tour .tour-max,.tour-nav .tour-btn{position:relative}
+  .toc-btn::after{content:"";position:absolute;inset:-6px 0}
+  .tour-nav .tour-btn::after{content:"";position:absolute;inset:-6px -4px}
+  .tour-ok::after{content:"";position:absolute;inset:-7px -2px}
+  .tour .tour-max::after{content:"";position:absolute;inset:-8px}
+  .ex-tab,.ex-step{min-height:44px}
+}
+
+/* (4) the lesson index on phones: whole buttons, soft edges where it goes on */
+@media (max-width:860px){
+  .toc-list{scroll-snap-type:x proximity;scroll-padding-inline:var(--space-2)}
+  .toc-list>.toc-btn{scroll-snap-align:start}
+  .toc-list.more-s{-webkit-mask-image:linear-gradient(to left,transparent,#000 40px);mask-image:linear-gradient(to left,transparent,#000 40px)}
+  .toc-list.more-e{-webkit-mask-image:linear-gradient(to right,transparent,#000 40px);mask-image:linear-gradient(to right,transparent,#000 40px)}
+  .toc-list.more-s.more-e{-webkit-mask-image:linear-gradient(to right,transparent,#000 40px,#000 calc(100% - 40px),transparent);mask-image:linear-gradient(to right,transparent,#000 40px,#000 calc(100% - 40px),transparent)}
+}
+
+/* (5) the smallest phones (t193 sets the page's spacing scale): cards and frames whose room is written in pixels */
+@media (max-width:400px){
+  /* the start cards (the tours' and the quizzes'): less room around, so the title keeps one line */
+  .tour-start{padding:var(--space-2)}
+  .tour-start-card,.q-gate-card{padding:var(--space-5) var(--space-4)}
+  .tour-start-card p{margin:4px 0 14px}
+  /* the phone mock-up: a thinner frame, a smaller radius and camera island, so its screen keeps the room; the island stays
+     above the screen's content */
+  .tour .monitor-bezel{padding:8px;border-radius:36px}
+  .tour .monitor-cam{top:13px;width:72px;height:20px;margin-left:-36px}
+  .tour .tour-stage{padding:36px 6px 8px;border-radius:28px}
+  .tour-panel{margin-top:6px}
+  .tour-desc{line-height:1.7}
+}
+@media (max-width:320px){
+  .tour .monitor-bezel{padding:7px;border-radius:30px}
+  .tour .monitor-cam{top:11px;width:60px;height:18px;margin-left:-30px}
+  .tour .tour-stage{padding:32px 5px 7px;border-radius:23px}
+  .tour-start-card h3,.q-gate-card h3{font-size:17px}
+  .tour-go{min-width:0;width:100%}
+}
+
+/* ==== text first (t192) ==== */
+.tf-stack{display:grid!important;grid-template-columns:auto minmax(0,1fr)!important;grid-auto-flow:row;align-items:center!important;justify-content:stretch!important}
+.tf-stack>*{grid-column:1/-1;max-width:100%;min-width:0}
+.tf-stack>.tf-text{width:100%}
+.tf-stack>.tf-ic{grid-column:1;grid-row:1;margin:0!important}
+.tf-stack>.tf-tag{grid-column:2;grid-row:1;justify-self:end;margin:0!important}
+.tf-stack>.tf-media{grid-row:1;justify-self:center}
+/* a file chip, stacked: our corners (a pill only fits one line), the name under its two icons */
+.ps-file.tf-stack,.in-file.tf-stack{border-radius:var(--radius-md)!important;padding:8px 12px!important;row-gap:6px;column-gap:var(--space-3)}
+.lessons:has(>li.tf-stack)::before,.steps:has(>li.tf-stack)::before{display:none}
+/* a glyph that is part of its line */
+.tf-inline{display:block!important}
+.tf-inline>.tf-glyph{display:inline!important;margin-inline-end:.45em;vertical-align:baseline}
+.tf-inline>.tf-glyph:not(i){display:inline-block!important;vertical-align:middle}
+.tf-inline>.tf-text{display:inline!important}
+/* answers */
+.tf-opt{display:grid!important;grid-template-columns:auto minmax(0,1fr)!important;align-items:center!important;row-gap:var(--space-2)!important}
+.tf-opt>*{grid-column:1/-1}
+.tf-opt>.tf-optl{grid-column:1;grid-row:1}
+.tf-opt>.tf-optm{grid-column:2;grid-row:1;justify-self:end;margin:0!important}
+.tf-opt>.tf-optt{grid-row:2;width:100%}
+/* buttons */
+.tf-noic>i,.tf-noic>svg,.tf-noic>.tour-ic{display:none!important}
+.tf-btns{display:flex!important;flex-direction:column!important;flex-wrap:nowrap!important;align-items:stretch!important}
+.tf-btns>*{width:100%!important;max-width:none!important;margin-inline:0!important}
+/* the simulated application's composer: its controls keep their words on one line; on a narrow composer their arrows go,
+   then the row wraps (the send button stays at the row's end) */
+.win-row{flex-wrap:wrap;row-gap:6px;min-width:0}
+.win-ctl,.win-pick,.win-agent{white-space:nowrap;flex:none}
+.win-row>.win-gap{flex:1 0 0;min-width:0}
+.win-composer{container:wincomp/inline-size}
+@container wincomp (max-width:320px){.win-pick>i{display:none}.win-pick{padding-inline:8px}}
+/* numbered lists of rows: never wider than their list; the references, when narrow: number, link icon, words under them */
+.steps{grid-template-columns:minmax(0,1fr)}
+.steps li,.refs .steps a,.steps .txt{min-width:0}
+.refs-fold>div{container:refs/inline-size}
+@container refs (max-width:520px){
+  .refs .steps::before{display:none}
+  .refs .steps a{display:grid;grid-template-columns:auto minmax(0,1fr);align-items:center;row-gap:var(--space-2)}
+  .refs .steps a>.num{grid-column:1;grid-row:1}
+  .refs .steps a>.ic{grid-column:2;grid-row:1;justify-self:end;margin:0}
+  .refs .steps a>.txt{grid-column:1/-1;grid-row:2}
+}
+/* a folding card's head on narrow screens: icon and title on the first line; the count, then the chevron at the far end */
+@media (max-width:600px){
+  .refs-head{flex-wrap:wrap;row-gap:var(--space-2)}
+  .refs-head::after{content:"";order:3;flex-basis:100%;height:0}
+  .refs-head .u-count{order:4}
+  .refs-head .chev{order:5;margin-inline-start:auto}
+}
+/* a long file name (no spaces) never widens its box or a tour (it widened the phone past the screen, owner 2026-10-22): it
+   breaks where it must */
+.tour-desc,.tour-info>b,:is(.win-file,.ps-file,.pt-userfile,.pt-infile,.rl-file,.pc-file,.th-file-tx,.rw-file,.ru-file,.mb-file,.gc-file,.in-file) :is(span,b){overflow-wrap:anywhere}
+/* the sideways tab strips: no fading edges */
+.ex-list.more-s,.ex-list.more-e,.more-s.more-e{-webkit-mask-image:none!important;mask-image:none!important}
+/* a short English term in brackets inside an Arabic title */
+.tf-lat{unicode-bidi:isolate;white-space:nowrap}
+/* ==== the smallest screens (t193): less room around, the words keep the width ==== */
+@media (max-width:400px){
+  :root{--gutter:12px;--band-y:28px;--space-4:12px;--space-5:14px;--space-6:16px;--space-7:24px;--space-8:28px}
+}
+@media (max-width:320px){
+  :root{--gutter:10px;--band-y:24px;--space-3:10px;--space-4:10px;--space-5:12px;--space-6:14px;--space-7:20px;--space-8:24px}
+}
+/* ==== the unit's intro video (t194, 2026-10-22) ==== */
+.layout>.section.uv{padding-top:var(--space-6);padding-bottom:var(--space-6);border-top:0}
+.uv-frame{--uv-h:calc(100svh - var(--header) - 48px);container:uvf/inline-size;position:relative;width:min(100%,calc(var(--uv-h) * 16 / 9));aspect-ratio:16/9;margin-inline:auto;border-radius:var(--radius-md);overflow:hidden;background:#00133D;box-shadow:0 1px 2px #00133D14,0 24px 48px -28px #00133D80;isolation:isolate;outline:none;user-select:none;-webkit-tap-highlight-color:transparent}
+.uv-frame:focus-visible{box-shadow:0 0 0 3px #00AD8B66,0 24px 48px -28px #00133D80}
+.uv-frame:fullscreen{width:100%;height:100%;max-width:none;aspect-ratio:auto;border-radius:0;box-shadow:none;background:#000}
+.uv-frame:-webkit-full-screen{width:100%;height:100%;border-radius:0}
+.uv-video{position:absolute;inset:0;width:100%;height:100%;object-fit:contain;background:#000}
+.uv-frame.is-idle{cursor:none}
+/* the cover */
+.uv-cover{position:absolute;inset:0;z-index:3;display:grid;grid-template-rows:1fr auto;padding:clamp(16px,3vw,36px);background:linear-gradient(to top,#00133DF2 0%,#00133DB3 38%,#00133D40 72%,#00133D26 100%);color:#fff;transition:opacity .35s var(--ease),visibility 0s .35s}
+.uv-frame.is-on .uv-cover{opacity:0;visibility:hidden}
+.uv-cover-tx{align-self:end;display:grid;gap:var(--space-2);max-width:min(100%,720px)}
+.uv-kick{display:inline-flex;align-items:center;gap:var(--space-2);justify-self:start;min-height:30px;padding:0 var(--space-3);border-radius:999px;background:#FFFFFF1F;border:1px solid #FFFFFF33;font-size:var(--fs-1);font-weight:600;color:#FFFFFFE6;backdrop-filter:blur(6px)}
+.uv-kick i{color:#5BE3C3}
+.uv-unit{font-size:clamp(13px,1.1vw,15px);font-weight:600;color:#FFFFFFCC}
+.uv-title{margin:0;font-size:clamp(20px,2.4vw,34px);font-weight:700;line-height:1.35;color:#fff;text-wrap:balance}
+.uv-meta{display:inline-flex;align-items:center;gap:var(--space-2);font-size:var(--fs-2);color:#FFFFFFCC;font-variant-numeric:tabular-nums}
+.uv-big{position:absolute;inset:0;margin:auto;z-index:4;display:grid;place-items:center;width:clamp(64px,8vw,96px);height:clamp(64px,8vw,96px);border:0;border-radius:50%;background:var(--brand-teal);color:#fff;font-size:clamp(22px,2.6vw,32px);cursor:pointer;box-shadow:0 0 0 10px #00AD8B33,0 18px 40px -12px #00000099;transition:transform .2s var(--ease),box-shadow .2s var(--ease)}
+.uv-big i{margin-inline-start:4px}
+.uv-big::after{content:"";position:absolute;inset:-10px;border-radius:50%;border:2px solid #00AD8B66;animation:uvRing 2.4s var(--ease) infinite}
+@keyframes uvRing{0%{transform:scale(.92);opacity:.9}100%{transform:scale(1.35);opacity:0}}
+@media (hover:hover){.uv-big:hover{transform:scale(1.06);box-shadow:0 0 0 14px #00AD8B40,0 18px 40px -12px #00000099}}
+.uv-big:focus-visible{outline:3px solid #fff;outline-offset:4px}
+.uv-frame.is-on .uv-big{display:none}
+.uv-frame.is-ended .uv-big i{margin:0}
+/* the bar */
+.uv-bar{position:absolute;inset:auto 0 0;z-index:2;display:grid;gap:6px;padding:28px clamp(10px,1.6vw,18px) clamp(8px,1.2vw,12px);background:linear-gradient(to top,#000000CC,#00000000);color:#fff;opacity:1;transition:opacity .3s var(--ease)}
+.uv-frame:not(.is-on) .uv-bar{display:none}
+.uv-frame.is-idle .uv-bar{opacity:0;pointer-events:none}
+.uv-scrub{position:relative;height:18px;cursor:pointer;touch-action:none}
+.uv-track{position:absolute;inset:7px 0;border-radius:3px;background:#FFFFFF40;overflow:hidden;transition:inset .15s var(--ease)}
+.uv-scrub:hover .uv-track,.uv-scrub.is-drag .uv-track{inset:6px 0}
+.uv-buf,.uv-fill{position:absolute;inset:0 auto 0 0;width:0}
+.uv-buf{background:#FFFFFF59}
+.uv-fill{background:var(--brand-teal)}
+.uv-thumb{position:absolute;top:50%;width:14px;height:14px;margin:-7px 0 0 -7px;border-radius:50%;background:#fff;box-shadow:0 0 0 3px #00AD8B;transform:scale(0);transition:transform .15s var(--ease)}
+.uv-scrub:hover .uv-thumb,.uv-scrub:focus-visible .uv-thumb,.uv-scrub.is-drag .uv-thumb{transform:scale(1)}
+.uv-scrub:focus-visible{outline:none}
+.uv-tip{position:absolute;bottom:22px;padding:2px 8px;border-radius:6px;background:#000000CC;font-size:12px;font-variant-numeric:tabular-nums;transform:translateX(-50%);opacity:0;pointer-events:none;transition:opacity .12s}
+.uv-scrub:hover .uv-tip,.uv-scrub.is-drag .uv-tip{opacity:1}
+.uv-row{display:flex;align-items:center;gap:4px;min-width:0}
+.uv-b{display:grid;place-items:center;flex:none;width:44px;height:44px;border:0;border-radius:10px;background:transparent;color:#fff;font:inherit;font-size:17px;cursor:pointer;transition:background-color .15s var(--ease)}
+@media (hover:hover){.uv-b:hover{background:#FFFFFF26}}
+.uv-b:focus-visible{outline:2px solid #fff;outline-offset:-2px}
+.uv-time{flex:none;padding:0 6px;font-size:13px;font-weight:600;font-variant-numeric:tabular-nums;color:#FFFFFFE6;white-space:nowrap}
+.uv-sp{flex:1}
+.uv-vol{display:flex;align-items:center;gap:2px}
+.uv-volr{width:84px;height:4px;accent-color:var(--brand-teal);cursor:pointer}
+.uv-rate{width:auto;min-width:52px;padding:0 10px;font-size:14px;font-weight:700}
+.uv-ratebox{position:relative}
+.uv-menu{position:absolute;bottom:calc(100% + 8px);inset-inline-end:0;display:grid;min-width:120px;padding:6px;border-radius:12px;background:#0B1220F2;box-shadow:0 12px 30px #00000080;backdrop-filter:blur(8px)}
+.uv-menu[hidden]{display:none}
+.uv-mi{display:flex;align-items:center;justify-content:space-between;gap:12px;min-height:40px;padding:0 12px;border:0;border-radius:8px;background:none;color:#fff;font:inherit;font-size:14px;font-weight:600;cursor:pointer}
+.uv-mi[aria-checked="true"]{background:#00AD8B33;color:#5BE3C3}
+@media (hover:hover){.uv-mi:hover{background:#FFFFFF1A}}
+/* what a key or a gesture did */
+.uv-hud{position:absolute;top:50%;left:50%;z-index:3;display:flex;align-items:center;gap:10px;padding:10px 16px;border-radius:999px;background:#000000B3;color:#fff;font-size:15px;font-weight:600;transform:translate(-50%,-50%) scale(.92);opacity:0;pointer-events:none;transition:opacity .18s,transform .18s}
+.uv-hud.is-on{opacity:1;transform:translate(-50%,-50%) scale(1)}
+.uv-seekfx{position:absolute;top:0;bottom:0;z-index:3;display:grid;place-items:center;align-content:center;gap:6px;width:34%;color:#fff;font-size:14px;font-weight:700;opacity:0;pointer-events:none;transition:opacity .2s}
+.uv-seekfx.is-r{right:0;border-radius:50% 0 0 50%/50% 0 0 50%;background:linear-gradient(to left,#FFFFFF2E,transparent)}
+.uv-seekfx.is-l{left:0;border-radius:0 50% 50% 0/0 50% 50% 0;background:linear-gradient(to right,#FFFFFF2E,transparent)}
+.uv-seekfx.is-on{opacity:1}
+.uv-seekfx i{font-size:22px}
+/* small pictures */
+@media (max-width:600px){
+  .layout>.section.uv{padding-top:var(--space-4);padding-bottom:var(--space-4)}
+  .uv-frame{border-radius:var(--radius-sm)}
+  .uv-cover{padding:14px}
+  .uv-kick{min-height:26px;font-size:12px}
+  .uv-title{font-size:clamp(16px,4.6vw,20px)}
+  .uv-meta{font-size:12px}
+  .uv-volr{display:none}
+  .uv-b{width:40px;height:40px;font-size:15px}
+  .uv-time{font-size:12px;padding:0 2px}
+  .uv-bar{padding-top:22px}
+}
+@media (max-width:360px){.uv-cover-tx .uv-unit{display:none}.uv-rate{min-width:44px;padding:0 6px}}
+/* a small picture: the play button at the cover's lower corner, beside the words (never over them) */
+@container uvf (max-width:560px){
+  .uv-big{inset:auto;left:14px;bottom:14px;margin:0;width:56px;height:56px;font-size:20px;box-shadow:0 0 0 6px #00AD8B33,0 10px 24px -10px #00000099}
+  .uv-big::after{inset:-6px}
+  .uv-cover-tx{padding-inline-end:72px}
+}
+@media (prefers-reduced-motion:reduce){.uv-big::after{animation:none}.uv-cover,.uv-bar,.uv-hud,.uv-seekfx{transition:none}}
+/* ==== SAMAI_POLISH_END ==== */
+</style>
+<script id="t179-resp-shared">
+/* ---- t179: text first where t192 does not reach (the owner's rule, as t192: an icon stays beside up to three lines, two
+   in a column narrower than 300px; past that the group puts its icons above the words). The lines are
+   counted from where they fall. Measured again when the group's room changes width, when it appears, when its words
+   change and when the fonts arrive. The lesson index's soft edges. ---- */
+(function () {
+  "use strict";
+  if (window.SAMAI_quizFit) return;
+  var MAX = 3, TIGHT = 300;
+  var SKIP = "#s-brief, #s-example, #s-project, #s-file"; // U6_L2's capstone sections have their own layer
+  function lineCount(t) {
+    var g = document.createRange(), tops = [], cs = getComputedStyle(t), lh = parseFloat(cs.lineHeight) || parseFloat(cs.fontSize) * 1.6;
+    g.selectNodeContents(t);
+    [].forEach.call(g.getClientRects(), function (x) {
+      if (x.width < 1 || x.height < 1) return;
+      for (var k = 0; k < tops.length; k++) if (Math.abs(tops[k] - x.top) < lh / 2) return;
+      tops.push(x.top);
+    });
+    return tops.length || 1;
+  }
+  function iconOf(t, sel) { var p = t.parentElement; if (!p) return null; for (var c = p.firstElementChild; c; c = c.nextElementSibling) if (c !== t && c.matches(sel)) return c; return null; }
+  // the words need their column: they sit beside their icon (when one is named) and pass three lines, or wrap narrow
+  function needs(t, icon) {
+    var r = t.getBoundingClientRect(); if (r.width < 1 || r.height < 1) return false;
+    if (icon) {
+      var ic = iconOf(t, icon); if (!ic) return false;
+      var q = ic.getBoundingClientRect(); if (q.width < 1 || q.bottom <= r.top + 1 || q.top >= r.bottom - 1) return false;
+    }
+    var n = lineCount(t);
+    return n > MAX || (n > 2 && r.width < TIGHT); // as t192: past three lines, or past two in a narrow column
+  }
+  function anyNeeds(list, icon) { for (var i = 0; i < list.length; i++) if (needs(list[i], icon)) return true; return false; }
+  function group(g, textSel, icon) {
+    var fit = function () {
+      if (!g.isConnected || !g.clientWidth) return;
+      g.classList.remove("is-tf");
+      g.classList.toggle("is-tf", anyNeeds(g.querySelectorAll(textSel), icon));
+    };
+    if (g.__t179) { g.__t179(); return; }
+    g.__t179 = fit;
+    var room = g.parentElement || g, w = room.clientWidth, gw = g.clientWidth, rq = 0;
+    var later = function () { cancelAnimationFrame(rq); rq = requestAnimationFrame(fit); };
+    if (window.ResizeObserver) {
+      // a few pixels of width (a scrollbar coming and going) never flip the layout back and forth
+      new ResizeObserver(function () { var a = room.clientWidth, b = g.clientWidth; if (Math.abs(a - w) < 8 && (b > 0) === (gw > 0)) return; w = a; gw = b; later(); }).observe(room);
+      new ResizeObserver(function () { var b = g.clientWidth; if ((b > 0) === (gw > 0)) return; gw = b; later(); }).observe(g);
+    }
+    if (window.MutationObserver) new MutationObserver(later).observe(g, { childList: true, subtree: true, characterData: true });
+    if (document.fonts && document.fonts.ready) document.fonts.ready.then(later);
+    fit();
+  }
+  // a quiz decides for all its questions and answers at once (its lock() draws each in turn, then keeps the tallest)
+  window.SAMAI_quizFit = function (box, walk) {
+    box.classList.remove("tf-opts", "tf-feed", "tf-label");
+    if (box.matches(".cf-quiz, .agent-quiz, .kx-sort") || box.closest(SKIP)) return; // lessons' own quiz layouts
+    var so = false, sf = false, sl = false;
+    walk(function (kind) {
+      if (kind === "ask") {
+        var o1 = box.querySelector(".q-opts > .q-opt");
+        if (!so && o1 && getComputedStyle(o1).display === "flex") so = anyNeeds(box.querySelectorAll(".q-opts > .q-opt > .t"), ".l");
+        var lb = box.querySelector(".q-label");
+        if (!sl && lb && !lb.hidden && lb.style.visibility !== "hidden") sl = needs(lb, null);
+      } else if (!sf) sf = anyNeeds(box.querySelectorAll(".q-feed > div"), "i");
+    });
+    box.classList.toggle("tf-opts", so); box.classList.toggle("tf-feed", sf); box.classList.toggle("tf-label", sl);
+  };
+  // a tour decides for all its steps' commands at once (lockTourBar draws each in turn, then keeps the tallest)
+  window.SAMAI_tourFit = function (root, walk) {
+    root.classList.remove("tf-cmd");
+    var s = false;
+    walk(function (kind) { if (!s && kind === "ask") s = anyNeeds(root.querySelectorAll(".tour-cmd > span:last-child"), ".tour-cmd-ic"); });
+    root.classList.toggle("tf-cmd", s);
+  };
+  // the shared places t192 leaves (it skips .x-hint and .refs; a row's number is not an icon to it): [group, words, icon]
+  var PLACES = [
+    [".x-hint > .x-do", ":scope > span", "i"],
+    [".u-card .lessons", ":scope > li > span:not(.num)", ".num"],
+    [".refs .steps", ":scope > li > a > .txt", ".num"],
+    [".refs-note", ":scope > span", "i"]
+  ];
+  var ALL = PLACES.map(function (p) { return p[0]; }).join(", ");
+  function scan(root) {
+    PLACES.forEach(function (d) {
+      var gs = [].slice.call(root.querySelectorAll(d[0])); if (root.matches && root.matches(d[0])) gs.unshift(root);
+      gs.forEach(function (g) { if (!g.__t179 && !g.closest(SKIP)) group(g, d[1], d[2]); });
+    });
+  }
+  // the lesson index: soft edges on the side(s) where it goes on
+  function tocEdges() {
+    var l = document.getElementById("toc-list"); if (!l) return;
+    var edge = function () {
+      var max = l.scrollWidth - l.clientWidth, x = Math.abs(l.scrollLeft); // RTL: scrollLeft runs from 0 to -max
+      l.classList.toggle("more-s", max > 2 && x > 2);
+      l.classList.toggle("more-e", max > 2 && x < max - 2);
+    };
+    l.addEventListener("scroll", edge, { passive: true });
+    if (window.ResizeObserver) new ResizeObserver(edge).observe(l);
+    edge();
+  }
+  function start() {
+    scan(document); tocEdges();
+    if (!window.MutationObserver) return;
+    var q = 0, roots = [];
+    new MutationObserver(function (ms) {
+      for (var i = 0; i < ms.length; i++) for (var j = 0; j < ms[i].addedNodes.length; j++) { var n = ms[i].addedNodes[j]; if (n.nodeType === 1) roots.push(n); }
+      if (!roots.length || q) return;
+      q = requestAnimationFrame(function () {
+        q = 0; var rs = roots; roots = [];
+        rs.forEach(function (r) { if (r.isConnected && (r.matches(ALL) || r.querySelector(ALL))) scan(r); });
+      });
+    }).observe(document.body, { childList: true, subtree: true });
+  }
+  if (document.readyState === "loading") document.addEventListener("DOMContentLoaded", start); else start();
+})();
+</script>
 </head>
 <body>
-<main>
-<h1>قطاع البلديات والإسكان</h1>
-<p>محتوى هذا القطاع قيد الإعداد</p>
+
+<header class="bar">
+  <div class="bar-inner">
+    <img class="bar-logo" src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAxNzcwIDY2NCIgcm9sZT0iaW1nIiBhcmlhLWxhYmVsPSLYs9mF2KfZiiAyIj4KPGxpbmVhckdyYWRpZW50IGlkPSJzMmwiIHgxPSIwIiB5MT0iMSIgeDI9IjAiIHkyPSIwIj48c3RvcCBvZmZzZXQ9IjAiIHN0b3AtY29sb3I9IiM5NkM3NEQiLz48c3RvcCBvZmZzZXQ9Ii4zOCIgc3RvcC1jb2xvcj0iIzRDQkM5NCIvPjxzdG9wIG9mZnNldD0iLjgxIiBzdG9wLWNvbG9yPSIjMjYzNTcwIi8+PHN0b3Agb2Zmc2V0PSIxIiBzdG9wLWNvbG9yPSIjMjYzNTcwIi8+PC9saW5lYXJHcmFkaWVudD4KPHBhdGggZmlsbD0idXJsKCNzMmwpIiBkPSJNMTc5IDAgMCAxMDN2NDg4aDQ4MVYwWk03OSAyNTFxLTEtMzkgOS03MiAxMS0zNSAzMi01OSAyMS0yNiA1My00MHQ3My0xNHEzMiAwIDYwIDkgMjggMTEgNTEgMjlhMTM3IDEzNyAwIDAxNDggMTA3IDE1NCAxNTQgMCAwMS0yNSA4NHEtMTEgMTYtMjYgMzAtMTQgMTQtMzEgMjVsLTY3IDQ1YTQwOSA0MDkgMCAwMC00NiA0MGgxOTd2OTRINjl2LTlxMC00MCAxMS02OSAxMi0zMCAzMi01MyAxOS0yMyA0NS00Mmw4NC01OXExNi0xMCAyOS0yMiAxMi0xMiAyMS0yNiA4LTEzIDgtMzEtMS0yOC0xNi00M2E1NSA1NSAwIDAwLTQxLTE2cS0xOCAwLTI4IDgtMTIgNy0xOSAyMS03IDEzLTExIDI5bC0zIDM0djlINzl6Ii8+CjxwYXRoIGZpbGw9IiMzRDUzNTUiIGQ9Im02OTQgNjI2LTEwIDM4IDY3LTM4ek01NTEgODJjMCA1NiA0NiA2OCA5NiA3NCAyNSAzIDQ2IDYgNDYgMjNxLTIgMjQtMzUgMjVjLTI2IDAtNDUtMTUtNDUtMzV2LTFoLTYzcTAgMTggNyAzM2MxNCAzMyA1MiA1NSA5OSA1NSA2MyAwIDEwNy0zNSAxMDctODYgMC01Ni00Ny02OS05NS03NC0yNy0zLTQ3LTUtNDctMjJxMi0yMSAzNS0yMmMyNCAwIDQxIDEzIDQxIDMxbDU0LTMxYy0xNS0zMi01MS01Mi05Ny01Mi02MCAwLTEwMyAzMi0xMDMgODJtNzk2LTc0aC03NmwtNTEgMTc4LTUyLTE3OGgtMTM0djIzOWg3M1Y1NWw2MCAxOTJoMTA1bDYwLTE5MnYxOTJoNzNWOHptMTUxIDAtNzUgMjM5aDc2bDE0LTQ3IDY2LTM4aC01NmwyOC05MyAyOCA5MyAyNCA4NWg3NkwxNjA0IDh6TTgzOCA4bC03NSAyMzloNzZsMTQtNDcgNjYtMzhoLTU2bDI4LTkzIDI4IDkzIDI0IDg1aDc2TDk0NCA4em04NTkgNDJ2MTk3aDczVjhaTTkyNiAzNTJ2MTU1cTAgMjQgNyA0MCA2IDE2IDE3IDI2IDEyIDkgMjggMTQgMTUgNCAzNCA0aDUzcTE4IDAgMzItNCAxNS0zIDMwLTE5IDI0IDE2IDQ3IDIzIDIzIDYgNDUgNiAyOSAwIDUwLTEwIDIwLTEwIDMyLTMwYTc0IDc0IDAgMDA2NCAzNGgycTM2IDAgNTktNSAyNC00IDM5LTI0IDkgMTAgMjcgMjAgMjAgOSA0OCA5bDM4LTRxMTAtMyAxOS05IDExLTYgMTgtMTYgMTEgMTUgMjYgMjJ0NDQgN2g4NVYzNzBsLTcyIDQydjExNWgtMzVxLTMyIDAtMzItMzh2LTk0bC03MiA0MXY2NHEwIDE3LTEyIDIyLTExIDUtMjcgNS0yMSAwLTMwLTEwLTEwLTEwLTEwLTI4di05NGwtNzEgNDF2NjRsLTIgMTVxLTMgNS03IDgtNiAzLTEzIDNsLTIwIDFxLTEzIDAtMjgtNS0xNS02LTIyLTE5di0xNHEwLTI0LTctNDYtOS0yMS0yMi0zNmE5NSA5NSAwIDAwLTczLTMxcS0xNS0xLTMwIDUtMTUgNS0zMSAxNy0xNSAxMy0zMCAzMy0xNCAyMS0yNiA1My04IDIxLTE3IDMyLTEwIDExLTE3IDExaC0zOXEtMTMgMC0yMC01LTYtNi03LTI1VjMxMHptMjU3IDE3NHEtMTItNS0yNi0xNCA5LTM5IDI0LTU1IDE1LTE1IDMwLTE1YTMyIDMyIDAgMDEyOCAxNGw2IDE1IDIgMTdxMCAxOS0xMCAzMS05IDEyLTI3IDEyLTE1IDAtMjctNU04MDkgMzI3cS0yMiA0LTM3IDEzLTEyIDktMjAgMTlhNjEgNjEgMCAwMC05IDUzcTMgMTUgMTUgMzJsMzggNTYgNCA5IDEgNnEwIDctOCAxMGwtMjAgMkg2NTRsLTIwLTJxLTctMy03LTEwYTI3IDI3IDAgMDE1LTE1bDEwLTE2IDE3LTI1IDExLTE3aC04OHEtMTUgMjQtMjIgNDEtMTAgMjAtMTAgMzggMCAxNSA1IDI3YTYxIDYxIDAgMDAzOCAzN3ExNSA2IDM2IDZoMTcwcTIxIDAgMzUtNiAxNS02IDI1LTE1IDktOSAxNC0yMiA1LTEyIDUtMjcgMC0xOC0xMC0zOGMtNy0xNC0xMC0yMi0yMy00M2wtNi0xMC00LTdxLTQtNi01LTExLTItNyAzLTExbDYtMyAxMC0yaDU2bC01MC03NHpNNjM3IDYyNmwtMTAgMzggNjctMzh6Ii8+Cjwvc3ZnPgo=" alt="سماي 2" width="101" height="38">
+  </div>
+</header>
+
+<main id="top">
+  <div class="container hero-wrap">
+    <section class="hero" aria-labelledby="a-title">
+      <div>
+        <ol class="trail hero-anim d1" data-trail aria-label="موقع هذه الصفحة"></ol>
+        <h1 class="hero-anim d1" id="a-title" data-f="title"></h1>
+        <p class="lead hero-anim d2" data-f="intro"></p>
+      </div>
+      <div class="orbit is-here hero-anim d2" id="orbit" role="group" aria-label="مسار البرنامج: الوحدات ودروسها"></div>
+    </section>
+  </div>
+
+  <div class="container layout">
+    <section class="section uv" id="unit-video" aria-label="فيديو تعريفي بالوحدة" hidden style="display:none"><div class="uv-frame" tabindex="0"></div></section>
+    <section class="section" id="goals">
+      <div class="section-head reveal"><div><span class="kicker">ماذا ستتعلم</span><h2>أهداف الوحدة</h2><p>بنهاية هذه الوحدة، ستتمكن من:</p></div></div>
+      <ul class="grid-3 goals" id="goal-list"></ul>
+    </section>
+
+    <section class="section" id="outline">
+      <div class="section-head reveal"><div><span class="kicker">الدروس</span><h2>محتوى الوحدة</h2></div></div>
+      <ol class="path" id="path"></ol>
+    </section>
+
+    <section class="section" id="terms">
+      <div class="section-head reveal"><div><span class="kicker">المصطلحات</span><h2>أبرز مصطلحات الوحدة</h2></div></div>
+      <p class="x-hint reveal"><i class="fa-solid fa-hand-pointer" aria-hidden="true"></i><span>اختر أي مصطلح من القائمة لقراءة تعريفه</span></p>
+      <div class="explorer reveal">
+        <div class="ex-side">
+          <div class="ex-read">
+            <div class="ex-read-top" aria-live="polite"><span><i class="fa-solid fa-circle-check" aria-hidden="true"></i><span id="ex-read-text"></span></span><b id="ex-read-count"></b></div>
+            <span class="bar-track" aria-hidden="true"><i id="ex-read-bar"></i></span>
+          </div>
+          <div class="ex-list" id="ex-list" role="tablist" aria-orientation="vertical" aria-label="المصطلحات"></div>
+        </div>
+        <div class="ex-panel" id="ex-panel" role="tabpanel">
+          <div class="ex-stack" id="ex-stack"></div>
+          <div class="ex-nav">
+            <button class="ex-step prev" type="button" id="ex-prev" aria-label="المصطلح السابق"><i class="fa-solid fa-arrow-right" aria-hidden="true"></i>السابق</button>
+            <button class="ex-step next" type="button" id="ex-next" aria-label="المصطلح التالي">التالي<i class="fa-solid fa-arrow-left" aria-hidden="true"></i></button>
+          </div>
+        </div>
+      </div>
+
+      <p class="terms-note" id="terms-note" hidden><i class="fa-solid fa-circle-info" aria-hidden="true"></i><span></span></p>
+
+    </section>
+  </div>
 </main>
+
+<!-- SAMAI_PAGE_NAV_START -->
+<nav class="container samai-page-nav" aria-label="التنقل بين صفحات البرنامج">
+  <a class="samai-page-nav__button" href="welcome%20(9).html" rel="prev" aria-label="السابق: سماي 2 — الذكاء الاصطناعي في البلديات والإسكان"><i class="fa-solid fa-arrow-right" aria-hidden="true"></i><span>السابق</span></a>
+  <a class="samai-page-nav__button samai-page-nav__button--next" href="U1_L1.html" rel="next" aria-label="التالي: سماي 2 — الوحدة 1 · الدرس 1: ما هو الذكاء الاصطناعي؟"><span>التالي</span><i class="fa-solid fa-arrow-left" aria-hidden="true"></i></a>
+</nav>
+<!-- SAMAI_PAGE_NAV_END -->
+
+<footer class="footer">
+  <div class="container"><p class="foot-rights">© 2026 سماي 2، مبادرة من الهيئة السعودية للبيانات والذكاء الاصطناعي (سدايا)؛ جميع الحقوق محفوظة</p></div>
+</footer>
+
+<script>
+document.documentElement.classList.add("js");
+// the sticky header gets its shadow only once the page has scrolled
+(() => { const bar = document.querySelector(".bar"); const f = () => bar.classList.toggle("is-stuck", scrollY > 2); addEventListener("scroll", f, { passive: true }); f(); })();
+
+/* ======================================================================
+   Content — the ONLY part that changes from one unit to another.
+   Text here is approved educational content: copy it exactly, never rewrite it.
+   ====================================================================== */
+const UNIT = {
+ "module": 1,
+ "title": "الذكاء الاصطناعي في البلديات والإسكان",
+ "introduction": "في هذه الوحدة، ستتعرف على مفهوم الذكاء الاصطناعي وكيف تطوّر وصولاً إلى الذكاء الاصطناعي التوليدي والتوكيلي، ثم تنتقل إلى المكوّنات التي تعمل داخل تطبيقاته، وستتعرف على أبرز استخداماته في قطاع البلديات والإسكان، والمهارات التي تساعدك على استخدامه بفاعلية ومسؤولية",
+ "goals": [
+  {
+   "icon": "brain",
+   "text": "توضيح مفهوم الذكاء الاصطناعي ومراحل تطوّره"
+  },
+  {
+   "icon": "diagram-project",
+   "text": "شرح آلية عمل تطبيقات الذكاء الاصطناعي"
+  },
+  {
+   "icon": "compass",
+   "text": "تحديد أبرز استخدامات الذكاء الاصطناعي في قطاع البلديات والإسكان، وتوضيح أسس استخدامه بفاعلية ومسؤولية"
+  }
+ ],
+ "lessons": [
+  {
+   "icon": "brain",
+   "title": "ما هو الذكاء الاصطناعي؟",
+   "items": [
+    "تعريف الذكاء الاصطناعي وأمثلته في حياتك اليومية",
+    "مراحل تطوّر الذكاء الاصطناعي",
+    "أبرز تطبيقات الذكاء الاصطناعي واستخداماتها"
+   ]
+  },
+  {
+   "icon": "gears",
+   "title": "كيف تعمل تطبيقات الذكاء الاصطناعي؟",
+   "items": [
+    "ما الذي تراه في واجهة تطبيقات الذكاء الاصطناعي",
+    "مكوّنات تطبيقات الذكاء الاصطناعي",
+    "رحلة الأمر في تطبيقات الذكاء الاصطناعي"
+   ]
+  },
+  {
+   "icon": "graduation-cap",
+   "title": "الذكاء الاصطناعي في البلديات والإسكان",
+   "items": [
+    "جهود المملكة في الذكاء الاصطناعي لقطاع البلديات والإسكان",
+    "حالات استخدام الذكاء الاصطناعي في قطاع البلديات والإسكان",
+    "مهارات استخدام الذكاء الاصطناعي بطلاقة"
+   ]
+  }
+ ],
+ "terms": [
+  {
+   "ar": "ذكاء اصطناعي",
+   "en": "Artificial Intelligence (AI)",
+   "def": "مجال من مجالات علوم الحاسب يركز على بناء أنظمة قادرة على أداء مهام تتطلب عادةً ذكاءً بشرياً، مثل التعلُّم والاستدلال والتطوير الذاتي، ويُطلق عليه أيضاً \"ذكاء الآلة\""
+  },
+  {
+   "ar": "نظام قائم على القواعد",
+   "en": "Rule-Based System",
+   "def": "نظام خبير يتضمن قواعد شرطية بُنيت بالتعلُّم من بيانات حقيقية أو باستخدام معرفة الخبراء"
+  },
+  {
+   "ar": "تعلُّم الآلة",
+   "en": "Machine Learning (ML)",
+   "def": "مجال فرعي من الذكاء الاصطناعي يركز على تمكين الآلات من التعلُّم من البيانات وتحسين أدائها في مهام محددة دون الحاجة إلى برمجة صريحة"
+  },
+  {
+   "ar": "تعلُّم عميق",
+   "en": "Deep Learning",
+   "def": "مجال فرعي من تعلُّم الآلة يستخدم عدة طبقات مخفية في الشبكات العصبية لحل المشكلات المعقدة عن طريق تحديد أهم الخصائص الأساسية للبيانات المُدْخَلة"
+  },
+  {
+   "ar": "ذكاء اصطناعي توليدي",
+   "en": "Generative AI (Gen AI)",
+   "def": "نوع من الذكاء الاصطناعي يمكنه إنشاء محتوى جديد، مثل النصوص والصور والأصوات والفيديوهات والأكواد البرمجية"
+  },
+  {
+   "ar": "ذكاء اصطناعي توكيلي",
+   "en": "Agentic AI",
+   "def": "ذكاء اصطناعي يعمل عبر وكلاء، والوكيل كيان مادي أو برمجي يمكنه إدراك بيئته، والعمل بتحكم ذاتي لتحقيق هدف"
+  },
+  {
+   "ar": "نموذج",
+   "en": "Model",
+   "def": "تمثيل لما تعلمته خوارزمية تعلُّم الآلة من بيانات التدريب، ويُطلق عليه أيضاً \"نموذج تعلُّم الآلة\""
+  },
+  {
+   "ar": "نموذج لغوي كبير",
+   "en": "Large Language Model (LLM)",
+   "def": "نموذج لغوي يحدد احتمالية وجود تسلسل معين من كلمات في جملة مُكوَّن من عدد كبير من المُعامِلات"
+  },
+  {
+   "ar": "التفويض",
+   "en": "Delegation",
+   "def": "إسناد مهمة إلى الذكاء الاصطناعي بناءً على قدراته ومراعاةً لحدوده بالصلاحيات الكافية ليتمكن من تنفيذها"
+  },
+  {
+   "ar": "الوصف",
+   "en": "Description",
+   "def": "وصف المهمة المطلوبة للذكاء الاصطناعي بطريقة فعّالة مع تجهيز المدخلات وإعطائه كامل السياق الذي يحتاجه لتنفيذها"
+  },
+  {
+   "ar": "التحقّق",
+   "en": "Discernment",
+   "def": "مراجعة وتدقيق مخرجات الذكاء الاصطناعي والتحقّق منها والتأكد من صحة خطوات تنفيذه للمهمة"
+  },
+  {
+   "ar": "المسؤولية",
+   "en": "Diligence",
+   "def": "الاجتهاد في التحقق من صلاحيات تفويض المهمة للذكاء الاصطناعي وتحمّل مسؤولية استخدام مخرجاته"
+  }
+ ]
+};
+// Where this page sits, from the top down (the last step is this page)
+const PROGRAMME = {
+  title: "الذكاء الاصطناعي في البلديات والإسكان",
+  icons: ["compass", "wand-magic-sparkles", "gauge-high", "gears", "shield-halved", "seedling"], // its units, as on the welcome page
+  // every unit and its lessons, as on the programme page — one station per lesson on the ring
+  units: [{"title":"الذكاء الاصطناعي في البلديات والإسكان","lessons":["ما هو الذكاء الاصطناعي؟","كيف تعمل تطبيقات الذكاء الاصطناعي؟","الذكاء الاصطناعي في البلديات والإسكان"]},{"title":"قدرات وحدود الذكاء الاصطناعي","lessons":["قدرات تطبيقات الذكاء الاصطناعي","قدرات نماذج الذكاء الاصطناعي","قدرات وكلاء الذكاء الاصطناعي"]},{"title":"رفع الإنتاجية بالذكاء الاصطناعي","lessons":["هندسة الأوامر (Prompt Engineering)","الإنتاجية باستخدام تطبيقات الذكاء الاصطناعي","اختيار تطبيق الذكاء الاصطناعي المناسب للمهمة"]},{"title":"الأتمتة والبرمجة التوليدية","lessons":["أتمتة المهام","البرمجة التوليدية"]},{"title":"الاستخدام المسؤول للذكاء الاصطناعي","lessons":["مبادئ أخلاقيات الذكاء الاصطناعي","التعامل مع البيانات عند استخدام الذكاء الاصطناعي","مراجعة المخرجات والتحقق من الجودة"]},{"title":"تبنّي الذكاء الاصطناعي في البلديات والإسكان","lessons":["إلى أين يتّجه الذكاء الاصطناعي في البلديات والإسكان؟","المشروع الختامي"]}],
+};
+// 0 = the unit overview; 1, 2, 3 … = that lesson of the unit (lights its station on the ring)
+const LESSON = 0;
+const PAGE = { trail: [{ level: "programme", title: PROGRAMME.title }, { level: "unit", n: UNIT.module, title: UNIT.title }] };
+
+/* ======================================================================
+   Helpers (the same as the welcome page)
+   ====================================================================== */
+const $ = (s, r = document) => r.querySelector(s);
+const $$ = (s, r = document) => Array.from(r.querySelectorAll(s));
+const el = (tag, props = {}, ...kids) => {
+  const n = document.createElement(tag);
+  for (const [k, v] of Object.entries(props)) {
+    if (k === "class") n.className = v;
+    else if (k === "text") n.textContent = v;
+    else n.setAttribute(k, v);
+  }
+  kids.flat().forEach((c) => c != null && n.append(c));
+  return n;
+};
+const icon = (name) => el("i", { class: `fa-solid fa-${name}`, "aria-hidden": "true" });
+const pad = (n) => String(n).padStart(2, "0");
+const reduced = matchMedia("(prefers-reduced-motion: reduce)").matches;
+const shuffle = (a) => { a = a.slice(); for (let i = a.length - 1; i > 0; i--) { const k = Math.floor(Math.random() * (i + 1)); [a[i], a[k]] = [a[k], a[i]]; } return a; };
+// Arabic counting: 1 → واحد, 2 → المثنى, 3–10 → الجمع, 11+ → المفرد المنصوب
+const counted = (one, two, few, many) => (n) => n === 1 ? one : n === 2 ? two : n <= 10 ? `${n} ${few}` : `${n} ${many}`;
+const lessonsWord = counted("درس واحد", "درسان", "دروس", "درساً");
+const goalsWord = counted("هدف واحد", "هدفان", "أهداف", "هدفاً");
+const termsWord = counted("مصطلح واحد", "مصطلحان", "مصطلحات", "مصطلحاً");
+const topicsWord = counted("موضوع واحد", "موضوعان", "موضوعات", "موضوعاً");
+const T = UNIT.terms, N = T.length;
+
+/* ---- trail: where this page sits (the same component on every page) ------
+   PAGE.trail lists the levels from the top down; the last one is this page.
+   Each step: { level, n?, title? }. Add a level (e.g. a category) to LEVELS.
+   Not links — the LMS owns navigation. */
+const LEVELS = {
+  programme: { word: "برنامج" },
+  unit: { word: "الوحدة", feminine: true },
+  lesson: { word: "الدرس" },
+};
+const ORDINAL = {
+  m: ["الأول", "الثاني", "الثالث", "الرابع", "الخامس", "السادس", "السابع", "الثامن", "التاسع", "العاشر"],
+  f: ["الأولى", "الثانية", "الثالثة", "الرابعة", "الخامسة", "السادسة", "السابعة", "الثامنة", "التاسعة", "العاشرة"],
+};
+const levelLabel = (s) => { const L = LEVELS[s.level]; return s.n ? `${L.word} ${(L.feminine ? ORDINAL.f : ORDINAL.m)[s.n - 1] || s.n}` : L.word; };
+// above this page: a programme as "برنامج {name}", any other level as "label: name"; this page: its label only
+// (t191) the programme by its name alone, a unit by its number alone
+const stepText = (s, last) => last ? levelLabel(s) : s.level === "programme" ? s.title : levelLabel(s);
+$$("[data-trail]").forEach((n) => n.append(...PAGE.trail.map((s, i, all) => el("li", { text: stepText(s, i === all.length - 1) }))));
+
+
+
+/* ---- shared fields ------------------------------------------------------ */
+document.title = `سماي 2 — الوحدة ${UNIT.module}: ${UNIT.title}`;
+$$('[data-f="title"]').forEach((n) => (n.textContent = UNIT.title));
+$$('[data-f="intro"]').forEach((n) => (n.textContent = UNIT.introduction));
+const stat = ([ic, v, w]) => el("li", { class: "stat" }, icon(ic), el("b", { text: String(v) }), el("span", { text: w }));
+const split = (s) => { const m = s.match(/^(\d+) (.+)$/); return m ? [m[1], m[2]] : ["", s]; };
+$$('[data-f="tags"]').forEach((n) => n.append(...[
+  ["book-open", ...split(lessonsWord(UNIT.lessons.length))],
+  ["bullseye", ...split(goalsWord(UNIT.goals.length))],
+  ["spell-check", ...split(termsWord(N))]].map(stat)));
+
+/* ---- goals: one card each, an icon tile and the goal ---------------------- */
+// the grid follows the number of goals: four → .grid-4, otherwise .grid-3
+$("#goal-list").className = UNIT.goals.length === 4 ? "grid-4 goals" : "grid-3 goals";
+$("#goal-list").append(...UNIT.goals.map((g) =>
+  el("li", { class: "card goal reveal" }, el("span", { class: "tile" }, icon(g.icon)), el("p", { text: g.text }))));
+
+/* ---- lessons: the unit cards (open / close) ------------------------------ */
+// a Latin name inside an Arabic line («هندسة الأوامر (Prompt Engineering)») stays whole, its brackets the right way round
+const bidi = (t) => t.split(/(\(?[A-Za-z][A-Za-z0-9 .\-]*[A-Za-z0-9.]\)?)/).filter(Boolean).map((s) => /[A-Za-z]/.test(s) ? el("bdi", { class: "lat", dir: "ltr", text: s }) : s);
+UNIT.lessons.forEach((l, i) => {
+  const id = `lesson-${i + 1}`;
+  const head = el("button", { class: "u-head", type: "button", id: `${id}-head`, "aria-expanded": "false", "aria-controls": `${id}-topics` },
+    el("span", { class: "u-band" }, el("span", { class: "u-num", "aria-hidden": "true", text: pad(i + 1) }), el("span", { class: "u-ic" }, icon(l.icon))),
+    el("span", { class: "u-main" },
+      el("span", { class: "u-title" }, bidi(l.title)),
+      el("span", { class: "u-bar" }, el("span", { class: "u-count topics", text: topicsWord(l.items.length) }), el("span", { class: "chev", "aria-hidden": "true" }, icon("chevron-down")))));
+  const fold = el("div", { class: "u-fold", id: `${id}-topics`, role: "region", "aria-labelledby": `${id}-head` }, el("div", {},
+    el("ol", { class: "lessons", "aria-label": `موضوعات الدرس ${i + 1}` },
+      l.items.map((t, j) => el("li", {}, el("span", { class: "num", text: `${i + 1}.${j + 1}` }), el("span", {}, el("span", { class: "hl" }, bidi(t))))))));
+  const row = el("li", { class: "unit-row reveal" }, el("article", { class: "u-card" }, el("h3", { class: "u-h" }, head), fold));
+  const set = (on) => { row.classList.toggle("is-open", on); head.setAttribute("aria-expanded", String(on)); };
+  head.addEventListener("click", () => set(!row.classList.contains("is-open")));
+  set(i === 0); // the first lesson starts open, to show that each one holds its topics
+  $("#path").append(row);
+});
+// as many columns as lessons (two lessons → two cards side by side), up to three
+$("#path").style.setProperty("--cols", String(Math.min(UNIT.lessons.length, 3)));
+function evenTitles() {
+  const titles = $$(".u-title");
+  titles.forEach((h) => (h.style.minHeight = ""));
+  const rows = new Map();
+  titles.forEach((h) => { const top = Math.round(h.closest(".unit-row").offsetTop); rows.set(top, [...(rows.get(top) || []), h]); });
+  rows.forEach((hs) => { const max = Math.max(...hs.map((h) => h.offsetHeight)); hs.forEach((h) => (h.style.minHeight = `${max}px`)); });
+}
+evenTitles();
+addEventListener("resize", evenTitles);
+document.fonts && document.fonts.ready.then(evenTitles);
+
+/* ---- hero: the programme's units on a ring — still, with this unit lit ---- */
+(function orbit() {
+  const box = $("#orbit"), NS = "http://www.w3.org/2000/svg", C = 160, R = 122, LEN = 2 * Math.PI * R, I = PROGRAMME.icons, k = UNIT.module - 1;
+  const svg = document.createElementNS(NS, "svg");
+  svg.setAttribute("viewBox", "0 0 320 320");
+  const add = (tag, attrs) => { const n = document.createElementNS(NS, tag); Object.entries(attrs).forEach(([a, v]) => n.setAttribute(a, v)); svg.append(n); return n; };
+  add("circle", { class: "track", cx: C, cy: C, r: R }); // the route: one line through every unit and station
+  const CORE = C * .34; // the centre circle's radius in the drawing (its width is 34% of the ring): the spokes start at its edge
+  const at = (i, r = R) => { const a = (-90 + i * (360 / I.length)) * Math.PI / 180; return [C + r * Math.cos(a), C + r * Math.sin(a)]; };
+  I.forEach((_, i) => { const [x, y] = at(i), [x0, y0] = at(i, CORE); add("line", { class: i === k ? "spoke on" : i < k ? "spoke passed" : "spoke", x1: x0, y1: y0, x2: x, y2: y }); });
+  add("circle", { class: "inner", cx: C, cy: C, r: 78 });
+  box.append(svg, el("span", { class: "core", "aria-hidden": "true" }, icon("city")));
+  // stations: unit i's lessons sit on the arc between node i and node i+1, clear of both nodes.
+  // On this page's own unit, the lesson names are the ones on this page.
+  const STEP = 360 / I.length, PITCH = 7.5; // a unit's stations sit centred between it and the next unit, the same step apart on every arc
+  const lessonsOf = (i) => (i === k ? UNIT.lessons.map((l) => l.title) : PROGRAMME.units[i].lessons);
+  I.forEach((_, i) => {
+    const names = lessonsOf(i), n = names.length, mid = -90 + (i + 0.5) * STEP;
+    names.forEach((name, j) => {
+      const a = (mid + (j - (n - 1) / 2) * PITCH) * Math.PI / 180, x = C + R * Math.cos(a), y = C + R * Math.sin(a);
+      const state = i < k ? "passed" : i > k ? "" : j + 1 < LESSON ? "passed" : j + 1 === LESSON ? "now" : "ahead";
+      const kicker = `${levelLabel({ level: "unit", n: i + 1 })} · ${levelLabel({ level: "lesson", n: j + 1 })}`;
+      const b = el("button", { class: `stop ${state}`.trim(), type: "button", style: `left:${x / 3.2}%;top:${y / 3.2}%`, "aria-label": `${kicker}: ${name}` });
+      b.addEventListener("click", (e) => { e.stopPropagation(); tip(b, kicker, name); });
+      box.append(b);
+    });
+  });
+  I.forEach((name, i) => {
+    const [x, y] = at(i), kicker = levelLabel({ level: "unit", n: i + 1 }), title = i === k ? UNIT.title : PROGRAMME.units[i].title;
+    const b = el("button", { class: "node" + (i === k ? " on" : i < k ? " done" : ""), type: "button", style: `left:${x / 3.2}%;top:${y / 3.2}%`, "aria-label": `${kicker}: ${title}` }, icon(name));
+    b.addEventListener("click", (e) => { e.stopPropagation(); tip(b, kicker, title); });
+    box.append(b);
+  });
+
+  // the name card: placed above the tapped item (below if there is no room), kept inside the hero
+  const hero = box.closest(".hero"), card = el("div", { class: "orbit-tip", role: "status", "aria-live": "polite" });
+  hero.append(card);
+  let timer = 0, picked = null;
+  function hide() { card.classList.remove("is-on"); if (picked) picked.classList.remove("is-picked"); picked = null; clearTimeout(timer); }
+  function tip(target, kicker, title) {
+    if (picked === target && card.classList.contains("is-on")) { hide(); return; }
+    hide(); picked = target; target.classList.add("is-picked");
+    card.replaceChildren(el("small", { text: kicker }), el("b", { text: title }));
+    const h = hero.getBoundingClientRect(), r = target.getBoundingClientRect(), w = card.offsetWidth, ht = card.offsetHeight, pad = 12;
+    let left = r.left + r.width / 2 - w / 2 - h.left, top = r.top - h.top - ht - 10;
+    if (top < pad) top = r.bottom - h.top + 10;
+    left = Math.max(pad, Math.min(left, h.width - w - pad));
+    card.style.left = `${left}px`; card.style.top = `${top}px`;
+    requestAnimationFrame(() => card.classList.add("is-on"));
+    timer = setTimeout(hide, 10000);
+  }
+  document.addEventListener("click", hide);
+  document.addEventListener("keydown", (e) => { if (e.key === "Escape") hide(); });
+  addEventListener("resize", hide);
+})();
+
+/* ---- terms: the source note, if this unit has one ---- */
+if (UNIT.termsNote) { $("#terms-note span").textContent = UNIT.termsNote; $("#terms-note").hidden = false; }
+
+/* ---- terms: explore ----------------------------------------------------- */
+// Labels for counts. Numbers are always written "X من Y" (never "X / Y"), so they read right-to-left.
+// one counter only: reading progress — "قرأت" on one side, "5 من 12" on the other; the open term is shown by the list itself
+let exIndex = 0;
+const seen = new Set();
+T.forEach((t, j) => {
+  const tab = el("button", { class: "ex-tab", type: "button", role: "tab", id: `ex-tab-${j}`, "aria-selected": "false", "aria-controls": "ex-panel", tabindex: "-1" },
+    el("span", { class: "n", "aria-hidden": "true", text: String(j + 1) }), el("span", { class: "t", text: t.ar }), el("i", { class: "fa-solid fa-check ok", "aria-hidden": "true" }));
+  tab.addEventListener("click", () => showTerm(j, true));
+  $("#ex-list").append(tab);
+  // every term's card content is built once and stacked in one cell (see .ex-stack)
+  $("#ex-stack").append(el("div", { class: "ex-item", id: `ex-item-${j}`, "aria-hidden": "true" },
+    el("h3", { class: "ex-ar", text: t.ar }), el("span", { class: "ex-en", lang: "en", dir: "ltr", text: t.en }),
+    el("div", { class: "ex-def" }, el("span", { class: "label", text: "التعريف" }), el("p", { text: t.def }))));
+});
+// arrows move through the terms; in RTL "left" is forward
+$("#ex-list").addEventListener("keydown", (e) => {
+  const step = { ArrowDown: 1, ArrowLeft: 1, ArrowUp: -1, ArrowRight: -1, Home: -exIndex, End: N - 1 - exIndex }[e.key];
+  if (step === undefined) return;
+  e.preventDefault(); showTerm((exIndex + step + N) % N, true, true);
+});
+$("#ex-prev").addEventListener("click", () => { if (exIndex > 0) showTerm(exIndex - 1, true); });
+$("#ex-next").addEventListener("click", () => { if (exIndex < N - 1) showTerm(exIndex + 1, true); });
+function showTerm(j, byUser, focus) {
+  exIndex = j;
+  // the ends stop: no step back from the first term, none on from the last
+  $("#ex-prev").disabled = j === 0; $("#ex-next").disabled = j === N - 1;
+  const t = T[j], tab = $(`#ex-tab-${j}`);
+  $$(".ex-tab").forEach((b, i) => { b.setAttribute("aria-selected", String(i === j)); b.tabIndex = i === j ? 0 : -1; });
+  $("#ex-panel").setAttribute("aria-labelledby", tab.id);
+  if (focus) tab.focus();
+  $$(".ex-item").forEach((n, i) => { n.classList.toggle("is-on", i === j); n.setAttribute("aria-hidden", String(i !== j)); });
+  if (byUser) {
+    const list = $("#ex-list");
+    // sideways chip row (phones): bring the chosen term into view; works in RTL, where scrollLeft runs negative
+    if (list.scrollWidth > list.clientWidth) { const lr = list.getBoundingClientRect(), tr = tab.getBoundingClientRect(); list.scrollBy({ left: (tr.left + tr.width / 2) - (lr.left + lr.width / 2), behavior: reduced ? "auto" : "smooth" }); }
+    if (!reduced) { const b = $(`#ex-item-${j}`); b.classList.remove("swap"); void b.offsetWidth; b.classList.add("swap"); }
+  }
+  seen.add(j); tab.classList.add("seen");
+  $("#ex-read-text").textContent = seen.size === N ? "قرأت كل المصطلحات" : "قرأت";
+  $("#ex-read-count").textContent = `${seen.size} من ${N}`;
+  $(".ex-read").classList.toggle("is-done", seen.size === N);
+  $("#ex-read-bar").style.width = `${(seen.size / N) * 100}%`;
+}
+showTerm(0, false);
+// phones: the terms are one sideways strip — its edge fades on the side where more terms wait (RTL: scrollLeft runs negative)
+(function stripEdges() {
+  const list = $("#ex-list");
+  let raf = 0;
+  const f = () => { raf = 0; const max = list.scrollWidth - list.clientWidth, x = Math.abs(list.scrollLeft); list.classList.toggle("more-s", max > 1 && x > 1); list.classList.toggle("more-e", max > 1 && x < max - 1); };
+  const q = () => { if (!raf) raf = requestAnimationFrame(f); };
+  list.addEventListener("scroll", q, { passive: true }); addEventListener("resize", q); document.fonts && document.fonts.ready.then(q); f();
+})();
+
+// the hand that shows where to press — the lessons' pressHint (with t132's fixes); unit pages had none
+// where the hand can be seen (2026-10-18): below the bars pinned at the top of the page — the header and the lesson's
+// index, measured as they stand now (one counts only while it is pinned) — and above the foot of the screen. A device in
+// full screen covers those bars.
+function handBand(n) {
+  let top = 0;
+  const fs = document.fullscreenElement;
+  if (!(n && n.closest && n.closest(".tour.is-max")) && !(fs && n && fs.contains(n)))
+    for (const b of document.querySelectorAll("header.bar, #toc")) {
+      const r = b.getBoundingClientRect();
+      if (r.height > 0 && r.top <= top + 2 && r.bottom > top) top = r.bottom;
+    }
+  return { top, bottom: innerHeight };
+}
+// a box in sight: all of it inside that band (`whole`), or, for a box taller than the band, its middle (where the hand
+// presses) well inside it
+function handFits(r, n, whole) {
+  if (!(r.width > 0 && r.height > 0) || r.right <= 0 || r.left >= innerWidth) return false;
+  const { top, bottom } = handBand(n);
+  if (whole || r.height <= bottom - top) return r.top >= top - 1 && r.bottom <= bottom + 1;
+  const y = r.top + r.height / 2;
+  return y >= top + 24 && y <= bottom - 48;
+}
+// a point in sight (a slider's thumb, a place to drag to)
+function handFitsPoint(p, n) {
+  const { top, bottom } = handBand(n);
+  return p.y >= top && p.y <= bottom && p.x >= 0 && p.x <= innerWidth;
+}
+// a block well in view: a third of it in that band (a third of the band, for a block taller than it)
+function handWell(host) {
+  const r = host.getBoundingClientRect(), { top, bottom } = handBand(host);
+  const v = Math.min(r.bottom, bottom) - Math.max(r.top, top);
+  return v > 0 && v >= Math.min(r.height, bottom - top) / 3;
+}
+// the page has settled: loaded (or 8 s after it opened, should a resource never answer). With `f`: f runs then.
+function handSettled(f) {
+  const ok = () => document.readyState === "complete" || performance.now() > 8000;
+  if (!f) return ok();
+  if (ok()) { f(); return true; }
+  let t = 0;
+  const go = () => { removeEventListener("load", go); clearTimeout(t); f(); };
+  addEventListener("load", go); t = setTimeout(go, Math.max(50, 8000 - performance.now()));
+  return false;
+}
+function pressHint({ host, targets, every = 10000, first = every, max = Infinity, act, hold = 0, done, armed = true, mount = document.body }) {
+  // `mount`: where the hand lives — inside a tour's root, so it shows in the tour's full screen too (the browser
+  // shows only the full-screen element there)
+  const hand = el("span", { class: "auto-hand is-fixed", "aria-hidden": "true" }, icon("hand-pointer"));
+  mount.append(hand);
+  let started = armed, seen = false, firstTime = true, timer = 0, opened = null, missed = false, still = 0, moved = -1e9, waiting = false;
+  const later = (ms, f) => { clearTimeout(timer); timer = setTimeout(f, ms); };
+  const off = () => hand.classList.remove("is-on", "is-press");
+  const shown = (x) => {
+    if (!x || x.disabled || (x.checkVisibility && !x.checkVisibility({ visibilityProperty: true }))) return false;
+    // (in sight: below the bars pinned at the top, above the foot of the screen — handFits)
+    return handFits(x.getBoundingClientRect(), x);
+  };
+  const place = (t) => { const r = t.getBoundingClientRect(), fresh = !hand.classList.contains("is-on"); if (fresh) hand.style.transition = "none"; hand.style.left = `${r.left + r.width / 2 - 6}px`; hand.style.top = `${r.top + r.height / 2}px`; if (fresh) { void hand.offsetWidth; hand.style.transition = ""; } hand.classList.add("is-on"); };
+  const tap = (t, then) => later(600, () => { if (!shown(t) || t.closest("[inert]")) { off(); if (opened === t && act) act(t); then(); return; } place(t); hand.classList.add("is-press"); if (act) act(t); later(300, () => { hand.classList.remove("is-press"); then(); }); });
+  function hint() {
+    if (!started || !seen) return off();
+    if (done && done()) { off(); return; }
+    if (document.documentElement.classList.contains("tour-lock") && !host.closest(".tour.is-max")) { off(); later(every, hint); return; }
+    const list = targets().filter(shown).slice(0, max); let i = 0; missed = !list.length;
+    // the quick first appearance: once the page has settled and stands still, with the block well in view or its target
+    // wholly in sight (not spent while the page loads, mid-scroll, or on a sliver of the block)
+    if (firstTime && list.length) {
+      if (!handSettled() || performance.now() - moved < 200 || !(handWell(host) || list.some((t) => handFits(t.getBoundingClientRect(), t, true)))) { missed = true; off(); later(every, hint); return; }
+      firstTime = false;
+    }
+    const step = () => {
+      if (!started || !seen) return off();
+      if (i >= list.length) { off(); later(every, hint); return; }
+      const t = list[i++];
+      if (!shown(t)) { step(); return; }
+      place(t);
+      if (!hold) { tap(t, () => later(650, step)); return; }
+      // press (it opens), wait, press again (it closes), then the next one
+      tap(t, () => { opened = t; later(hold, () => tap(t, () => { opened = null; later(650, step); })); });
+    };
+    step();
+  }
+  // (it waits for the page to finish loading; the quick first delay stays until the hand has really been seen)
+  const wake = () => {
+    if (!handSettled()) { if (!waiting) { waiting = true; handSettled(() => { waiting = false; if (started && seen) wake(); }); } return; }
+    later(firstTime ? first : every, hint);
+  };
+  // the learner's own press: the hand steps aside (what it opened closes, unless that is what was pressed)
+  const quiet = (e) => {
+    off();
+    if (opened && act && !opened.contains(e.target)) act(opened);
+    opened = null; later(every, hint);
+  };
+  host.addEventListener("pointerdown", (e) => { if (e.isTrusted && started) quiet(e); }, true);
+  host.addEventListener("keydown", (e) => { if (started) quiet(e); }, true);
+  addEventListener("scroll", () => {
+    moved = performance.now();
+    if (hand.classList.contains("is-on")) off();
+    clearTimeout(still); still = setTimeout(() => { if (missed && started && seen && !(done && done())) { missed = false; later(700, hint); } }, 250);
+  }, { passive: true });
+  // (one batch can carry several changes — a page opening at a #section: out of view, then in — and the last one is
+  // how the block stands now; reading only the first left the hand hidden until the block left the screen and came back)
+  if ("IntersectionObserver" in window) new IntersectionObserver((es) => {
+    const e = es[es.length - 1];
+    seen = e.isIntersecting;
+    if (!seen) { off(); clearTimeout(timer); if (opened && act) { act(opened); opened = null; } }
+    else if (started) wake();
+  }, { threshold: .25 }).observe(host);
+  else seen = true;
+  return { start() { started = true; if (seen) wake(); }, stop() { started = false; off(); clearTimeout(timer); } };
+}
+/* ---- terms: the hand (2026-10-18) — the lessons' pressHint, as on U3_L0: it presses the next term not read yet (the
+   one after the term open, in the list's order), first about a second after the explorer is in sight, then every 10 s;
+   it steps aside at any press or key in the explorer and is gone once every term is read. On phones the terms are a
+   sideways strip: a term mostly in its clear part is pressed in its middle, one only partly in it on its number; one out of it is opened by «التالي» when it is
+   the next one; otherwise the hand presses another term not read yet that is in the strip (or waits for one). ---- */
+pressHint({ host: $(".explorer"), first: 1000, every: 10000, done: () => seen.size === N,
+  targets: () => {
+    const left = [];
+    for (let s = 1; s <= N; s++) { const k = (exIndex + s) % N; if (!seen.has(k)) left.push(k); }
+    if (!left.length) return [];
+    const list = $("#ex-list"), lr = list.getBoundingClientRect();
+    // the part of the strip that is clear (its faded edges are 48px: on the left while more terms wait at its end)
+    const a = lr.left + (list.classList.contains("more-e") ? 48 : 0) - 1, b = lr.right - (list.classList.contains("more-s") ? 48 : 0) + 1;
+    // (in it: its middle well inside that clear part, and most of it there)
+    const clear = (n) => { const r = n.getBoundingClientRect(), m = (r.left + r.right) / 2; return r.width > 0 && m >= a + 8 && m <= b - 8 && (Math.min(r.right, b) - Math.max(r.left, a)) >= r.width * .6; };
+    const press = (j) => { const tab = $(`#ex-tab-${j}`), num = $(".n", tab); return clear(tab) ? tab : num && clear(num) ? num : null; };
+    const first = press(left[0]);
+    if (first) return [first];
+    if (left[0] === exIndex + 1) return [$("#ex-next")];
+    const other = left.slice(1).map(press).find(Boolean);
+    return other ? [other] : [];
+  } });
+/* ---- reveal on scroll --------------------------------------------------- */
+if ("IntersectionObserver" in window && !reduced) {
+  const io = new IntersectionObserver((entries) => entries.forEach((e) => {
+    if (e.isIntersecting) { e.target.classList.add("is-in"); io.unobserve(e.target); }
+  }), { rootMargin: "0px 0px -8% 0px", threshold: .08 });
+  $$(".reveal").forEach((n) => { const k = Math.min($$(":scope > .reveal", n.parentElement).filter((s) => s.offsetTop === n.offsetTop).indexOf(n), 5); n.style.transitionDelay = `${k * 70}ms`; n.style.setProperty("--rd", `${k * 70}ms`); io.observe(n); });
+} else $$(".reveal").forEach((n) => n.classList.add("is-in"));
+
+/* ---- hero: a faint light follows the pointer (mouse only, not under reduced motion) ---- */
+(function heroLight() {
+  const hero = $(".hero");
+  if (!hero || reduced || !matchMedia("(hover:hover)").matches) return;
+  let raf = 0;
+  hero.addEventListener("pointerenter", () => hero.classList.add("is-lit"));
+  hero.addEventListener("pointerleave", () => hero.classList.remove("is-lit"));
+  hero.addEventListener("pointermove", (e) => {
+    if (raf) return;
+    raf = requestAnimationFrame(() => { const r = hero.getBoundingClientRect(); hero.style.setProperty("--mx", `${e.clientX - r.left}px`); hero.style.setProperty("--my", `${e.clientY - r.top}px`); raf = 0; });
+  });
+})();
+</script>
+
+<script id="samai-polish-js">
+/* SAMAI_POLISH_JS · scene motion follows the same school as the CSS: every keyframed SVG move
+   eases in and out (calm, symmetric). Continuous flows (dash runs, full turns, motion along a
+   whole path) keep their constant speed. Works for scenes built later too (tabs, tours). */
+(() => {
+  const SPLINE = ".45 0 .55 1";
+  const ease = (a) => {
+    const mode = a.getAttribute("calcMode");
+    if (mode === "spline" || mode === "discrete" || mode === "paced") return;
+    if (!a.hasAttribute("keyTimes") && (a.getAttribute("attributeName") === "stroke-dashoffset" || a.getAttribute("type") === "rotate")) return;
+    const list = a.tagName.toLowerCase() === "animatemotion" ? a.getAttribute("keyPoints") : a.getAttribute("values");
+    if (!list) return;
+    const n = list.split(";").filter((s) => s.trim() !== "").length;
+    if (n < 2) return;
+    if (!a.hasAttribute("keyTimes")) a.setAttribute("keyTimes", Array.from({ length: n }, (_, i) => +(i / (n - 1)).toFixed(4)).join(";"));
+    if (a.getAttribute("keyTimes").split(";").length !== n) return;
+    a.setAttribute("calcMode", "spline");
+    a.setAttribute("keySplines", Array(n - 1).fill(SPLINE).join(";"));
+  };
+  const scan = (root) => root.querySelectorAll("animate,animateTransform,animateMotion").forEach(ease);
+  scan(document);
+  new MutationObserver((ms) => ms.forEach((m) => m.addedNodes.forEach((n) => {
+    if (n.nodeType !== 1) return;
+    if (/^animate/i.test(n.tagName)) ease(n); else if (n.querySelector) scan(n);
+  }))).observe(document.documentElement, { childList: true, subtree: true });
+})();
+</script>
+
+<script id="samai-instructions-js">
+/* every instruction line wears the instruction chip; an instruction never names a list for screen readers */
+(() => {
+  const chip = (p) => {
+    if (p.querySelector(":scope>b.x-do")) return;
+    const ic = p.querySelector(":scope>i"), tx = p.querySelector(":scope>span");
+    if (!tx) return;
+    const b = document.createElement("b"); b.className = "x-do";
+    if (ic) b.append(ic); b.append(tx); p.prepend(b);
+    // a list labelled by the instruction is named by its section instead
+    const said = tx.textContent.trim(), wrap = p.parentElement;
+    if (wrap) wrap.querySelectorAll('[aria-label]').forEach((n) => {
+      if (n.getAttribute("aria-label").trim() === said) {
+        const h = p.closest(".section") && p.closest(".section").querySelector("h2");
+        n.setAttribute("aria-label", h ? h.textContent.trim() : "عناصر النشاط");
+      }
+    });
+  };
+  const scan = (r) => r.querySelectorAll(".x-hint").forEach(chip);
+  scan(document);
+  new MutationObserver((ms) => ms.forEach((m) => m.addedNodes.forEach((n) => { if (n.nodeType === 1) { if (n.classList.contains("x-hint")) chip(n); else scan(n); } })))
+    .observe(document.body, { childList: true, subtree: true });
+})();
+</script>
+<script id="t192-text-first">
+/* text first (t192): see the transform's header */
+(function () {
+  var SKIP = ".hero,#toc,.toc,.bar,.trail,.tour-panel,.tour-start,.chat-msg,.win-messages,.ps-chat,.chat-thread,.pt-umsg,.pt-msg,.gf-chat,.ps-msgs,.mt-chat,.chip,button,.btn,.btn-2,.tour-btn,.refs-head,.u-head,.samai-page-nav,.ex-tab,.tsh-view,.apps,.cw-rail,.cw-bar,.cw-rq,label,table,.refs,.win-row";
+  var ICON = ".ic-tile,.tile,.pe-big,.fx-big,.cap-icon,.cap-mark,.cb-time-ic,.fw-ic,.lp-ic,.st-ic";
+  var FA = /\bfa-/;
+  function rootOf() { return document.getElementById("lesson") || document.querySelector("main") || document.body; }
+  function placed(n) { var p = getComputedStyle(n).position; return p === "absolute" || p === "fixed"; }
+  // a glyph that is part of its line: a bare icon, or a small mark without a tile of its own (no fill, no edge)
+  function isGlyph(n) {
+    if (!n || n.nodeType !== 1) return false;
+    if (n.tagName === "I" && FA.test(n.className)) return true;
+    var r = n.getBoundingClientRect(), cs = getComputedStyle(n);
+    return r.width > 0 && r.width <= 34 && r.height <= 30 && !n.textContent.trim() && /rgba\(0, 0, 0, 0\)|transparent/.test(cs.backgroundColor) && parseFloat(cs.borderTopWidth || 0) === 0;
+  }
+  function isIcon(n) {
+    if (!n || n.nodeType !== 1) return false;
+    if (n.matches(ICON)) return true;
+    if (n.tagName === "I" && FA.test(n.className)) return true;
+    // any small mark without words of its own (a drawn mark too: dots, a tile of shapes)
+    if (!n.textContent.trim() && (n.children.length || n.tagName.toLowerCase() === "svg")) { var r = n.getBoundingClientRect(); return r.width > 0 && r.width <= 72 && r.height <= 72; }
+    return false;
+  }
+  // a picture: no words of its own, an svg / img / canvas / video inside, wider than an icon
+  function isMedia(n) {
+    if (!n || n.nodeType !== 1 || n.textContent.trim().length > 2) return false;
+    if (!(n.matches("svg,img,canvas,video,picture") || n.querySelector("svg,img,canvas,video"))) return false;
+    var r = n.getBoundingClientRect(); return r.width >= 56 && r.height >= 40;
+  }
+  // a row's number (a short badge: 1, 12, 1.2, ✓) leads it as an icon does
+  function isNum(n) {
+    if (!n || n.nodeType !== 1) return false;
+    var t = n.textContent.trim();
+    if (!/^(\d{1,3}(\.\d{1,2})?|[✓✔])$/.test(t)) return false;
+    var r = n.getBoundingClientRect(); return r.width > 0 && r.width <= 56;
+  }
+  function lines(n) {
+    var rg = document.createRange(); rg.selectNodeContents(n);
+    var ys = {}, k = 0;
+    [].forEach.call(rg.getClientRects(), function (r) { if (r.width > 2 && r.height > 2) { var y = Math.round(r.top / 4); if (!ys[y]) { ys[y] = 1; k++; } } });
+    return k;
+  }
+  // a button's lines are its words' lines (an icon above or beside them is not a line of words)
+  function wordLines(b) {
+    var ys = [], w = document.createTreeWalker(b, NodeFilter.SHOW_TEXT, { acceptNode: function (n) { return n.nodeValue.trim() && !n.parentElement.closest("i,svg") ? 1 : 2; } }), n;
+    while ((n = w.nextNode())) {
+      var rg = document.createRange(); rg.selectNodeContents(n);
+      [].forEach.call(rg.getClientRects(), function (r) { if (r.width > 2 && r.height > 2) { var y = Math.round(r.top / 4); if (ys.indexOf(y) < 0 && ys.indexOf(y - 1) < 0 && ys.indexOf(y + 1) < 0) ys.push(y); } });
+    }
+    return ys.length;
+  }
+  /* ---- rows: a lead (icon, picture, number) beside a text ---- */
+  function rowsIn(root) {
+    var out = [];
+    root.querySelectorAll("*").forEach(function (box) {
+      if (box.closest(SKIP) || box.classList.contains("tf-stack")) return;
+      var kids = [].filter.call(box.children, function (c) { return c.getClientRects().length && !placed(c); });
+      if (kids.length < 2 || kids.length > 4) return;
+      var media = kids.filter(isMedia), ic = media.length ? media : kids.filter(isIcon), trail = null;
+      // a number that leads, with (at most) an icon at the row's far end: the number is the lead, the icon its tag
+      if (!media.length && isNum(kids[0])) {
+        trail = ic.length === 1 && kids[kids.length - 1] === ic[0] ? ic[0] : null;
+        if (ic.length > 1 || (ic.length === 1 && !trail)) return;
+        ic = [kids[0]];
+      }
+      // a lead icon and an end icon round a text (a file chip: its clip, its name, its download): the end icon is the tag
+      if (!media.length && !trail && ic.length === 2 && kids.length === 3 && kids[0] === ic[0] && kids[2] === ic[1] && !isIcon(kids[1])) { trail = ic[1]; ic = [ic[0]]; }
+      if (ic.length !== 1) return;
+      if (!media.length && kids[0] !== ic[0]) return;   // an icon counts when it leads; a picture wherever it stands
+      var texts = kids.filter(function (c) { return c !== ic[0] && c !== trail && !isIcon(c) && !isMedia(c) && c.textContent.trim().length > 12; });
+      if (!texts.length) return;
+      // (a tag is a word that labels the row — a date, a count — never a button or a link: those keep their own place)
+      var tags = trail ? [trail] : kids.filter(function (c) { var t = c.textContent.trim(); return c !== ic[0] && texts.indexOf(c) < 0 && t.length > 0 && t.length <= 20 && !c.querySelector("p,div,ul,ol,button,a[href]") && !c.matches("button,a[href],[role=button]"); });
+      out.push({ box: box, ic: ic[0], texts: texts, media: !!media.length,
+        glyph: !media.length && !trail && box.tagName === "LI" && isGlyph(ic[0]) && texts.length === 1,
+        tag: !media.length && tags.length === 1 ? tags[0] : null, pair: !!trail && !isNum(ic[0]) });
+    });
+    return out;
+  }
+  function beside(ic, t) {
+    var a = ic.getBoundingClientRect(), b = t.getBoundingClientRect();
+    return b.top < a.bottom - 2 && b.bottom > a.top + 2 && (b.left >= a.right - 2 || b.right <= a.left + 2);
+  }
+  // a short tag pushed to a line of its own under the words: stacking puts it on the lead's line
+  function tagAlone(row) {
+    var g = row.tag.getBoundingClientRect(), a = row.ic.getBoundingClientRect(), t = row.texts[0].getBoundingClientRect();
+    return g.top >= Math.max(a.bottom, t.top + t.height / 2) - 2;
+  }
+  function needs(row) {
+    return row.texts.some(function (t) {
+      if (!beside(row.ic, t)) return false;
+      var n = lines(t), w = t.getBoundingClientRect().width;
+      if (row.box.matches(".x-do,.x-hint")) return n > 1 && w < 300;
+      if (row.pair) return n > 1;   // a file chip whose name wraps: its two icons on top, at the two ends, the name under them
+      return n > 2;
+    }) || (!!row.tag && tagAlone(row));
+  }
+  function plain(c) { return c.className.replace(/\s*\bis-[\w-]+/g, "").replace(/\s*\bseen\b/g, "").trim(); }
+  function groupOf(row) {
+    var p = row.box.parentElement, cls = plain(row.box);
+    var same = function (c) { return c.tagName === row.box.tagName && plain(c) === cls; };
+    if (!p) return [row.box];
+    var g = [].filter.call(p.children, same);
+    // a card alone in its list item: its group is the cards of the list's other items
+    if (g.length === 1 && p.parentElement && p.tagName === "LI") g = [].concat.apply([], [].map.call(p.parentElement.children, function (li) { return [].filter.call(li.children, same); }));
+    return g.length > 1 ? g : [row.box];
+  }
+  function clear(root) {
+    ["tf-stack", "tf-media", "tf-tag", "tf-ic", "tf-text", "tf-inline", "tf-glyph"].forEach(function (c) { root.querySelectorAll("." + c).forEach(function (b) { b.classList.remove(c); }); });
+  }
+  function pass(root) {
+    clear(root);   // measure every row in its side-by-side form
+    var rows = rowsIn(root), stack = new Set();
+    rows.forEach(function (row) {
+      if (row.glyph) { if (lines(row.texts[0]) > 1) { row.box.classList.add("tf-inline"); row.ic.classList.add("tf-glyph"); row.texts[0].classList.add("tf-text"); } return; }
+      if (needs(row)) groupOf(row).forEach(function (b) { stack.add(b); });
+    });
+    rows.forEach(function (row) {
+      if (row.glyph || !stack.has(row.box)) return;
+      row.box.classList.add("tf-stack"); row.ic.classList.add(row.media ? "tf-media" : "tf-ic");
+      row.texts.forEach(function (t) { t.classList.add("tf-text"); });
+      if (row.tag) row.tag.classList.add("tf-tag");
+    });
+  }
+  /* ---- answers: an option led by its letter, with its words and its mark; the group is the question ---- */
+  function options(root) {
+    ["tf-opt", "tf-optl", "tf-optm", "tf-optt"].forEach(function (c) { root.querySelectorAll("." + c).forEach(function (b) { b.classList.remove(c); }); });
+    var groups = new Map();
+    root.querySelectorAll("button,[role=radio],[role=option],label").forEach(function (b) {
+      if (!b.getClientRects().length) return;
+      var kids = [].filter.call(b.children, function (c) { return c.getClientRects().length && !placed(c); });
+      if (kids.length < 2) return;
+      var l = kids[0], tl = l.textContent.trim();
+      if (!(tl.length >= 1 && tl.length <= 2 && l.getBoundingClientRect().width <= 56)) return;
+      var tx = kids.filter(function (c) { return c !== l && c.textContent.trim().length > 12; })[0]; if (!tx) return;
+      var mk = kids.filter(function (c) { return c !== l && c !== tx && (isGlyph(c) || isIcon(c)); }).pop() || null;
+      var p = b.parentElement; if (!groups.has(p)) groups.set(p, []);
+      groups.get(p).push({ b: b, l: l, t: tx, m: mk });
+    });
+    groups.forEach(function (list) {
+      if (!list.some(function (o) { return lines(o.t) > 2; })) return;
+      list.forEach(function (o) { o.b.classList.add("tf-opt"); o.l.classList.add("tf-optl"); o.t.classList.add("tf-optt"); if (o.m) o.m.classList.add("tf-optm"); });
+    });
+  }
+  /* ---- buttons: icons off first, then one under the other (decided for the buttons that stand together) ---- */
+  var BTN = "button,.btn,.btn-2,a.btn,a.btn-2";
+  var BTN_SKIP = "#toc,.toc,.pk,.tk,.rl,.ex-tab,.stx-step,.cw-rail,.cw-r,.uv-frame,.chip,.q-opt,.qopt,.q-option,.tour-nav,.tour-icon,.refs-head,.u-head,.orbit,.trail,.srow,.win-top,.ps-chips,.tsh-view,.apps,.tf-opt";
+  function wordsOf(b) { return [].some.call(b.childNodes, function (c) { return (c.nodeType === 3 && c.nodeValue.trim()) || (c.nodeType === 1 && c.tagName !== "I" && c.tagName.toLowerCase() !== "svg" && c.textContent.trim()); }); }
+  function hasMark(b) { return [].some.call(b.children, function (c) { return c.tagName === "I" || c.tagName.toLowerCase() === "svg" || c.classList.contains("tour-ic"); }); }
+  function buttons(root) {
+    root.querySelectorAll(".tf-noic").forEach(function (b) { b.classList.remove("tf-noic"); });
+    root.querySelectorAll(".tf-btns").forEach(function (g) { g.classList.remove("tf-btns"); });
+    var groups = new Map();
+    root.querySelectorAll(BTN).forEach(function (b) {
+      if (!b.getClientRects().length || b.closest(BTN_SKIP) || !wordsOf(b)) return;
+      var p = b.parentElement; if (!p) return;
+      if (!groups.has(p)) groups.set(p, []); groups.get(p).push(b);
+    });
+    groups.forEach(function (list, p) {
+      var wraps = function () { return list.some(function (b) { return wordLines(b) > 1; }); };
+      if (!wraps()) return;
+      var marked = list.filter(hasMark);
+      if (marked.length) { marked.forEach(function (b) { b.classList.add("tf-noic"); }); if (!wraps()) return; marked.forEach(function (b) { b.classList.remove("tf-noic"); }); }
+      if (list.length > 1) p.classList.add("tf-btns");
+    });
+  }
+  /* ---- a short English term in brackets in a title or a label: one piece ---- */
+  function latinRuns(root) {
+    var RE = /\(([A-Za-z][A-Za-z0-9 .&'\/-]{1,34})\)/g;
+    root.querySelectorAll("h1,h2,h3,h4,b,strong,.yr,.t,.rc-head h3").forEach(function (h) {
+      if (h.closest(".tf-lat") || h.querySelector(".tf-lat")) return;
+      [].slice.call(h.childNodes).forEach(function (n) {
+        if (n.nodeType !== 3) return;
+        RE.lastIndex = 0; if (!RE.test(n.nodeValue)) return;
+        RE.lastIndex = 0;
+        var frag = document.createDocumentFragment(), txt = n.nodeValue, i = 0, m;
+        while ((m = RE.exec(txt))) {
+          if (m.index > i) frag.appendChild(document.createTextNode(txt.slice(i, m.index)));
+          var sp = document.createElement("span"); sp.className = "tf-lat"; sp.textContent = m[0]; frag.appendChild(sp);
+          i = RE.lastIndex;
+        }
+        if (i < txt.length) frag.appendChild(document.createTextNode(txt.slice(i)));
+        n.parentNode.replaceChild(frag, n);
+      });
+    });
+  }
+  function all(root) { root = root || rootOf(); latinRuns(root); pass(root); options(root); buttons(root); }
+  var t = 0;
+  function soon(ms) { clearTimeout(t); t = setTimeout(function () { requestAnimationFrame(function () { all(); }); }, ms || 160); }
+  window.SAMAI_textFirst = function (root) { all(root); };
+  addEventListener("load", function () { soon(60); });
+  if (document.fonts && document.fonts.ready) document.fonts.ready.then(function () { soon(60); });
+  var lastW = innerWidth;
+  addEventListener("resize", function () { if (innerWidth !== lastW) { lastW = innerWidth; soon(200); } }, { passive: true });
+  document.addEventListener("click", function () { soon(260); }, true);
+  soon(400);
+})();
+</script>
+<script id="t194-unit-video">
+/* the unit's intro video (t194): see the transform's header */
+(function () {
+  var frame = document.querySelector("#unit-video .uv-frame");
+  if (!frame || typeof UNIT === "undefined" || frame.closest("[hidden]")) return;   // (the section is hidden while the video is not here)
+  var N = UNIT.module, SRC = "videos/intro_" + N + "_1080p.mp4";
+  var unitWord = typeof levelLabel === "function" ? levelLabel({ level: "unit", n: N }) : "الوحدة " + N;
+  var I = function (n) { return '<i class="fa-solid fa-' + n + '" aria-hidden="true"></i>'; };
+  frame.setAttribute("role", "region"); frame.setAttribute("aria-label", "فيديو تعريفي: " + unitWord);
+  frame.innerHTML =
+    '<video class="uv-video" preload="metadata" playsinline webkit-playsinline src="' + SRC + '#t=0.5"></video>' +
+    '<div class="uv-cover"><div></div><div class="uv-cover-tx">' +
+      '<span class="uv-kick">' + I("clapperboard") + '<span>فيديو تعريفي</span></span>' +
+      '<span class="uv-unit"></span><h2 class="uv-title"></h2>' +
+      '<span class="uv-meta">' + I("clock") + '<bdi class="uv-len" dir="ltr">–:––</bdi></span></div></div>' +
+    '<button type="button" class="uv-big" aria-label="تشغيل الفيديو">' + I("play") + '</button>' +
+    '<div class="uv-hud" role="status" aria-live="polite"></div><div class="uv-seekfx" aria-hidden="true"></div>' +
+    '<div class="uv-bar" role="group" aria-label="التحكم في الفيديو">' +
+      '<div class="uv-scrub" dir="ltr" role="slider" tabindex="0" aria-label="التقدّم في الفيديو" aria-valuemin="0">' +
+        '<div class="uv-track"><span class="uv-buf"></span><span class="uv-fill"></span></div><span class="uv-thumb"></span><span class="uv-tip"></span></div>' +
+      '<div class="uv-row">' +
+        '<button type="button" class="uv-b uv-play" aria-label="تشغيل">' + I("play") + '</button>' +
+        '<span class="uv-time" dir="ltr"><span class="uv-now">0:00</span> / <span class="uv-all">0:00</span></span>' +
+        '<div class="uv-vol"><button type="button" class="uv-b uv-mute" aria-label="كتم الصوت" aria-pressed="false">' + I("volume-high") + '</button>' +
+          '<input type="range" class="uv-volr" min="0" max="100" step="5" value="100" aria-label="مستوى الصوت"></div>' +
+        '<span class="uv-sp"></span>' +
+        '<div class="uv-ratebox"><button type="button" class="uv-b uv-rate" aria-haspopup="true" aria-expanded="false" aria-label="سرعة التشغيل"><bdi dir="ltr">1×</bdi></button><div class="uv-menu" role="menu" aria-label="سرعة التشغيل" hidden></div></div>' +
+        '<button type="button" class="uv-b uv-fs" aria-label="ملء الشاشة">' + I("expand") + '</button>' +
+      '</div></div>';
+  var q = function (s) { return frame.querySelector(s); };
+  var v = q(".uv-video"), big = q(".uv-big"), hud = q(".uv-hud"), fx = q(".uv-seekfx"), scrub = q(".uv-scrub"), fill = q(".uv-fill"), buf = q(".uv-buf"), thumb = q(".uv-thumb"), tip = q(".uv-tip");
+  var bPlay = q(".uv-play"), bMute = q(".uv-mute"), volr = q(".uv-volr"), bRate = q(".uv-rate"), menu = q(".uv-menu"), bFs = q(".uv-fs");
+  q(".uv-unit").textContent = unitWord; q(".uv-title").textContent = UNIT.title;
+  var RM = matchMedia("(prefers-reduced-motion: reduce)");
+  var fmt = function (s) { s = Math.max(0, Math.floor(s || 0)); return Math.floor(s / 60) + ":" + String(s % 60).padStart(2, "0"); };
+  var secsW = function (n) { return n === 1 ? "ثانية" : n === 2 ? "ثانيتين" : n <= 10 ? n + " ثوانٍ" : n + " ثانية"; };
+  // the learner's speed and volume are kept for every unit's video
+  var KEY = "samai-video", pref = {}; try { pref = JSON.parse(localStorage.getItem(KEY) || "{}") || {}; } catch (e) {}
+  var keep = function () { try { localStorage.setItem(KEY, JSON.stringify(pref)); } catch (e) {} };
+  var VOL_OK = (function () { try { var a = document.createElement("audio"); a.volume = 0.5; return Math.abs(a.volume - 0.5) < 0.01; } catch (e) { return false; } })();
+  if (!VOL_OK) volr.style.display = "none";
+  var RATES = [0.5, 0.75, 1, 1.25, 1.5, 2];
+  menu.innerHTML = RATES.map(function (r) { return '<button type="button" class="uv-mi" role="menuitemradio" data-r="' + r + '" aria-checked="false"><bdi dir="ltr">' + r + '×</bdi>' + (r === 1 ? '<span>عادية</span>' : '') + '</button>'; }).join("");
+  function hudSay(ic, text) { hud.innerHTML = I(ic) + "<span>" + text + "</span>"; hud.classList.add("is-on"); clearTimeout(hud.__t); hud.__t = setTimeout(function () { hud.classList.remove("is-on"); }, 900); }
+  // the controls rest out of sight while it plays and nobody moves
+  var idleT = 0;
+  function wake() { frame.classList.remove("is-idle"); clearTimeout(idleT); if (!v.paused && menu.hidden) idleT = setTimeout(function () { frame.classList.add("is-idle"); }, 2600); }
+  function paintPlay() { var p = !v.paused && !v.ended; bPlay.innerHTML = I(p ? "pause" : "play"); bPlay.setAttribute("aria-label", p ? "إيقاف مؤقت" : "تشغيل"); }
+  function paintTime() {
+    var d = v.duration || 0, t = v.currentTime || 0, k = d ? t / d : 0;
+    fill.style.width = (k * 100) + "%"; thumb.style.left = (k * 100) + "%";
+    q(".uv-now").textContent = fmt(t); q(".uv-all").textContent = fmt(d);
+    scrub.setAttribute("aria-valuemax", String(Math.round(d))); scrub.setAttribute("aria-valuenow", String(Math.round(t))); scrub.setAttribute("aria-valuetext", fmt(t) + " من " + fmt(d));
+    try { if (v.buffered.length && d) buf.style.width = (v.buffered.end(v.buffered.length - 1) / d * 100) + "%"; } catch (e) {}
+  }
+  function paintVol() {
+    var mu = v.muted || v.volume === 0;
+    bMute.innerHTML = I(mu ? "volume-xmark" : v.volume < 0.5 ? "volume-low" : "volume-high");
+    bMute.setAttribute("aria-pressed", String(mu)); bMute.setAttribute("aria-label", mu ? "إلغاء كتم الصوت" : "كتم الصوت");
+    volr.value = String(Math.round((mu ? 0 : v.volume) * 100));
+  }
+  function setRate(r, say) {
+    v.playbackRate = r; pref.rate = r; keep();
+    bRate.innerHTML = '<bdi dir="ltr">' + r + "×</bdi>";
+    [].forEach.call(menu.children, function (b) { b.setAttribute("aria-checked", String(+b.dataset.r === r)); });
+    if (say) hudSay("gauge-high", 'السرعة <bdi dir="ltr">' + r + "×</bdi>");
+  }
+  function seek(t, say) { if (!v.duration) return; var to = Math.max(0, Math.min(v.duration - 0.05, t)); v.currentTime = to; paintTime(); if (say) hudSay("clock-rotate-left", fmt(to)); }
+  function start() { frame.classList.add("is-on"); frame.classList.remove("is-ended"); v.play().catch(function () {}); frame.focus({ preventScroll: true }); wake(); }
+  function togglePlay() { if (!frame.classList.contains("is-on")) return start(); if (v.paused || v.ended) { v.play().catch(function () {}); hudSay("play", "تشغيل"); } else { v.pause(); hudSay("pause", "إيقاف مؤقت"); } wake(); }
+  // full screen: the browser's own on the picture (on iPhone the video's own)
+  function isFs() { return document.fullscreenElement === frame || document.webkitFullscreenElement === frame; }
+  function toggleFs() {
+    if (isFs()) { (document.exitFullscreen || document.webkitExitFullscreen).call(document); return; }
+    var go = frame.requestFullscreen || frame.webkitRequestFullscreen;
+    if (go) { var p = go.call(frame); if (p && p.catch) p.catch(function () {}); }
+    else if (v.webkitEnterFullscreen) v.webkitEnterFullscreen();
+  }
+  function paintFs() { var on = isFs(); bFs.innerHTML = I(on ? "compress" : "expand"); bFs.setAttribute("aria-label", on ? "الخروج من ملء الشاشة" : "ملء الشاشة"); frame.classList.toggle("is-fs", on); }
+  document.addEventListener("fullscreenchange", paintFs); document.addEventListener("webkitfullscreenchange", paintFs);
+  // the picture: one click plays or pauses (a first tap on a touch screen only shows the controls); a double one: right
+  // third 5 s forward, left third 5 s back (each further tap on the same side adds 5 s), middle full screen
+  var lastTap = 0, lastX = -1, clickT = 0, chainSide = 0, chainUntil = 0, chainSum = 0, pointer = "mouse", holdT = 0, held = false, holdRate = 1;
+  function jump(dir) {
+    chainSum += 5; chainUntil = Date.now() + 700; seek(v.currentTime + dir * 5);
+    fx.className = "uv-seekfx " + (dir > 0 ? "is-r" : "is-l");
+    fx.innerHTML = I(dir > 0 ? "forward" : "backward") + "<span>" + (dir > 0 ? "تقديم " : "رجوع ") + secsW(chainSum) + "</span>";
+    void fx.offsetWidth; fx.classList.add("is-on"); clearTimeout(fx.__t); fx.__t = setTimeout(function () { fx.classList.remove("is-on"); }, 700); wake();
+  }
+  var CTRL = ".uv-bar, .uv-big, button, input";
+  frame.addEventListener("pointerdown", function (e) {
+    pointer = e.pointerType || "mouse"; held = false; clearTimeout(holdT);
+    if (!frame.classList.contains("is-on") || v.paused || e.button > 0 || e.target.closest(CTRL)) return;
+    holdT = setTimeout(function () { held = true; holdRate = v.playbackRate; if (holdRate < 2) v.playbackRate = 2; hudSay("gauge-high", '<bdi dir="ltr">2×</bdi> ما دمت ضاغطًا'); }, 520);
+  });
+  var endHold = function () { clearTimeout(holdT); if (!held) return; v.playbackRate = holdRate; hud.classList.remove("is-on"); };
+  frame.addEventListener("pointerup", endHold); frame.addEventListener("pointercancel", endHold); frame.addEventListener("pointerleave", endHold);
+  frame.addEventListener("contextmenu", function (e) { if (held) e.preventDefault(); });
+  frame.addEventListener("click", function (e) {
+    if (e.target.closest(CTRL)) return;
+    if (!frame.classList.contains("is-on")) { start(); return; }
+    if (held) { held = false; return; }
+    var r = frame.getBoundingClientRect(), x = (e.clientX - r.left) / (r.width || 1), zone = x > 0.65 ? 1 : x < 0.35 ? -1 : 0, t0 = Date.now(), win = pointer === "touch" ? 350 : 300;
+    if (chainSide && zone === chainSide && t0 < chainUntil) { clearTimeout(clickT); lastTap = 0; jump(zone); return; }
+    if (t0 - lastTap < win && Math.abs(x - lastX) < 0.2) { clearTimeout(clickT); lastTap = 0; if (zone) { chainSide = zone; chainSum = 0; jump(zone); } else { chainSide = 0; toggleFs(); } return; }
+    lastTap = t0; lastX = x; chainSide = 0;
+    if (pointer === "touch" && frame.classList.contains("is-idle")) { wake(); return; }
+    clearTimeout(clickT); clickT = setTimeout(togglePlay, win);
+  });
+  frame.addEventListener("dblclick", function (e) { e.preventDefault(); });
+  frame.addEventListener("pointermove", function () { if (frame.classList.contains("is-on")) wake(); });
+  frame.addEventListener("focusin", wake);
+  // keys
+  frame.addEventListener("keydown", function (e) {
+    if (e.altKey || e.ctrlKey || e.metaKey) return;
+    var k = e.key, c = e.code, inScrub = e.target === scrub;
+    if (e.target.closest(".uv-menu") && (k === "ArrowUp" || k === "ArrowDown")) return;
+    var done = true;
+    if (k === " " || c === "KeyK") { if (e.target.tagName === "BUTTON" && k === " ") { done = false; } else togglePlay(); }
+    else if (k === "ArrowRight") { if (!frame.classList.contains("is-on")) start(); chainSum = 0; jump(1); }
+    else if (k === "ArrowLeft") { chainSum = 0; jump(-1); }
+    else if (k === "ArrowUp" && !inScrub) { v.muted = false; v.volume = Math.min(1, v.volume + 0.1); hudSay("volume-high", 'الصوت <bdi dir="ltr">' + Math.round(v.volume * 100) + "%</bdi>"); }
+    else if (k === "ArrowDown" && !inScrub) { v.volume = Math.max(0, v.volume - 0.1); hudSay(v.volume ? "volume-low" : "volume-xmark", 'الصوت <bdi dir="ltr">' + Math.round(v.volume * 100) + "%</bdi>"); }
+    else if (c === "KeyM") { bMute.click(); }
+    else if (c === "KeyF") { toggleFs(); }
+    else if (k === ">" || (e.shiftKey && c === "Period")) { var i = RATES.indexOf(v.playbackRate); setRate(RATES[Math.min(RATES.length - 1, (i < 0 ? 2 : i) + 1)], true); }
+    else if (k === "<" || (e.shiftKey && c === "Comma")) { var j = RATES.indexOf(v.playbackRate); setRate(RATES[Math.max(0, (j < 0 ? 2 : j) - 1)], true); }
+    else if (/^(Digit|Numpad)[0-9]$/.test(c)) { var n = +c.slice(-1); if (v.duration) { seek(v.duration * n / 10); hudSay("forward", '<bdi dir="ltr">' + n * 10 + "%</bdi> من الفيديو"); } }
+    else if (k === "Escape" && !menu.hidden) { openMenu(false); bRate.focus(); }
+    else done = false;
+    if (done) { e.preventDefault(); wake(); }
+  });
+  // the controls
+  big.addEventListener("click", function (e) { e.stopPropagation(); start(); });
+  bPlay.addEventListener("click", togglePlay);
+  bMute.addEventListener("click", function () { v.muted = !(v.muted || v.volume === 0); if (!v.muted && v.volume === 0) v.volume = 0.5; pref.muted = v.muted; keep(); hudSay(v.muted ? "volume-xmark" : "volume-high", v.muted ? "كتم الصوت" : "الصوت مسموع"); });
+  volr.addEventListener("input", function () { v.volume = +volr.value / 100; v.muted = v.volume === 0; pref.vol = v.volume; pref.muted = v.muted; keep(); });
+  function openMenu(on) { menu.hidden = !on; bRate.setAttribute("aria-expanded", String(on)); if (on) { var cur = menu.querySelector('[aria-checked="true"]') || menu.firstChild; cur.focus(); } wake(); }
+  bRate.addEventListener("click", function (e) { e.stopPropagation(); openMenu(menu.hidden); });
+  menu.addEventListener("click", function (e) { var b = e.target.closest(".uv-mi"); if (!b) return; setRate(+b.dataset.r, true); openMenu(false); bRate.focus(); });
+  menu.addEventListener("keydown", function (e) { if (e.key !== "ArrowUp" && e.key !== "ArrowDown") return; e.preventDefault(); var items = [].slice.call(menu.children), i = items.indexOf(document.activeElement); items[(i + (e.key === "ArrowDown" ? 1 : -1) + items.length) % items.length].focus(); });
+  document.addEventListener("click", function (e) { if (!menu.hidden && !e.target.closest(".uv-ratebox")) openMenu(false); });
+  bFs.addEventListener("click", toggleFs);
+  // the progress line: press or drag to go there; its tip says the time
+  function atX(clientX) { var r = scrub.getBoundingClientRect(); return Math.max(0, Math.min(1, (clientX - r.left) / (r.width || 1))); }
+  var dragging = false;
+  scrub.addEventListener("pointerdown", function (e) { if (!v.duration) return; dragging = true; scrub.classList.add("is-drag"); scrub.setPointerCapture(e.pointerId); seek(atX(e.clientX) * v.duration); e.stopPropagation(); });
+  scrub.addEventListener("pointermove", function (e) { var k = atX(e.clientX); tip.style.left = (k * 100) + "%"; tip.textContent = fmt(k * (v.duration || 0)); if (dragging) seek(k * v.duration); });
+  var endDrag = function () { dragging = false; scrub.classList.remove("is-drag"); };
+  scrub.addEventListener("pointerup", endDrag); scrub.addEventListener("pointercancel", endDrag);
+  scrub.addEventListener("click", function (e) { e.stopPropagation(); });
+  // the video's own events
+  v.addEventListener("loadedmetadata", function () { q(".uv-len").textContent = fmt(v.duration); paintTime(); });
+  v.addEventListener("timeupdate", paintTime); v.addEventListener("progress", paintTime);
+  v.addEventListener("play", function () { paintPlay(); wake(); }); v.addEventListener("pause", function () { paintPlay(); frame.classList.remove("is-idle"); clearTimeout(idleT); });
+  v.addEventListener("volumechange", paintVol);
+  v.addEventListener("ended", function () {
+    paintPlay(); frame.classList.remove("is-on", "is-idle"); frame.classList.add("is-ended");
+    big.innerHTML = I("rotate-right"); big.setAttribute("aria-label", "إعادة المشاهدة");
+    q(".uv-kick span").textContent = "إعادة المشاهدة";
+    if (isFs()) toggleFs();
+  });
+  big.addEventListener("click", function () { if (frame.classList.contains("is-ended")) { v.currentTime = 0; } }, true);
+  // the learner's speed and volume
+  if (typeof pref.vol === "number" && VOL_OK) v.volume = pref.vol;
+  if (pref.muted) v.muted = true;
+  setRate(RATES.indexOf(pref.rate) >= 0 ? pref.rate : 1, false);
+  v.addEventListener("loadedmetadata", function () { v.playbackRate = pref.rate || 1; });
+  paintPlay(); paintVol(); paintFs();
+  // leaving the page's view pauses it (it never plays unseen)
+  if ("IntersectionObserver" in window) new IntersectionObserver(function (es) { es.forEach(function (en) { if (!en.isIntersecting && !v.paused && !isFs()) v.pause(); }); }, { threshold: 0.2 }).observe(frame);
+})();
+</script>
 </body>
 </html>
