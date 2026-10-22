@@ -1,0 +1,550 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>سماي 2</title>
+<link rel="icon" type="image/svg+xml" href="assets/brand/icon.svg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@400;500;600;700;800;900&amp;display=swap">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+<link rel="stylesheet" href="assets/samai.css">
+<style>
+/* ======================================================================
+   The course shell (index.html). It carries the shared stylesheet for
+   its tokens and adds only the rules the shell itself needs: the lesson
+   frame, the outline panel, and the rail the panel collapses into.
+
+   Every colour, radius and shadow below comes from a token — the shell
+   invents none. What is left is geometry no token can express: the
+   width of the panel, the width of the rail, and the diameter of a
+   unit's progress ring.
+   ====================================================================== */
+
+/* One slide for the panel and the rail: they move together, so they
+   cannot be timed apart. */
+:root{--outline-width:min(360px,86vw);--rail-width:44px;--ring:36px;--mark:24px;--slide:.32s}
+
+/* The shell never scrolls; the lesson scrolls inside its own frame. */
+html,body{height:100%;overflow:hidden}
+body{background:var(--page)}
+
+.shell{height:100%}
+.stage{width:100%;height:100%;display:block;border:0}
+
+/* ---- Outline panel ----------------------------------------------------- */
+
+/* Physical left, not inline-start: the panel sits on the same edge in
+   this right-to-left document as it does in the design. */
+.outline{position:fixed;inset-block:0;left:0;z-index:200;width:var(--outline-width);display:flex;flex-direction:column;border-right:1px solid var(--border);background:var(--surface-veil);box-shadow:var(--shadow-hover);backdrop-filter:blur(14px);transition:transform var(--slide) ease,visibility var(--slide)}
+.shell:not(.is-open) .outline{visibility:hidden;transform:translateX(-100%)}
+
+.outline-head{position:relative;padding:var(--space-3) var(--space-4);display:grid;grid-template-columns:44px minmax(0,1fr) 44px;align-items:center;overflow:hidden;background:var(--black)}
+.outline-head::before{content:"";position:absolute;inset:0;pointer-events:none;background:radial-gradient(320px 140px at 80% 50%,var(--glow-teal),transparent 70%),radial-gradient(320px 140px at 20% 50%,var(--glow-green),transparent 70%);background-origin:border-box}
+.outline-head>*{position:relative;z-index:1}
+.outline-logo{grid-column:2;justify-self:center;width:auto;height:var(--logo-height);display:block;filter:var(--shadow-logo)}
+.outline-reset{grid-column:3;appearance:none;width:44px;height:44px;padding:0;display:grid;place-items:center;border:1px solid var(--veil-line);border-radius:var(--radius-xs);background:var(--veil);color:var(--on-dark);cursor:pointer;transition:background .2s ease}
+.outline-reset:hover{background:var(--veil-strong)}
+
+/* The sector the course is shown in. */
+.outline-sector{padding:var(--space-3) var(--space-4);display:grid;grid-template-columns:auto auto minmax(0,1fr);align-items:center;gap:var(--space-2);border-bottom:1px solid var(--border);background:var(--surface);color:var(--primary);font-size:var(--text-sm);font-weight:var(--weight-bold)}
+.outline-sector i{color:var(--teal)}
+.outline-sector-pick{min-width:0;min-height:40px;padding:var(--space-1) var(--space-3);border:1px solid var(--border);border-radius:var(--radius-xs);background:var(--surface-soft);color:var(--primary);font:inherit;font-size:var(--text-base);font-weight:var(--weight-bold);cursor:pointer}
+.outline-sector-pick:hover{border-color:var(--border-strong)}
+
+/* The whole course, in one bar. */
+.outline-track{height:4px;background:var(--tint-primary-2)}
+.outline-track i{width:0;height:100%;display:block;background:linear-gradient(90deg,var(--primary),var(--teal),var(--green));box-shadow:var(--shadow-glow);transition:width .3s ease;background-origin:border-box}
+
+.outline-units{flex:1 1 auto;padding:var(--space-3);display:flex;flex-direction:column;gap:var(--space-2);overflow-y:auto}
+
+.unit{border:1px solid var(--border);border-radius:var(--radius-md);background:var(--surface-soft);transition:border-color .25s ease,background .25s ease,box-shadow .25s ease}
+.unit.is-open{border-color:var(--border-strong);background:var(--surface);box-shadow:var(--shadow-card)}
+
+/* Number first, then title: both the ring and the lesson dots sit on
+   the reading side, where the eye starts. */
+.unit-head{appearance:none;width:100%;padding:var(--space-3);display:grid;grid-template-columns:var(--ring) minmax(0,1fr);align-items:center;gap:var(--space-2);border:0;border-radius:var(--radius-md);background:none;color:var(--primary);font-size:var(--text-base);font-weight:var(--weight-bold);line-height:var(--leading-tight);text-align:start;cursor:pointer}
+.unit-head:hover{color:var(--primary-2)}
+.unit.is-open .unit-head{font-weight:var(--weight-black)}
+
+/* Ring, track and number share one box. */
+.unit-ring{position:relative;width:var(--ring);height:var(--ring);display:grid;place-items:center}
+.unit-ring svg{position:absolute;inset:0;width:100%;height:100%;transform:rotate(-90deg)}
+.unit-ring .ring-track{fill:var(--surface);stroke:var(--border);stroke-width:2}
+/* The ring is the same reading as the dots below it, so it is drawn in
+   the same colour a completed lesson carries. */
+.unit-ring .ring-fill{fill:none;stroke:var(--success);stroke-width:3;stroke-linecap:round;transition:stroke-dashoffset .35s ease}
+.unit-ring b{position:relative;color:var(--muted);font-size:var(--text-xs);font-weight:var(--weight-black)}
+.unit.is-open .unit-ring b{color:var(--primary)}
+
+.unit-lessons{padding-block:0 var(--space-3);padding-inline:var(--space-3) var(--space-2);display:flex;flex-direction:column;gap:var(--space-1)}
+
+/* The dot's cell is as wide as the ring above it and carries the same
+   gap, so every indicator in the panel stands on one axis and every
+   title starts on another. */
+.lesson{display:grid;grid-template-columns:var(--ring) minmax(0,1fr);align-items:center;gap:var(--space-2)}
+
+/* A dense list, so a unit reads as one block: both controls drop the
+   44px minimum the shared sheet puts on every button, which is meant
+   for the buttons inside a lesson rather than for an index of them. */
+/* The block hangs back over its own padding, so the title starts on the
+   very axis the unit title above it starts on. */
+.unit-lessons .lesson-link{position:relative;min-height:0;margin-inline-start:calc(var(--space-2) * -1);padding:var(--space-1) var(--space-2);border:0;border-radius:var(--radius-xs);background:none;color:var(--grey);font-size:var(--text-xs);font-weight:var(--weight-medium);line-height:var(--leading-snug);text-align:start;cursor:pointer;transition:background .2s ease,color .2s ease}
+.unit-lessons .lesson-link:hover{background:var(--tint-teal);color:var(--ink)}
+.unit-lessons .lesson-link.is-current{background:var(--tint-primary-2);color:var(--primary);font-weight:var(--weight-bold)}
+/* The marker stands in the block's own gutter, beside the dot. */
+.unit-lessons .lesson-link.is-current::after{content:"";position:absolute;inset-block:4px;inset-inline-start:0px;width:3px;border-radius:var(--radius-pill);background:var(--teal)}
+
+.unit-lessons .lesson-state{width:var(--ring);height:var(--mark);min-height:0;padding:0;display:grid;place-items:center;border:0;border-radius:var(--radius-pill);background:none;color:var(--grey);font-size:var(--text-lg);line-height:1;cursor:pointer;transition:color .2s ease,transform .2s ease}
+.unit-lessons .lesson-state:hover{transform:scale(1.12)}
+.unit-lessons .lesson-state.is-doing{color:var(--teal)}
+.unit-lessons .lesson-state.is-done{color:var(--success)}
+
+/* ---- Rail -------------------------------------------------------------- */
+
+/* Half a rail peeks over the lesson, so the learner keeps the full page
+   to read; hovering it brings the other half in. While the panel is
+   open the rail rides its edge instead. */
+/* The corners clip the buttons, so each one can run the full width of
+   the rail and still leave the strip rounded. */
+.rail{position:fixed;left:0;top:50%;z-index:190;width:var(--rail-width);display:flex;flex-direction:column;overflow:hidden;border:1px solid var(--border);border-left:0;border-radius:0 var(--radius-sm) var(--radius-sm) 0;background:var(--surface-veil);box-shadow:var(--shadow-nav);backdrop-filter:blur(10px);transform:translate(calc(var(--rail-width) / -2),-50%);transition:transform var(--slide) ease}
+.rail:hover{transform:translate(0,-50%)}
+/* Keyboard focus brings the rail out; a press that merely leaves focus
+   behind must not pin it there. */
+.rail:has(:focus-visible){transform:translate(0,-50%)}
+.shell.is-open .rail{transform:translate(var(--outline-width),-50%)}
+
+.rail button{width:100%;height:38px;min-height:0;padding:0;display:grid;place-items:center;border:0;border-radius:0;background:none;color:var(--primary);font-size:var(--text-md);cursor:pointer;transition:background .2s ease,color .2s ease}
+.rail button + button{border-block-start:1px solid var(--border)}
+.rail button:hover{background:var(--tint-teal);color:var(--teal-2)}
+.rail button:disabled{background:none;color:var(--border);cursor:default}
+.rail-open img{width:22px;height:22px;display:block;transition:transform .2s ease}
+.rail-open:hover img{transform:scale(1.08)}
+
+/* Too narrow to give the panel a lane of its own: the rail stays put
+   and the panel covers it. */
+@media (max-width:900px){
+  .shell.is-open .rail{transform:translate(calc(var(--rail-width) / -2),-50%)}
+}
+
+@media (prefers-reduced-motion:reduce){
+  .outline,.rail,.rail-open img,.lesson-state,.outline-track i,.unit-ring .ring-fill{transition:none}
+}
+</style>
+<script src="sectors/sectors.js"></script>
+</head>
+<body>
+<!-- Built by src/build.mjs from src/shell/. Edit the source, not this page. -->
+<div class="shell"></div>
+<script>window.SAMAI_COURSE = {"title":"سماي 2","logo":"assets/brand/logo.svg","units":[{"title":{"sector":"titles.unit1"},"lessons":["ما هو الذكاء الاصطناعي؟","كيف تعمل تطبيقات الذكاء الاصطناعي؟",{"title":{"sector":"titles.unit1Lesson3"},"own":true}]},{"title":"قدرات وحدود الذكاء الاصطناعي","lessons":["قدرات تطبيقات الذكاء الاصطناعي","قدرات نماذج الذكاء الاصطناعي","قدرات وكلاء الذكاء الاصطناعي"]},{"title":"رفع الإنتاجية بالذكاء الاصطناعي","lessons":["هندسة الأوامر (Prompt Engineering)","الإنتاجية باستخدام تطبيقات الذكاء الاصطناعي","تقسيم المهام واختيار التطبيق المناسب"]},{"title":"أتمتة الأوامر والبرمجة التوليدية","lessons":["أتمتة المهام باستخدام تطبيقات الذكاء الاصطناعي","البرمجة التوليدية (Vibe Coding)"]},{"title":"الاستخدام المسؤول للذكاء الاصطناعي","lessons":["أخلاقيات الذكاء الاصطناعي","التعامل مع البيانات عند استخدام الذكاء الاصطناعي","مراجعة المخرجات والتحقق من الجودة"]},{"title":{"sector":"titles.unit6"},"lessons":[{"sector":"titles.unit6Lesson1"},"خطّة تبنّي الذكاء الاصطناعي","المشروع الختامي"]}]};</script>
+<script>
+/* ==========================================================================
+   سماي 2 — the course shell (index.html)
+   One lesson at a time in a frame, with the outline beside it and the learner's progress kept in local
+   storage. The build hands it the outline as window.SAMAI_COURSE:
+
+     { title, logo, units: [{ title, lessons: ["…", …] }] }
+
+   where a title that differs by sector is { sector: "titles.unit1" }, read from the learner's sector file.
+   Lesson n of unit u is U{u}_L{n}.html; lesson 0, the unit's overview, is reached by opening the unit.
+   A lesson written separately for every sector is { title: …, own: true }, and lives at
+   <slug>/U{u}_L{n}.html instead, one copy per sector folder.
+   ========================================================================== */
+(function () {
+  "use strict";
+
+  var DATA = window.SAMAI_COURSE;
+
+  /* ---- 1 · Drawing -------------------------------------------------------------------------------- */
+
+  function append(parent, items) {
+    [].concat(items).flat(Infinity).forEach(function (item) {
+      if (item === null || item === undefined || item === false) return;
+      parent.append(item instanceof Node ? item : document.createTextNode(String(item)));
+    });
+    return parent;
+  }
+
+  /** An element: el("button", { className, type, text, attrs }, children). */
+  function el(tag, options, items) {
+    var node = document.createElement(tag);
+    var settings = options || {};
+    if (settings.className) node.className = settings.className;
+    if (settings.type) node.type = settings.type;
+    if (settings.text !== undefined) node.textContent = settings.text;
+    Object.keys(settings.attrs || {}).forEach(function (name) {
+      var value = settings.attrs[name];
+      if (value === false || value === null || value === undefined) return;
+      node.setAttribute(name, value === true ? "" : String(value));
+    });
+    return items === undefined ? node : append(node, items);
+  }
+
+  function svg(tag, options, items) {
+    var node = document.createElementNS("http://www.w3.org/2000/svg", tag);
+    var settings = options || {};
+    if (settings.className) node.setAttribute("class", settings.className);
+    Object.keys(settings.attrs || {}).forEach(function (name) { node.setAttribute(name, String(settings.attrs[name])); });
+    return items === undefined ? node : append(node, items);
+  }
+
+  /** A Font Awesome icon: a solid name, or a full class list such as "fa-regular fa-circle". */
+  function icon(name) {
+    var classes = /\bfa-(solid|regular)\b/.test(name) ? name : "fa-solid fa-" + name;
+    return el("i", { className: classes, attrs: { "aria-hidden": "true" } });
+  }
+
+  /** A title from the outline, which may be the sector's own. */
+  function text(value) {
+    if (value && typeof value === "object" && "title" in value) return text(value.title);
+    if (!value || typeof value !== "object") return value;
+    return value.sector.split(".").reduce(function (at, step) { return at == null ? at : at[step]; }, window.SAMAI_SECTOR) || "";
+  }
+
+  var COURSE = DATA.units.map(function (unit) {
+    return {
+      title: text(unit.title),
+      lessons: unit.lessons.map(text),
+      own: unit.lessons.map(function (lesson) { return !!(lesson && lesson.own); })
+    };
+  });
+
+  // Every string the shell shows. The lessons carry their own.
+  var STRINGS = {
+    outline: "محتوى الدورة",
+    overview: "نظرة عامة",
+    sector: "القطاع",
+    lesson: "الدرس",
+    logoAlt: DATA.title,
+    reset: "إعادة تعيين التقدم",
+    resetConfirm: "سيُمسح تقدمك في جميع الدروس. هل تريد المتابعة؟",
+    courseProgress: "تقدمك في الدورة",
+    openOutline: "إظهار المحتوى",
+    closeOutline: "إخفاء المحتوى",
+    previous: "الدرس السابق",
+    next: "الدرس التالي",
+    none: "لم يبدأ",
+    doing: "قيد التقدم",
+    done: "مكتمل"
+  };
+
+  /* ---- 2 · Progress ------------------------------------------------------------------------------- */
+  /* One record per lesson, in one of three states, kept in local storage so a learner who closes the tab
+     comes back to where they left off. A unit overview is not a lesson to complete. */
+
+  var STORE = "samai.outline.v1";
+  var STATES = ["none", "doing", "done"];
+  var WEIGHT = { none: 0, doing: 0.5, done: 1 };
+
+  var key = function (unit, lesson) { return "u" + unit + "l" + lesson; };
+  // Every lesson opens in the sector the learner chose; sectors/sectors.js reads it back.
+  var page = function (unit, lesson) {
+    var slug = window.SAMAI_SECTORS.current;
+    var folder = lesson && COURSE[unit - 1].own[lesson - 1] ? slug + "/" : "";
+    return folder + "U" + unit + "_L" + lesson + ".html?sector=" + slug;
+  };
+
+  // The whole course as one reading order, overviews included, so the rail can step from the end of one
+  // unit into the start of the next.
+  var ORDER = COURSE.flatMap(function (entry, index) {
+    return [key(index + 1, 0)].concat(entry.lessons.map(function (title, lesson) { return key(index + 1, lesson + 1); }));
+  });
+
+  function readStore() {
+    try {
+      var saved = JSON.parse(localStorage.getItem(STORE) || "{}");
+      return {
+        progress: saved && typeof saved.progress === "object" && saved.progress ? saved.progress : {},
+        last: typeof saved.last === "string" ? saved.last : "",
+        outline: saved.outline !== false
+      };
+    } catch (error) {
+      return { progress: {}, last: "", outline: true };
+    }
+  }
+
+  var state = readStore();
+
+  function writeStore() {
+    try { localStorage.setItem(STORE, JSON.stringify(state)); } catch (error) { /* storage blocked */ }
+  }
+
+  var stateOf = function (id) { return STATES.indexOf(state.progress[id]) >= 0 ? state.progress[id] : "none"; };
+
+  /**
+   * Records a state. Reading only ever moves a lesson forward — a learner who scrolls back up has not
+   * un-read it — while a press on the indicator is the learner's own word, and sets whatever it says.
+   */
+  function record(id, next, told) {
+    if (!told && STATES.indexOf(next) <= STATES.indexOf(stateOf(id))) return;
+    if (next === "none") delete state.progress[id];
+    else state.progress[id] = next;
+    writeStore();
+    paint();
+  }
+
+  /** How far through a list of lessons the learner is, from 0 to 1. */
+  function shareOf(ids) {
+    if (!ids.length) return 0;
+    return ids.reduce(function (sum, id) { return sum + WEIGHT[stateOf(id)]; }, 0) / ids.length;
+  }
+
+  var unitIds = function (unit) { return COURSE[unit - 1].lessons.map(function (title, index) { return key(unit, index + 1); }); };
+  var courseIds = function () { return COURSE.flatMap(function (entry, index) { return unitIds(index + 1); }); };
+
+  /* ---- 3 · The shell ------------------------------------------------------------------------------ */
+
+  // Where the learner is. The unit they are in is the unit the outline lists, which keeps exactly one
+  // expanded at all times.
+  var here = { unit: 1, lesson: 0 };
+
+  var frame = el("iframe", { className: "stage", attrs: { title: STRINGS.lesson } });
+
+  var track = el("i");
+  var bar = el("div", {
+    className: "outline-track",
+    attrs: { role: "progressbar", "aria-label": STRINGS.courseProgress, "aria-valuemin": "0", "aria-valuemax": "100", "aria-valuenow": "0" }
+  }, track);
+
+  var reset = el("button", { className: "outline-reset", type: "button", attrs: { "aria-label": STRINGS.reset, title: STRINGS.reset } }, icon("rotate-left"));
+
+  var units = el("nav", { className: "outline-units", attrs: { "aria-label": STRINGS.outline } });
+
+  // The sector picker. Choosing another sector reloads the course in it, at the same lesson; progress is
+  // kept, since the lessons are the same.
+  var picker = el("select", { className: "outline-sector-pick", attrs: { "aria-label": STRINGS.sector } },
+    window.SAMAI_SECTORS.list.map(function (entry) { return el("option", { text: entry.name, attrs: { value: entry.slug } }); }));
+  picker.value = window.SAMAI_SECTORS.current;
+  picker.addEventListener("change", function () { window.SAMAI_SECTORS.choose(picker.value); });
+  var sector = el("label", { className: "outline-sector" }, [icon("briefcase"), el("span", { text: STRINGS.sector }), picker]);
+
+  var outline = el("aside", { className: "outline" }, [
+    el("div", { className: "outline-head" }, [el("img", { className: "outline-logo", attrs: { src: DATA.logo, alt: STRINGS.logoAlt } }), reset]),
+    sector,
+    bar,
+    units
+  ]);
+
+  var stepper = function (offset, label, glyph) {
+    return el("button", { className: "rail-step", type: "button", attrs: { "aria-label": label, title: label, "data-step": offset } }, icon(glyph));
+  };
+  var previous = stepper("-1", STRINGS.previous, "chevron-up");
+  var next = stepper("1", STRINGS.next, "chevron-down");
+  var opener = el("button", {
+    className: "rail-open",
+    type: "button",
+    attrs: { "aria-label": STRINGS.openOutline, title: STRINGS.openOutline, "aria-expanded": "false" }
+  }, el("img", { attrs: { src: "assets/brand/icon.svg", alt: "" } }));
+  var rail = el("div", { className: "rail" }, [previous, opener, next]);
+
+  var shell = document.querySelector(".shell");
+  shell.append(frame, outline, rail);
+
+  /**
+   * Opens and closes the panel, and remembers which it was: open on a first visit, folded away once the
+   * learner has started reading.
+   */
+  function show(on) {
+    shell.classList.toggle("is-open", on);
+    opener.setAttribute("aria-expanded", String(on));
+    var label = on ? STRINGS.closeOutline : STRINGS.openOutline;
+    opener.setAttribute("aria-label", label);
+    opener.title = label;
+    if (on === state.outline) return;
+    state.outline = on;
+    writeStore();
+  }
+
+  /* ---- 4 · The outline ---------------------------------------------------------------------------- */
+  /* Redrawn whenever the route or a lesson's state changes; it is small enough that this costs nothing,
+     and it keeps the rings, the bar and the indicators in step. */
+
+  var RADIUS = 15;
+  var CIRCUMFERENCE = 2 * Math.PI * RADIUS;
+
+  /** A unit's number, inside a ring of how much of it is behind the learner. */
+  function ring(unit) {
+    return el("span", { className: "unit-ring" }, [
+      svg("svg", { attrs: { viewBox: "0 0 36 36", "aria-hidden": "true" } }, [
+        svg("circle", { className: "ring-track", attrs: { cx: 18, cy: 18, r: RADIUS } }),
+        svg("circle", {
+          className: "ring-fill",
+          attrs: { cx: 18, cy: 18, r: RADIUS, "stroke-dasharray": CIRCUMFERENCE, "stroke-dashoffset": CIRCUMFERENCE * (1 - shareOf(unitIds(unit))) }
+        })
+      ]),
+      el("b", { text: String(unit) })
+    ]);
+  }
+
+  /** One lesson: a title that navigates, an indicator that cycles. */
+  function row(unit, lesson, title) {
+    var id = key(unit, lesson);
+    var current = here.unit === unit && here.lesson === lesson;
+    var status = stateOf(id);
+    var glyph = status === "done" ? "circle-check" : status === "doing" ? "circle-half-stroke" : "fa-regular fa-circle";
+
+    var link = el("button", {
+      className: current ? "lesson-link is-current" : "lesson-link",
+      type: "button",
+      text: title,
+      attrs: { "aria-current": current ? "true" : false }
+    });
+    link.addEventListener("click", function () { go(unit, lesson); });
+
+    var mark = el("button", {
+      className: "lesson-state is-" + status,
+      type: "button",
+      attrs: { "aria-label": STRINGS[status] + " - " + title, title: STRINGS[status] }
+    }, icon(glyph));
+    mark.addEventListener("click", function () {
+      record(id, STATES[(STATES.indexOf(status) + 1) % STATES.length], true);
+    });
+
+    return el("div", { className: "lesson" }, [mark, link]);
+  }
+
+  /** One unit: its head, and its lessons while it is the open one. */
+  function block(unit, entry) {
+    var expanded = here.unit === unit;
+    var head = el("button", { className: "unit-head", type: "button", attrs: { "aria-expanded": String(expanded) } },
+      [ring(unit), el("span", { text: entry.title })]);
+    // Opening a unit is how a learner reaches its overview; a press on the open unit while reading its
+    // overview does nothing.
+    head.addEventListener("click", function () { if (!expanded || here.lesson !== 0) go(unit, 0); });
+    return el("section", { className: expanded ? "unit is-open" : "unit" }, [
+      head,
+      expanded ? el("div", { className: "unit-lessons" }, entry.lessons.map(function (title, index) { return row(unit, index + 1, title); })) : null
+    ]);
+  }
+
+  function paint() {
+    units.replaceChildren.apply(units, COURSE.map(function (entry, index) { return block(index + 1, entry); }));
+    var percent = Math.round(shareOf(courseIds()) * 100);
+    track.style.width = percent + "%";
+    bar.setAttribute("aria-valuenow", String(percent));
+    var at = ORDER.indexOf(key(here.unit, here.lesson));
+    previous.disabled = at <= 0;
+    next.disabled = at < 0 || at >= ORDER.length - 1;
+  }
+
+  /* ---- 5 · Routing -------------------------------------------------------------------------------- */
+  /* The hash is the address of a lesson: #u3l2 is unit 3, lesson 2. A visit with no address resumes at
+     the first lesson the learner has yet to finish. */
+
+  function parse(hash) {
+    var match = /^#u(\d+)l(\d+)$/i.exec(hash || "");
+    if (!match) return null;
+    var unit = Number(match[1]);
+    var lesson = Number(match[2]);
+    var entry = COURSE[unit - 1];
+    if (!entry || lesson > entry.lessons.length) return null;
+    return { unit: unit, lesson: lesson };
+  }
+
+  /**
+   * Where a visit with no address lands: the first lesson not yet finished, or the overview of a unit not
+   * yet started. With the whole course behind them, the lesson the learner last opened.
+   */
+  function resume() {
+    for (var index = 0; index < COURSE.length; index++) {
+      var unit = index + 1;
+      for (var lesson = 1; lesson <= COURSE[index].lessons.length; lesson++) {
+        var status = stateOf(key(unit, lesson));
+        if (status === "done") continue;
+        return { unit: unit, lesson: lesson === 1 && status === "none" ? 0 : lesson };
+      }
+    }
+    return parse("#" + state.last) || { unit: 1, lesson: 0 };
+  }
+
+  /** Moves to a lesson through the hash, so the address stays true. */
+  function go(unit, lesson) {
+    var id = key(unit, lesson);
+    if (window.location.hash.toLowerCase() === "#" + id) route();
+    else window.location.hash = id;
+  }
+
+  function route() {
+    var asked = parse(window.location.hash);
+    var target = asked || resume();
+    if (!asked) window.history.replaceState(null, "", "#" + key(target.unit, target.lesson));
+
+    here.unit = target.unit;
+    here.lesson = target.lesson;
+
+    var entry = COURSE[target.unit - 1];
+    var name = target.lesson ? entry.lessons[target.lesson - 1] : STRINGS.overview + " — " + entry.title;
+    document.title = name + " | " + DATA.title;
+
+    state.last = key(target.unit, target.lesson);
+    writeStore();
+
+    var src = page(target.unit, target.lesson);
+    if (frame.getAttribute("src") !== src) frame.setAttribute("src", src);
+    paint();
+  }
+
+  window.addEventListener("hashchange", route);
+
+  [previous, next].forEach(function (button) {
+    button.addEventListener("click", function () {
+      var at = ORDER.indexOf(key(here.unit, here.lesson));
+      var target = parse("#" + ORDER[at + Number(button.dataset.step)]);
+      if (!target) return;
+      // Moving on from a lesson is the learner saying they are done with it. Moving back says nothing.
+      if (button === next && here.lesson) record(key(here.unit, here.lesson), "done");
+      go(target.unit, target.lesson);
+    });
+  });
+
+  opener.addEventListener("click", function () { show(!shell.classList.contains("is-open")); });
+
+  reset.addEventListener("click", function () {
+    if (!window.confirm(STRINGS.resetConfirm)) return;
+    state.progress = {};
+    writeStore();
+    paint();
+  });
+
+  /* ---- 6 · What the lesson says ------------------------------------------------------------------- */
+  /* Every page reports being touched, and a lesson how far it has been read (runtime/samai.js). Both
+     arrive as messages: a course opened from disk gives every page an origin of its own, and a frame like
+     that cannot be reached into. Opening a lesson starts it. */
+
+  frame.addEventListener("load", function () {
+    if (here.lesson) record(key(here.unit, here.lesson), "doing");
+  });
+
+  window.addEventListener("message", function (event) {
+    if (event.source !== frame.contentWindow) return;
+    var said = event.data;
+    if (!said) return;
+    if (said.samai === "touched") { show(false); return; }
+    if (said.samai !== "reading" || STATES.indexOf(said.state) < 0) return;
+    var target = parse("#" + key(said.module, said.lesson));
+    if (target && target.lesson) record(key(target.unit, target.lesson), said.state);
+  });
+
+  /* ---- 7 · Closing the panel ---------------------------------------------------------------------- */
+  /* A press or a scroll on the shell itself, anywhere but the panel and the rail, and the Escape key.
+     Inside the lesson it is the frame's own report that folds the panel away. */
+
+  function outside(event) {
+    if (!shell.classList.contains("is-open")) return false;
+    var target = event.target;
+    return !(target instanceof Node && (outline.contains(target) || rail.contains(target)));
+  }
+
+  ["pointerdown", "wheel", "touchmove"].forEach(function (name) {
+    document.addEventListener(name, function (event) { if (outside(event)) show(false); }, { passive: true });
+  });
+
+  document.addEventListener("keydown", function (event) { if (event.key === "Escape") show(false); });
+
+  show(state.outline);
+  route();
+})();
+</script>
+</body>
+</html>
