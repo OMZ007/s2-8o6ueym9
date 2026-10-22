@@ -137,7 +137,7 @@ body{background:var(--page)}
 <body>
 <!-- Built by src/build.mjs from src/shell/. Edit the source, not this page. -->
 <div class="shell"></div>
-<script>window.SAMAI_COURSE = {"title":"سماي 2","logo":"assets/brand/logo.svg","units":[{"title":{"sector":"titles.unit1"},"lessons":["ما هو الذكاء الاصطناعي؟","كيف تعمل تطبيقات الذكاء الاصطناعي؟",{"title":{"sector":"titles.unit1Lesson3"},"own":true}]},{"title":"قدرات وحدود الذكاء الاصطناعي","lessons":["قدرات تطبيقات الذكاء الاصطناعي","قدرات نماذج الذكاء الاصطناعي","قدرات وكلاء الذكاء الاصطناعي"]},{"title":"رفع الإنتاجية بالذكاء الاصطناعي","lessons":["هندسة الأوامر (Prompt Engineering)","الإنتاجية باستخدام تطبيقات الذكاء الاصطناعي","تقسيم المهام واختيار التطبيق المناسب"]},{"title":"أتمتة الأوامر والبرمجة التوليدية","lessons":["أتمتة المهام باستخدام تطبيقات الذكاء الاصطناعي","البرمجة التوليدية (Vibe Coding)"]},{"title":"الاستخدام المسؤول للذكاء الاصطناعي","lessons":["أخلاقيات الذكاء الاصطناعي","التعامل مع البيانات عند استخدام الذكاء الاصطناعي","مراجعة المخرجات والتحقق من الجودة"]},{"title":{"sector":"titles.unit6"},"lessons":[{"sector":"titles.unit6Lesson1"},"خطّة تبنّي الذكاء الاصطناعي","المشروع الختامي"]}]};</script>
+<script>window.SAMAI_COURSE = {"title":"سماي 2","logo":"assets/brand/logo.svg","units":[]};</script>
 <script>
 /* ==========================================================================
    سماي 2 — the course shell (index.html)
@@ -149,7 +149,9 @@ body{background:var(--page)}
    where a title that differs by sector is { sector: "titles.unit1" }, read from the learner's sector file.
    Lesson n of unit u is U{u}_L{n}.html; lesson 0, the unit's overview, is reached by opening the unit.
    A lesson written separately for every sector is { title: …, own: true }, and lives at
-   <slug>/U{u}_L{n}.html instead, one copy per sector folder.
+   <slug>/U{u}_L{n}.html instead, one copy per sector folder. A sector whose file carries a course of its
+   own ({ units: [{ title, lessons: ["…"] }] }) has every page in its folder, overviews included, and the
+   outline is that course's.
    ========================================================================== */
 (function () {
   "use strict";
@@ -202,7 +204,10 @@ body{background:var(--page)}
     return value.sector.split(".").reduce(function (at, step) { return at == null ? at : at[step]; }, window.SAMAI_SECTOR) || "";
   }
 
-  var COURSE = DATA.units.map(function (unit) {
+  var OWN = window.SAMAI_SECTOR && window.SAMAI_SECTOR.course;
+  var COURSE = OWN ? OWN.units.map(function (unit) {
+    return { title: unit.title, lessons: unit.lessons, own: unit.lessons.map(function () { return true; }), whole: true };
+  }) : DATA.units.map(function (unit) {
     return {
       title: text(unit.title),
       lessons: unit.lessons.map(text),
@@ -241,7 +246,8 @@ body{background:var(--page)}
   // Every lesson opens in the sector the learner chose; sectors/sectors.js reads it back.
   var page = function (unit, lesson) {
     var slug = window.SAMAI_SECTORS.current;
-    var folder = lesson && COURSE[unit - 1].own[lesson - 1] ? slug + "/" : "";
+    var entry = COURSE[unit - 1];
+    var folder = entry.whole || (lesson && entry.own[lesson - 1]) ? slug + "/" : "";
     return folder + "U" + unit + "_L" + lesson + ".html?sector=" + slug;
   };
 
@@ -514,7 +520,35 @@ body{background:var(--page)}
 
   frame.addEventListener("load", function () {
     if (here.lesson) record(key(here.unit, here.lesson), "doing");
+    reach();
   });
+
+  /* A sector's own pages were built to stand alone: they carry no runtime and say nothing, and they link
+     to each other with their own previous and next buttons. Served from the shell's origin, they can be
+     reached into instead — a press anywhere folds the panel, a link to another lesson goes through the
+     hash, and scrolling to the end of a lesson marks it done. Opened from disk, this quietly does nothing. */
+  function reach() {
+    var view, doc;
+    try { view = frame.contentWindow; doc = view.document; } catch (error) { return; }
+    if (!doc || !doc.documentElement) return;
+    doc.addEventListener("pointerdown", function () { show(false); }, { passive: true });
+    doc.addEventListener("click", function (event) {
+      var link = event.target instanceof view.Element && event.target.closest("a[href]");
+      var match = link && /(?:^|\/)U(\d+)_L(\d+)\.html(?:[?#].*)?$/i.exec(link.getAttribute("href"));
+      if (!match) return;
+      var target = parse("#u" + match[1] + "l" + match[2]);
+      if (!target) return;
+      event.preventDefault();
+      if (link.closest(".samai-page-nav__button--next") && here.lesson) record(key(here.unit, here.lesson), "done");
+      go(target.unit, target.lesson);
+    }, true);
+    var at = { unit: here.unit, lesson: here.lesson };
+    var read = function () {
+      var page = doc.scrollingElement || doc.documentElement;
+      if (at.lesson && view.scrollY + view.innerHeight >= page.scrollHeight * 0.9) record(key(at.unit, at.lesson), "done");
+    };
+    view.addEventListener("scroll", read, { passive: true });
+  }
 
   window.addEventListener("message", function (event) {
     if (event.source !== frame.contentWindow) return;

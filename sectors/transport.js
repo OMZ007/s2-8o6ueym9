@@ -1,11 +1,13 @@
-// سماي 2 — النقل. The words this sector puts into the course.
+// سماي 2 — النقل. Its course arrives later; until then one page says so.
 window.SAMAI_SECTOR = {
  "slug": "transport",
  "sector": "النقل",
- "titles": {
-  "unit1": "الذكاء الاصطناعي في قطاع النقل",
-  "unit1Lesson3": "الذكاء الاصطناعي في قطاع النقل",
-  "unit6": "تبنّي الذكاء الاصطناعي في قطاع النقل",
-  "unit6Lesson1": "إلى أين يتّجه الذكاء الاصطناعي في قطاع النقل؟"
+ "course": {
+  "units": [
+   {
+    "title": "محتوى القطاع قيد الإعداد",
+    "lessons": []
+   }
+  ]
  }
 };

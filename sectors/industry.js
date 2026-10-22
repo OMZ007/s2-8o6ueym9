@@ -1,11 +1,13 @@
-// سماي 2 — الصناعة. The words this sector puts into the course.
+// سماي 2 — الصناعة. Its course arrives later; until then one page says so.
 window.SAMAI_SECTOR = {
  "slug": "industry",
  "sector": "الصناعة",
- "titles": {
-  "unit1": "الذكاء الاصطناعي في قطاع الصناعة",
-  "unit1Lesson3": "الذكاء الاصطناعي في قطاع الصناعة",
-  "unit6": "تبنّي الذكاء الاصطناعي في قطاع الصناعة",
-  "unit6Lesson1": "إلى أين يتّجه الذكاء الاصطناعي في قطاع الصناعة؟"
+ "course": {
+  "units": [
+   {
+    "title": "محتوى القطاع قيد الإعداد",
+    "lessons": []
+   }
+  ]
  }
 };

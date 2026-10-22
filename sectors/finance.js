@@ -1,11 +1,13 @@
-// سماي 2 — المالية. The words this sector puts into the course.
+// سماي 2 — المالية. Its course arrives later; until then one page says so.
 window.SAMAI_SECTOR = {
  "slug": "finance",
  "sector": "المالية",
- "titles": {
-  "unit1": "الذكاء الاصطناعي في قطاع المالية",
-  "unit1Lesson3": "الذكاء الاصطناعي في قطاع المالية",
-  "unit6": "تبنّي الذكاء الاصطناعي في قطاع المالية",
-  "unit6Lesson1": "إلى أين يتّجه الذكاء الاصطناعي في قطاع المالية؟"
+ "course": {
+  "units": [
+   {
+    "title": "محتوى القطاع قيد الإعداد",
+    "lessons": []
+   }
+  ]
  }
 };
