@@ -8074,6 +8074,8 @@ function illMotion() {
     const later = () => { clearTimeout(settle); settle = setTimeout(() => { fit(); refresh(); }, 120); };
     addEventListener("resize", later, { passive: true });
     if (global.ResizeObserver) new ResizeObserver(later).observe(stage);
+    // (p2) the text-first layer re-lays out words and buttons after a click: the ring and the hand follow their part
+    document.addEventListener("samai:textfirst", later);
     document.fonts && document.fonts.ready.then(refresh);
     render(-1, { menus: false });
 
@@ -8801,7 +8803,7 @@ const BLOCKS_MORE = {
   // use cases by beneficiary: a tab per beneficiary, the open one's intro and cases beneath
   beneficiaries(d) {
     // each example its own icon (the tray's rule: an Arabic example its own icon, else its case's)
-    const USE_ICON = {"دروس تقوية إضافية":"book-open-reader","تمارين تتدرّج مع الأداء":"stairs","مراجعة مركّزة على نقاط الضعف":"bullseye","مسار إثرائي للمتفوّقين":"medal","تحفيز التفكير النقدي (منهج سقراط)":"lightbulb","شرح الواجبات":"person-chalkboard","تغذية راجعة لحظية":"bolt","ملخّصات مراجعة قبل الاختبار":"file-lines","ترجمة فورية":"language","تحويل النصّ إلى صوت":"volume-high","التعليم بالتلّعيب":"gamepad","وصف الصور والمخطّطات":"image","مسودات خطط الدروس":"file-pen","دروس تفاعلية":"display","أوراق عمل بمستويات":"layer-group","تنويع الأمثلة":"shuffle","كشف أنماط التعلّم":"magnifying-glass-chart","رصد من يحتاج إلى دعم":"hand-holding-heart","تغذية راجعة تفصيلية":"comment-dots","بنك أسئلة متنوّع":"circle-question","تصحيح الواجبات":"check-double","تقارير الأداء":"chart-column","رصد الدرجات":"table-list","التواصل مع أولياء الأمور":"people-roof","جدولة الفصول":"calendar-days","توزيع الموارد":"boxes-stacked","متابعة الحضور":"clipboard-user","توحيد القوالب":"clone","توفير قنوات تواصل":"tower-broadcast","محاضر الاجتماعات":"file-signature","فرز الاستفسارات":"filter","تحديثات لأولياء الأمور":"bell","محتوى مخصّص":"sliders","تحليل البيانات التعليمية":"chart-pie","تقييم المستوى":"gauge","تجارب تفاعلية":"flask","رصد الأنماط":"wave-square","مقارنة الفترات":"scale-balanced","أسئلة متابعة مقترحة":"circle-question","خطّة تحسين":"clipboard-list","ترتيب الأولويات":"list-ol","مؤشّرات متابعة":"gauge-high","حقائب تدريبية":"briefcase","تحليل الاستبانات":"square-poll-vertical","تحديد الاحتياج التدريبي":"crosshairs"};
+    const USE_ICON = {"ترتيب الأولويات":"list-ol"};
     const panels = d.groups.map((g, i) => el("div", { class: "who-panel", role: "tabpanel", id: `who-${i}`, "aria-labelledby": `who-tab-${i}`, tabindex: "0" },
       el("p", { class: "who-intro" }, rich(g.intro)),
       el("ul", { class: "grid-3 who-cases" }, g.cases.map((c) => el("li", { class: "card use" },
@@ -12472,7 +12474,7 @@ const TREND_ART = (() => {
     return svg(`
       ${at(0, 0, arrive(14, .02, .93, D), me(136, 6, 96))}
       <g>${op("0;0;1;1;0;0", k(0, .1, .13, .24, .28, 1), D)}${at(8, 30, sc("1 1;1 1;1 0;1 0;1 1", k(0, .24, .28, .99, 1), D), `<rect class="c-card" x="0" y="0" width="150" height="58" rx="10"/>
-        ${[[12, 124], [22, 118], [32, 124], [42, 90]].map(([y, w], i) => at(140, y, grow(.11 + i * .015, .03, .99, D), `<rect class="c-line" x="${-w}" y="0" width="${w}" height="4" rx="2"/>`)).join("")}`)}</g>
+        ${[[12, 124], [22, 118], [32, 124], [42, 90]].map(([y, w], i) => at(140, y, grow(.11 + i * .015, .03, .98, D), `<rect class="c-line" x="${-w}" y="0" width="${w}" height="4" rx="2"/>`)).join("")}`)}</g>
       <g opacity="0">${op("0;0;1;1;0;0", k(0, .3, .31, .93, .95, 1), D)}${ai(30, 80, ask(), .31)}</g>
       <g>${at(0, 0, arrive(14, .42, .93, D), me(150, 54, 82))}</g>
       <g opacity="0">${op("0;0;1;1;0;0", k(0, .52, .53, .93, .95, 1), D)}${ai(78, 96, bulb(), .53)}</g>
@@ -13074,7 +13076,7 @@ function section(id, nav, title, lead, kids, role) {
   return s;
 }
 const lesson = $("#lesson");
-Object.entries(L.sections).forEach(([id, s]) => lesson.append(section(id, s.nav, s.title, s.subtitle, render(s.nodes), s.subtitleRole)));
+Object.entries(L.sections).forEach(([id, s], i, all) => { const n = lesson.appendChild(section(id, s.nav, s.title, s.subtitle, render(s.nodes), s.subtitleRole)); if (i && all[i - 1][1].nav === s.nav) n.classList.add("is-cont"); });
 
 // summary: the take-aways, the next step (text only — the LMS moves between pages), the references
 const C = L.conclusion;
@@ -13106,7 +13108,7 @@ addEventListener("load", () => $$("i[data-fallback]").forEach((i) => {
 
 /* ---- lesson index: the section on screen, the sections passed, how far you've read ---- */
 (function toc() {
-  const bar = $("#toc"), list = $("#toc-list"), secs = $$("#lesson > .section");
+  const bar = $("#toc"), list = $("#toc-list"), secs = $$("#lesson > .section:not(.is-cont)");
   const btns = secs.map((s, i) => {
     const b = el("button", { class: "toc-btn", type: "button", "aria-current": "false" }, el("span", { class: "n", "aria-hidden": "true", text: String(i + 1) }), el("span", { text: s.dataset.nav }));
     b.addEventListener("click", () => s.scrollIntoView({ behavior: reduced ? "auto" : "smooth", block: "start" }));
@@ -13688,7 +13690,7 @@ var reduce = window.matchMedia && window.matchMedia("(prefers-reduced-motion: re
       });
     });
   }
-  function all(root) { root = root || rootOf(); latinRuns(root); pass(root); options(root); buttons(root); }
+  function all(root) { root = root || rootOf(); latinRuns(root); pass(root); options(root); buttons(root); document.dispatchEvent(new Event("samai:textfirst")); }
   var t = 0;
   function soon(ms) { clearTimeout(t); t = setTimeout(function () { requestAnimationFrame(function () { all(); }); }, ms || 160); }
   window.SAMAI_textFirst = function (root) { all(root); };

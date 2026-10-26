@@ -7988,6 +7988,8 @@ function illMotion() {
     const later = () => { clearTimeout(settle); settle = setTimeout(() => { fit(); refresh(); }, 120); };
     addEventListener("resize", later, { passive: true });
     if (global.ResizeObserver) new ResizeObserver(later).observe(stage);
+    // (p2) the text-first layer re-lays out words and buttons after a click: the ring and the hand follow their part
+    document.addEventListener("samai:textfirst", later);
     document.fonts && document.fonts.ready.then(refresh);
     render(-1, { menus: false });
 
@@ -8715,7 +8717,7 @@ const BLOCKS_MORE = {
   // use cases by beneficiary: a tab per beneficiary, the open one's intro and cases beneath
   beneficiaries(d) {
     // each example its own icon (the tray's rule: an Arabic example its own icon, else its case's)
-    const USE_ICON = {"دروس تقوية إضافية":"book-open-reader","تمارين تتدرّج مع الأداء":"stairs","مراجعة مركّزة على نقاط الضعف":"bullseye","مسار إثرائي للمتفوّقين":"medal","تحفيز التفكير النقدي (منهج سقراط)":"lightbulb","شرح الواجبات":"person-chalkboard","تغذية راجعة لحظية":"bolt","ملخّصات مراجعة قبل الاختبار":"file-lines","ترجمة فورية":"language","تحويل النصّ إلى صوت":"volume-high","التعليم بالتلّعيب":"gamepad","وصف الصور والمخطّطات":"image","مسودات خطط الدروس":"file-pen","دروس تفاعلية":"display","أوراق عمل بمستويات":"layer-group","تنويع الأمثلة":"shuffle","كشف أنماط التعلّم":"magnifying-glass-chart","رصد من يحتاج إلى دعم":"hand-holding-heart","تغذية راجعة تفصيلية":"comment-dots","بنك أسئلة متنوّع":"circle-question","تصحيح الواجبات":"check-double","تقارير الأداء":"chart-column","رصد الدرجات":"table-list","التواصل مع أولياء الأمور":"people-roof","جدولة الفصول":"calendar-days","توزيع الموارد":"boxes-stacked","متابعة الحضور":"clipboard-user","توحيد القوالب":"clone","توفير قنوات تواصل":"tower-broadcast","محاضر الاجتماعات":"file-signature","فرز الاستفسارات":"filter","تحديثات لأولياء الأمور":"bell","محتوى مخصّص":"sliders","تحليل البيانات التعليمية":"chart-pie","تقييم المستوى":"gauge","تجارب تفاعلية":"flask","رصد الأنماط":"wave-square","مقارنة الفترات":"scale-balanced","أسئلة متابعة مقترحة":"circle-question","خطّة تحسين":"clipboard-list","ترتيب الأولويات":"list-ol","مؤشّرات متابعة":"gauge-high","حقائب تدريبية":"briefcase","تحليل الاستبانات":"square-poll-vertical","تحديد الاحتياج التدريبي":"crosshairs"};
+    const USE_ICON = {};
     const panels = d.groups.map((g, i) => el("div", { class: "who-panel", role: "tabpanel", id: `who-${i}`, "aria-labelledby": `who-tab-${i}`, tabindex: "0" },
       el("p", { class: "who-intro" }, rich(g.intro)),
       el("ul", { class: "grid-3 who-cases" }, g.cases.map((c) => el("li", { class: "card use" },
@@ -10631,10 +10633,10 @@ function conceptSim(d) {
 
   // ---- the four files: short, correct, and the same data as the site (each report: title, priority, status)
   const FILES = [
-    { name: "index.html", x: "html", lang: "html", role: "العنوان والنموذج والقائمة", lines: ["<!-- منصة متابعة الفعاليات الرياضية -->", "<header>منصة متابعة الفعاليات الرياضية<\/header>", "<main id=\"rooms\">الفعاليات القادمة<\/main>", "<table><caption>مهام الفعالية<\/caption><\/table>", "<progress max=\"100\" value=\"25\">25%<\/progress>", "<aside>ما تم إنجازه هذا الأسبوع<\/aside>"] },
+    { name: "index.html", x: "html", lang: "html", role: "العنوان والنموذج والقائمة", lines: ["<!-- منصة متابعة الفعاليات الرياضية -->", "<header>منصة متابعة الفعاليات الرياضية<\/header>", "<main id=\"events\">الفعاليات القادمة<\/main>", "<table><caption>مهام الفعالية<\/caption><\/table>", "<progress max=\"100\" value=\"25\">25%<\/progress>", "<aside>ما تم إنجازه هذا الأسبوع<\/aside>"] },
     { name: "style.css", x: "css", lang: "css", role: "الألوان وشكل البطاقات", lines: ["/* ألوان الحالات مع تسمياتها */", ".room { border-radius: 14px; padding: 12px; }", "progress { width: 100%; accent-color: #5B3DF5; }", "table { width: 100%; border-collapse: collapse; }", ".state { border-radius: 12px; padding: 4px 8px; }"] },
     { name: "app.js", x: "js", lang: "js", role: "بطاقات الطلبات، وعمل زر الإرسال", lines: ["// يتحدّث التقدّم من حالات المهام", "function progress(tasks) {", "  var done=tasks.filter(t => t.status==='منجز').length;", "  return tasks.length?Math.round(done/tasks.length*100):0;", "}", "// المدير يسند، والمسؤول يحدّث مهامه، والقيادة تقرأ"] },
-    { name: "events.js", x: "json", lang: "json", role: "المشكلة والأولوية والحالة في كل طلب", lines: ["// بيانات تجريبية، والمواعيد نسبية إلى يوم التجربة", "var events=[", "  {n:'نهائي بطولة محلية',date:day(7)},", "  {n:'جري مجتمعي',date:day(10)},", "  {n:'يوم رياضي مدرسي',date:day(14)}", "];", "var task={title:'تجهيز المعدات',owner:'مسؤول التجهيزات',due:day(2),status:'لم يبدأ'};"] },
+    { name: "events.js", x: "json", lang: "json", role: "الفعاليات ومواعيدها ومهمة تجريبية", lines: ["// بيانات تجريبية، والمواعيد نسبية إلى يوم التجربة", "var events=[", "  {n:'نهائي بطولة محلية',date:day(7)},", "  {n:'جري مجتمعي',date:day(10)},", "  {n:'يوم رياضي مدرسي',date:day(14)}", "];", "var task={title:'تجهيز المعدات',owner:'مسؤول التجهيزات',due:day(2),status:'لم يبدأ'};"] },
   ];
   const TICKETS = [["نهائي بطولة محلية", "", ""], ["جري مجتمعي", "", ""], ["يوم رياضي مدرسي", "", ""]];
   const ALL = FILES.reduce((n, f) => n + f.lines.length, 0);
@@ -10700,9 +10702,9 @@ function conceptSim(d) {
     el("div", { class: "gc-page" },
       el("div", { class: "gc-h1", "data-x": "html css", text: "منصة متابعة الفعاليات الرياضية" }),
       el("div", { class: "gc-form", "data-x": "html" },
-        el("span", { class: "gc-in", text: "سجّل العطل" }),
-        el("span", { class: "gc-sel" }, el("span", { text: "حدّد الأولوية" }), icon("chevron-down")),
-        el("span", { class: "gc-btn", "data-x": "css js", text: "اعرض مهام الفعالية" })),
+        el("span", { class: "gc-in", text: "أضف مهمة" }),
+        el("span", { class: "gc-sel" }, el("span", { text: "حدّث الحالة" }), icon("chevron-down")),
+        el("span", { class: "gc-btn", "data-x": "css js", text: "مهام الفعالية ونسبة الإنجاز" })),
       el("ul", { class: "gc-list", "data-x": "html" }, ROWS),
       // the name of the file whose parts are lit, in one place under the page (never over what it names)
       tag));
@@ -12133,7 +12135,7 @@ const TREND_ART = (() => {
     return svg(`
       ${at(0, 0, arrive(14, .02, .93, D), me(136, 6, 96))}
       <g>${op("0;0;1;1;0;0", k(0, .1, .13, .24, .28, 1), D)}${at(8, 30, sc("1 1;1 1;1 0;1 0;1 1", k(0, .24, .28, .99, 1), D), `<rect class="c-card" x="0" y="0" width="150" height="58" rx="10"/>
-        ${[[12, 124], [22, 118], [32, 124], [42, 90]].map(([y, w], i) => at(140, y, grow(.11 + i * .015, .03, .99, D), `<rect class="c-line" x="${-w}" y="0" width="${w}" height="4" rx="2"/>`)).join("")}`)}</g>
+        ${[[12, 124], [22, 118], [32, 124], [42, 90]].map(([y, w], i) => at(140, y, grow(.11 + i * .015, .03, .98, D), `<rect class="c-line" x="${-w}" y="0" width="${w}" height="4" rx="2"/>`)).join("")}`)}</g>
       <g opacity="0">${op("0;0;1;1;0;0", k(0, .3, .31, .93, .95, 1), D)}${ai(30, 80, ask(), .31)}</g>
       <g>${at(0, 0, arrive(14, .42, .93, D), me(150, 54, 82))}</g>
       <g opacity="0">${op("0;0;1;1;0;0", k(0, .52, .53, .93, .95, 1), D)}${ai(78, 96, bulb(), .53)}</g>
@@ -12735,7 +12737,7 @@ function section(id, nav, title, lead, kids, role) {
   return s;
 }
 const lesson = $("#lesson");
-Object.entries(L.sections).forEach(([id, s]) => lesson.append(section(id, s.nav, s.title, s.subtitle, render(s.nodes), s.subtitleRole)));
+Object.entries(L.sections).forEach(([id, s], i, all) => { const n = lesson.appendChild(section(id, s.nav, s.title, s.subtitle, render(s.nodes), s.subtitleRole)); if (i && all[i - 1][1].nav === s.nav) n.classList.add("is-cont"); });
 
 // summary: the take-aways, the next step (text only — the LMS moves between pages), the references
 const C = L.conclusion;
@@ -12767,7 +12769,7 @@ addEventListener("load", () => $$("i[data-fallback]").forEach((i) => {
 
 /* ---- lesson index: the section on screen, the sections passed, how far you've read ---- */
 (function toc() {
-  const bar = $("#toc"), list = $("#toc-list"), secs = $$("#lesson > .section");
+  const bar = $("#toc"), list = $("#toc-list"), secs = $$("#lesson > .section:not(.is-cont)");
   const btns = secs.map((s, i) => {
     const b = el("button", { class: "toc-btn", type: "button", "aria-current": "false" }, el("span", { class: "n", "aria-hidden": "true", text: String(i + 1) }), el("span", { text: s.dataset.nav }));
     b.addEventListener("click", () => s.scrollIntoView({ behavior: reduced ? "auto" : "smooth", block: "start" }));
@@ -13075,6 +13077,18 @@ async function runCover(labels){
 }
 
 /* ---- عارض الأكواد ---- */
+// the four project files: index / app / data lines are filled from the lab's own functions in projectFiles()
+var CODE_FILES=[
+ {n:'index.html',lines:[]},
+ {n:'style.css',lines:[
+  '<span class="tk-com">/* واجهة عربية للحاسب والجوال */</span>',
+  '<span class="tk-fn">body</span> { direction: <span class="tk-num">rtl</span>; }',
+  '<span class="tk-fn">article</span> { border-radius: <span class="tk-num">14px</span>; padding: <span class="tk-num">12px</span>; }',
+  '<span class="tk-fn">@media</span> (max-width: <span class="tk-num">600px</span>) { <span class="tk-fn">.filters</span> { flex-direction: column; } }'
+ ]},
+ {n:'app.js',lines:[]},
+ {n:'events.js',lines:['<span class="tk-com">// بيانات تجريبية لمهام الفعاليات دون بيانات شخصية</span>']}
+];
 function projectFiles(){
   var f=CODE_FILES.map(function(file){return {n:file.n,lines:file.lines.slice()}});
   f[0].lines=[navHTML,homeHTML,bookHTML,mineHTML].map(function(fn){return esc(fn.toString())}).join('\n').split('\n');
@@ -13839,7 +13853,7 @@ resetStudio();
       });
     });
   }
-  function all(root) { root = root || rootOf(); latinRuns(root); pass(root); options(root); buttons(root); }
+  function all(root) { root = root || rootOf(); latinRuns(root); pass(root); options(root); buttons(root); document.dispatchEvent(new Event("samai:textfirst")); }
   var t = 0;
   function soon(ms) { clearTimeout(t); t = setTimeout(function () { requestAnimationFrame(function () { all(); }); }, ms || 160); }
   window.SAMAI_textFirst = function (root) { all(root); };

@@ -7988,6 +7988,8 @@ function illMotion() {
     const later = () => { clearTimeout(settle); settle = setTimeout(() => { fit(); refresh(); }, 120); };
     addEventListener("resize", later, { passive: true });
     if (global.ResizeObserver) new ResizeObserver(later).observe(stage);
+    // (p2) the text-first layer re-lays out words and buttons after a click: the ring and the hand follow their part
+    document.addEventListener("samai:textfirst", later);
     document.fonts && document.fonts.ready.then(refresh);
     render(-1, { menus: false });
 
@@ -8715,7 +8717,7 @@ const BLOCKS_MORE = {
   // use cases by beneficiary: a tab per beneficiary, the open one's intro and cases beneath
   beneficiaries(d) {
     // each example its own icon (the tray's rule: an Arabic example its own icon, else its case's)
-    const USE_ICON = {"دروس تقوية إضافية":"book-open-reader","تمارين تتدرّج مع الأداء":"stairs","مراجعة مركّزة على نقاط الضعف":"bullseye","مسار إثرائي للمتفوّقين":"medal","تحفيز التفكير النقدي (منهج سقراط)":"lightbulb","شرح الواجبات":"person-chalkboard","تغذية راجعة لحظية":"bolt","ملخّصات مراجعة قبل الاختبار":"file-lines","ترجمة فورية":"language","تحويل النصّ إلى صوت":"volume-high","التعليم بالتلّعيب":"gamepad","وصف الصور والمخطّطات":"image","مسودات خطط الدروس":"file-pen","دروس تفاعلية":"display","أوراق عمل بمستويات":"layer-group","تنويع الأمثلة":"shuffle","كشف أنماط التعلّم":"magnifying-glass-chart","رصد من يحتاج إلى دعم":"hand-holding-heart","تغذية راجعة تفصيلية":"comment-dots","بنك أسئلة متنوّع":"circle-question","تصحيح الواجبات":"check-double","تقارير الأداء":"chart-column","رصد الدرجات":"table-list","التواصل مع أولياء الأمور":"people-roof","جدولة الفصول":"calendar-days","توزيع الموارد":"boxes-stacked","متابعة الحضور":"clipboard-user","توحيد القوالب":"clone","توفير قنوات تواصل":"tower-broadcast","محاضر الاجتماعات":"file-signature","فرز الاستفسارات":"filter","تحديثات لأولياء الأمور":"bell","محتوى مخصّص":"sliders","تحليل البيانات التعليمية":"chart-pie","تقييم المستوى":"gauge","تجارب تفاعلية":"flask","رصد الأنماط":"wave-square","مقارنة الفترات":"scale-balanced","أسئلة متابعة مقترحة":"circle-question","خطّة تحسين":"clipboard-list","ترتيب الأولويات":"list-ol","مؤشّرات متابعة":"gauge-high","حقائب تدريبية":"briefcase","تحليل الاستبانات":"square-poll-vertical","تحديد الاحتياج التدريبي":"crosshairs"};
+    const USE_ICON = {};
     const panels = d.groups.map((g, i) => el("div", { class: "who-panel", role: "tabpanel", id: `who-${i}`, "aria-labelledby": `who-tab-${i}`, tabindex: "0" },
       el("p", { class: "who-intro" }, rich(g.intro)),
       el("ul", { class: "grid-3 who-cases" }, g.cases.map((c) => el("li", { class: "card use" },
@@ -10694,16 +10696,16 @@ function conceptSim(d) {
   const tag = el("em", { class: "gc-tag" });
   const ROWS = TICKETS.map(([t, p, s], i) => el("li", { class: "gc-tk", "data-x": "css js" },
     el("b", { "data-x": "json", text: t }), el("br"),
-    el("small", {}, "أولوية ", el("span", { "data-x": "json", text: p })),
-    el("span", { class: "gc-pill", "data-x": "css" }, el("span", { "data-x": "json", text: s }))));
+    p ? el("small", {}, "أولوية ", el("span", { "data-x": "json", text: p })) : null,
+    s ? el("span", { class: "gc-pill", "data-x": "css" }, el("span", { "data-x": "json", text: s })) : null));
   const site = el("div", { class: "gc-site", "aria-hidden": "true" },
     el("div", { class: "gc-url" }, icon("lock"), el("span", { text: url }), el("i", { class: "gc-load" })),
     el("div", { class: "gc-page" },
-      el("div", { class: "gc-h1", "data-x": "html css", text: "تجهيزات المدرسة" }),
+      el("div", { class: "gc-h1", "data-x": "html css", text: "خطة المشتريات" }),
       el("div", { class: "gc-form", "data-x": "html" },
-        el("span", { class: "gc-in", text: "سجّل العطل" }),
+        el("span", { class: "gc-in", text: "اكتب مشكلتك" }),
         el("span", { class: "gc-sel" }, el("span", { text: "حدّد الأولوية" }), icon("chevron-down")),
-        el("span", { class: "gc-btn", "data-x": "css js", text: "أضف بلاغًا جديدًا" })),
+        el("span", { class: "gc-btn", "data-x": "css js", text: "أرسل الطلب" })),
       el("ul", { class: "gc-list", "data-x": "html" }, ROWS),
       // the name of the file whose parts are lit, in one place under the page (never over what it names)
       tag));
@@ -12134,7 +12136,7 @@ const TREND_ART = (() => {
     return svg(`
       ${at(0, 0, arrive(14, .02, .93, D), me(136, 6, 96))}
       <g>${op("0;0;1;1;0;0", k(0, .1, .13, .24, .28, 1), D)}${at(8, 30, sc("1 1;1 1;1 0;1 0;1 1", k(0, .24, .28, .99, 1), D), `<rect class="c-card" x="0" y="0" width="150" height="58" rx="10"/>
-        ${[[12, 124], [22, 118], [32, 124], [42, 90]].map(([y, w], i) => at(140, y, grow(.11 + i * .015, .03, .99, D), `<rect class="c-line" x="${-w}" y="0" width="${w}" height="4" rx="2"/>`)).join("")}`)}</g>
+        ${[[12, 124], [22, 118], [32, 124], [42, 90]].map(([y, w], i) => at(140, y, grow(.11 + i * .015, .03, .98, D), `<rect class="c-line" x="${-w}" y="0" width="${w}" height="4" rx="2"/>`)).join("")}`)}</g>
       <g opacity="0">${op("0;0;1;1;0;0", k(0, .3, .31, .93, .95, 1), D)}${ai(30, 80, ask(), .31)}</g>
       <g>${at(0, 0, arrive(14, .42, .93, D), me(150, 54, 82))}</g>
       <g opacity="0">${op("0;0;1;1;0;0", k(0, .52, .53, .93, .95, 1), D)}${ai(78, 96, bulb(), .53)}</g>
@@ -12736,7 +12738,7 @@ function section(id, nav, title, lead, kids, role) {
   return s;
 }
 const lesson = $("#lesson");
-Object.entries(L.sections).forEach(([id, s]) => lesson.append(section(id, s.nav, s.title, s.subtitle, render(s.nodes), s.subtitleRole)));
+Object.entries(L.sections).forEach(([id, s], i, all) => { const n = lesson.appendChild(section(id, s.nav, s.title, s.subtitle, render(s.nodes), s.subtitleRole)); if (i && all[i - 1][1].nav === s.nav) n.classList.add("is-cont"); });
 
 // summary: the take-aways, the next step (text only — the LMS moves between pages), the references
 const C = L.conclusion;
@@ -12768,7 +12770,7 @@ addEventListener("load", () => $$("i[data-fallback]").forEach((i) => {
 
 /* ---- lesson index: the section on screen, the sections passed, how far you've read ---- */
 (function toc() {
-  const bar = $("#toc"), list = $("#toc-list"), secs = $$("#lesson > .section");
+  const bar = $("#toc"), list = $("#toc-list"), secs = $$("#lesson > .section:not(.is-cont)");
   const btns = secs.map((s, i) => {
     const b = el("button", { class: "toc-btn", type: "button", "aria-current": "false" }, el("span", { class: "n", "aria-hidden": "true", text: String(i + 1) }), el("span", { text: s.dataset.nav }));
     b.addEventListener("click", () => s.scrollIntoView({ behavior: reduced ? "auto" : "smooth", block: "start" }));
@@ -12863,7 +12865,6 @@ var TOOLS=[
  {logo:mk('bolt'),n:'Bolt',d:'bolt.new',p:'اكتب الفكرة فيُبنى المشروع داخل المتصفح، ويمكن نشره بضغطة',t:'من الفكرة للنشر'},
  {logo:mk('v0'),n:'v0',d:'v0.app',p:'يحوّل الوصف أو صورة تصميم إلى واجهات ويب جاهزة',t:'واجهات وتصميم'},
  {logo:mk('cursor'),n:'Cursor',d:'cursor.com',p:'محرّر أكواد بمساعد ذكي الأنسب لمن اقترب من الجانب التقني',t:'للمطوّرين'},
- {logo:mk('firebase'),n:'Firebase Studio',d:'firebase.studio',p:'بيئة من قوقل لبناء موقع كامل بالوصف، مع قاعدة بيانات واستضافة',t:'موقع كامل'},
  {logo:mk('windsurf'),n:'Windsurf',d:'windsurf.com',p:'محرّر بمساعد يعمل كوكيل: ينفّذ خطوات متتابعة داخل المشروع',t:'وكيل برمجي'},
  {logo:mk('figma'),n:'Figma Make',d:'figma.com',p:'يحوّل التصميم أو الوصف إلى نموذج تفاعلي قابل للتجربة',t:'من التصميم للنموذج'},
  {logo:mk('copilot'),n:'GitHub Copilot',d:'github.com/copilot',p:'مساعد يكتب الأكواد ويقترح التعديلات داخل بيئة المطوّر',t:'مساعد داخل المحرّر'},
@@ -12902,48 +12903,32 @@ if(toolsTrack){
 /* ==========================================================
    3 · الاستوديو الرحلة الكاملة حتى النشر
    ========================================================== */
-var PROMPT_ONE='أنشئ موقعًا داخليًا باسم «حجز مرافق التعلّم» لحجز المختبر ومعمل الحاسب ومركز مصادر التعلّم بالحصة. اعرض المرافق مع السعة والتجهيزات، وأضف صفحة حجز فيها: المرفق، والتاريخ، ورقم الحصة، والفصل، والمادة، والتجهيزات المطلوبة، واسم المعلم، وصفحة «حجوزاتي»، ولوحة للأمين بحجوزات اليوم. اجعل المعلم يرى حجوزاته فقط، والأمين يرى جميع الحجوزات ويغلق الفترات غير المتاحة. امنع التعارض، واجعل الحجز من الأحد إلى الخميس وبحصص الجدول، والدخول لمنسوبي المدرسة فقط، ولا تحفظ أي بيانات لطالب، واجعل الواجهة عربية ومتجاوبة، واستخدم بيانات تجريبية فقط';
-var ROOMS=[
- {n:'مختبر العلوم',f:2,s:24,t:['شاشة عرض','أدوات سلامة'],busy:false},
- {n:'معمل الحاسب',f:1,s:20,t:['حواسيب','شاشة عرض'],busy:true},
- {n:'مركز مصادر التعلّم',f:1,s:30,t:['سبورة','أجهزة لوحية'],busy:false},
- {n:'مختبر الكيمياء',f:2,s:18,t:['أدوات سلامة','مغسلة'],busy:false},
- {n:'معمل الابتكار',f:1,s:16,t:['طابعة ثلاثية','سبورة'],busy:false},
- {n:'قاعة الأنشطة',f:1,s:40,t:['نظام صوت','شاشة عرض'],busy:true}
-];
+var PROMPT_ONE='أنشئ «احتياجات الإدارات للخطة السنوية للمشتريات» بدل البريد والجداول، بصفحات «احتياج جديد» و«احتياجات إدارتي» ولوحة بالتصفية والإجمالي، احفظ الحقول التسعة أعلاه، المنسق يرى إدارته ويعدّل «جديد» فقط والمشتريات ترى الجميع وتغيّر الحالة، واجهة عربية للحاسب والهاتف وبيانات تجريبية بلا موردين أو عروض، لا تضف رقماً غير وارد في المصدر ولا تربط بأنظمة رسمية، الرابط لفريق المراجعة والتقرير باعتماد أخصائي التخطيط';
+var ROOMS=['سلع','خدمات','أعمال'];
 var IMPS=[
- {key:'smart',
-  btn:'أضف التجهيزات المطلوبة',
-  prompt:'أضف حقل «التجهيزات المطلوبة» في صفحة الحجز، واعرضه لأمين مصادر التعلّم في قائمة يومية مرتبة بحسب رقم الحصة ليجهّزها مسبقًا',
-  plan:'سأضيف حقل التجهيزات المطلوبة إلى الحجز، وأعرضه للأمين ضمن قائمة يومية مرتبة بحسب رقم الحصة',
-  log:['<b>~</b> تعديل صفحة الحجز','<b>+</b> إضافة حقل التجهيزات','<b>~</b> ربطه ببيانات الحجز','<b>+</b> قائمة الأمين اليومية','<b>✓</b> تم التحديث في 9.2 ثانية'],
-  cover:['يضيف حقل التجهيزات…','يربطه بالحجز…','يرتّب قائمة الأمين…','يحدّث المعاينة…'],
-  apply:function(){S.smart=true;S.page='book'},
-  ver:'التجهيزات المطلوبة',
-  state:'أُضيفت التجهيزات المطلوبة',
-  say:'<strong>اكتمل التحديث ✓</strong> افتح نموذج الاحتياج، واكتب التجهيزات المطلوبة، ثم تأكّد من ظهورها في ملخص الحجز قبل التأكيد'},
- {key:'color',
-  btn:'أضف العرض الأسبوعي',
-  prompt:'أضف عرضًا أسبوعيًا لكل مرفق يوضح الحصص المحجوزة والمتاحة بلونين مختلفين، وامنع الحجز في أيام الاختبارات التي يحددها الأمين',
-  plan:'سأضيف عرضًا أسبوعيًا للمرفق بلونين للحصص المحجوزة والمتاحة، مع منع الحجز في أيام الاختبارات المحددة',
-  log:['<b>~</b> تعديل العرض الأسبوعي','<b>~</b> تمييز حالة الحصص','<b>~</b> إضافة أيام الاختبارات','<b>✓</b> تم التحديث في 4.6 ثانية'],
-  cover:['يبني العرض الأسبوعي…','يميّز الحصص بلونين…','يضيف أيام الاختبارات…','يحدّث المعاينة…'],
-  apply:function(){S.week=true;S.page='home'},
-  ver:'العرض الأسبوعي',
-  state:'أُضيف العرض الأسبوعي للمرافق',
-  say:'<strong>اكتمل التحديث ✓</strong> راجع تمييز الحصص المحجوزة والمتاحة، ثم جرّب يوم اختبار للتأكد من منع الحجز'},
- {key:'search',
-  btn:'طبّق قاعدة السعة',
-  prompt:'امنع الحجز إذا زاد عدد طلاب الفصل عن سعة المرفق، واعرض رسالة توضح السعة المتاحة',
-  plan:'سأقارن عدد طلاب الفصل بسعة المرفق، وأمنع الحجز عند التجاوز مع رسالة توضح السعة المتاحة',
-  log:['<b>~</b> تعديل صفحة الحجز','<b>+</b> إضافة قاعدة السعة','<b>~</b> ربطها بقائمة المرافق','<b>+</b> رسالة توضح السعة','<b>✓</b> تم التحديث في 7.8 ثانية'],
-  cover:['يقرأ سعة المرفق…','يقارن عدد الطلاب…','يضيف رسالة المنع…','يحدّث المعاينة…'],
-  apply:function(){S.capRule=true;S.page='book'},
-  ver:'قاعدة سعة المرفق',
-  state:'أُضيفت قاعدة سعة المرفق',
-  say:'<strong>اكتمل التحديث ✓</strong> جرّب عددًا أكبر من سعة المرفق للتأكد من رفض الحجز برسالة واضحة'}
+ {key:'smart',btn:'أضف اقتراح الفئة',
+  prompt:'أضف زر «اقترح الفئة» يقرأ وصف الاحتياج ويقترح «سلع» أو «خدمات» أو «أعمال»، ويبقى الاختيار النهائي للمنسق، استخدم الوصف فقط ولا تضف رقماً غير وارد في المصدر، وإذا لم يتضح الوصف فاطلب من المنسق تحديد الفئة يدوياً، ولا ترسل بيانات ميزانية أو دفع مصنفة أو عروضاً سرية أو بيانات بنكية',
+  plan:'سأضيف اقتراحاً للفئة من الوصف، يراجعه المنسق قبل اختياره، مع رسالة عند غموض الوصف وإبقاء الاختيار اليدوي متاحاً',
+  log:['<b>~</b> تعديل نموذج الاحتياج','<b>+</b> إنشاء category-suggestion.js','<b>~</b> إظهار اقتراح للمراجعة','<b>✓</b> اكتمل التحديث'],
+  cover:['يقرأ وصف الاحتياج…','يضيف اقتراح الفئة…','يبقي الاختيار للمنسق…','يحدّث المعاينة…'],
+  apply:function(){S.smart=true;S.role='coordinator';S.page='book'},ver:'اقتراح الفئة',state:'أُضيف اقتراح الفئة',
+  say:'<strong>اكتمل التحديث ✓</strong> اكتب وصف الاحتياج ثم اضغط «اقترح الفئة»، راجع الاقتراح واختر الفئة بنفسك، وجرّب وصفاً غامضاً للتحقق من بقاء الإدخال اليدوي متاحاً'},
+ {key:'color',btn:'أضف تجميع التكلفة وتصديرها',
+  prompt:'أضف في لوحة المشتريات جدولاً يجمع التكلفة التقديرية بحسب الربع والفئة، مع زر تصدير إلى ملف Excel، اجمع القيم المدخلة فقط ولا تضف رقماً غير وارد في المصدر، ويراجع أخصائي التخطيط الإجمالي قبل استخدام التقرير',
+  plan:'سأجمع التكلفة بحسب الربع والفئة في جدول، وأعرض زر التصدير للمراجعة، مع اعتماد الأرقام على الاحتياجات المدخلة فقط',
+  log:['<b>~</b> تعديل لوحة المشتريات','<b>+</b> إنشاء totals.js','<b>~</b> جمع التكاليف المدخلة','<b>✓</b> اكتمل التحديث'],
+  cover:['يجمع التكاليف…','ينشئ جدول الربع والفئة…','يضيف زر التصدير…','يحدّث المعاينة…'],
+  apply:function(){S.totals=true;S.role='procurement';S.page='home'},ver:'تجميع التكلفة',state:'أُضيف جدول الربع والفئة',
+  say:'<strong>اكتمل الجدول ✓</strong> قارن المجاميع بحسابك اليدوي، زر Excel هنا يوضح التصدير فقط، ويعتمد أخصائي التخطيط الأرقام قبل التقرير الرسمي'},
+ {key:'search',btn:'اضبط المدخلات ونبّه للتشابه',
+  prompt:'امنع الحفظ إذا كانت التكلفة صفراً أو سالبة أو إذا تُرك المبرر فارغاً، وارفض الكمية النصية، ونبّه قبل الحفظ إذا أدخلت الإدارة وصفاً مشابهاً لاحتياج سابق في الربع نفسه، لا تضف رقماً غير وارد في المصدر واترك مراجعة التشابه للمنسق',
+  plan:'سأتحقق من التكلفة والكمية والمبرر، وأقارن وصف الاحتياج باحتياجات الإدارة في الربع نفسه، وأطلب مراجعة التشابه قبل الحفظ',
+  log:['<b>~</b> تعديل التحقق من المدخلات','<b>+</b> إنشاء validation.js','<b>~</b> تنبيه التشابه قبل الحفظ','<b>✓</b> اكتمل التحديث'],
+  cover:['يتحقق من القيم…','يقارن الأوصاف…','يضيف تنبيه التشابه…','يحدّث المعاينة…'],
+  apply:function(){S.search=true;S.role='coordinator';S.page='book'},ver:'تحقق وتنبيه',state:'أُضيف التحقق وتنبيه التشابه',
+  say:'<strong>اكتمل التحديث ✓</strong> جرّب تكلفة سالبة وكمية نصية ومبرراً فارغاً، ثم وصفاً مشابهاً في الربع نفسه، وتأكد من الرسالة قبل حفظ الاحتياج'}
 ];
-var REVIEW_PROMPT='راجع الموقع قبل النشر: تأكّد أن الحجز المكرر للمرفق والحصة نفسيهما يُرفض، وأن الجمعة والحصة الثامنة والتاريخ الماضي غير متاحة، وأن المعلم لا يرى حجوزات زملائه أو لوحة الأمين، وأن النموذج لا يطلب بيانات طلاب، وأن جدول الحصص مقروء على الجوال. واذكر لي ما لا تستطيع التحقق منه بنفسك';
+var REVIEW_PROMPT='راجع صلاحيات المنسق والمشتريات، ورفض التكلفة السالبة والكمية النصية والمبرر الفارغ، وقارن إجمالي كل ربع بخمسة احتياجات تجريبية، اختبر جدول الجوال وفواصل الآلاف والريال، لا تضف رقماً غير وارد في المصدر، وحدّد ما يحتاج اختباراً بشرياً قبل اعتماد أخصائي التخطيط';
 
 var S,VERS=[],HIST=[],phase=0,impDone=0,impDoneMap={},pickIdx=0,cmdWritten=false,replyMode='',planEdited=false,busy=false,publishedVersion=0,reviewDone=false,triedMobile=false;
 var viewMode='preview',codeSel=0;
@@ -12966,7 +12951,7 @@ var acl='team',aclNames={team:'فريق المراجعة فقط',link:'من يم
 
 function freshState(){
   return {built:false,version:0,page:'home',theme:'indigo',smart:false,search:false,
-    bookings:[],toast:'',q:'',cap:'all',floor:'all',pick:'',usedAI:false,capRule:false,week:false,wv:'',wvx:false,pre:null};
+    role:'coordinator',department:'إدارة الخدمات',totals:false,bookings:[],toast:'',q:'',cap:'all',floor:'all',pick:'',usedAI:false,capRule:false,pre:null};
 }
 function snap(){return JSON.parse(JSON.stringify(S))}
 function bubble(kind,html){
@@ -13013,7 +12998,7 @@ function stShow(q,ms){setTimeout(function(){var e=$(q,viewport);if(e&&typeof dvR
 /* the one thing to press now, and the bar's words naming it (t177); «التالي» is lit only when it is that thing */
 var ST_SAY={ready:'الوصف جاهز، اضغط «التالي» لإرساله',ok:'اختر «الخطة مناسبة ابدأ البناء» من الصندوق، ثم اضغط «التالي»',
   imp:function(n){return 'اختر «'+n+'» من قائمة الخطة ليُكتب في الصندوق، ثم اضغط «التالي»'},
-  open:'اضغط «افتح نموذج الاحتياج» في التحقّق اليدوي',save:'اضغط «تأكيد الحجز» في المعاينة',
+  open:'اضغط «افتح نموذج الاحتياج» في التحقّق اليدوي',save:'اضغط «حفظ الاحتياج» في المعاينة',
   mobile:'اضغط «شغّل عرض الجوال» في التحقّق اليدوي',go:'اضغط «التالي» للانتقال إلى النشر'};
 function stGuide(){
   if(!sNext||!sSay||!S)return;
@@ -13117,16 +13102,16 @@ function projectFiles(){
   var warm=S.theme==='warm';
   var f=[
    {n:'index.html',lines:[
-    '<span class="tk-com">&lt;!-- حجز مرافق التعلّم (v'+S.version+') --&gt;</span>',
-    '<span class="tk-tag">&lt;header</span> <span class="tk-attr">class</span>=<span class="tk-str">"app-nav"</span><span class="tk-tag">&gt;</span>حجز مرافق التعلّم<span class="tk-tag">&lt;/header&gt;</span>',
-    (S.search?'<span class="tk-tag">&lt;input</span> <span class="tk-attr">id</span>=<span class="tk-str">"search"</span> <span class="tk-attr">placeholder</span>=<span class="tk-str">"ابحث باسم المرفق"</span><span class="tk-tag">&gt;</span>':null),
+    '<span class="tk-com">&lt;!-- احتياجات الخطة السنوية للمشتريات (v'+S.version+') --&gt;</span>',
+    '<span class="tk-tag">&lt;header</span> <span class="tk-attr">class</span>=<span class="tk-str">"app-nav"</span><span class="tk-tag">&gt;</span>احتياجات الخطة السنوية للمشتريات<span class="tk-tag">&lt;/header&gt;</span>',
+    (S.search?'<span class="tk-tag">&lt;input</span> <span class="tk-attr">id</span>=<span class="tk-str">"search"</span> <span class="tk-attr">placeholder</span>=<span class="tk-str">"ابحث باسم الإدارة"</span><span class="tk-tag">&gt;</span>':null),
     (S.search?'<span class="tk-tag">&lt;div</span> <span class="tk-attr">id</span>=<span class="tk-str">"filters"</span><span class="tk-tag">&gt;&lt;/div&gt;</span>':null),
     '<span class="tk-tag">&lt;main</span> <span class="tk-attr">id</span>=<span class="tk-str">"rooms"</span><span class="tk-tag">&gt;&lt;/main&gt;</span>',
     '<span class="tk-tag">&lt;form</span> <span class="tk-attr">id</span>=<span class="tk-str">"bookingForm"</span><span class="tk-tag">&gt;</span>',
-    (S.smart?'  <span class="tk-tag">&lt;textarea</span> <span class="tk-attr">id</span>=<span class="tk-str">"equipment"</span> <span class="tk-attr">placeholder</span>=<span class="tk-str">"اكتب التجهيزات المطلوبة"</span><span class="tk-tag">&gt;&lt;/textarea&gt;</span>':null),
+    (S.smart?'  <span class="tk-tag">&lt;textarea</span> <span class="tk-attr">id</span>=<span class="tk-str">"freeText"</span> <span class="tk-attr">placeholder</span>=<span class="tk-str">"صف احتياج الإدارة"</span><span class="tk-tag">&gt;&lt;/textarea&gt;</span>':null),
     '  <span class="tk-tag">&lt;select</span> <span class="tk-attr">id</span>=<span class="tk-str">"room"</span><span class="tk-tag">&gt;&lt;/select&gt;</span>',
     '  <span class="tk-tag">&lt;input</span> <span class="tk-attr">id</span>=<span class="tk-str">"date"</span> <span class="tk-attr">type</span>=<span class="tk-str">"date"</span><span class="tk-tag">&gt;</span>',
-    '  <span class="tk-tag">&lt;button</span> <span class="tk-attr">type</span>=<span class="tk-str">"submit"</span><span class="tk-tag">&gt;</span>تأكيد الحجز<span class="tk-tag">&lt;/button&gt;</span>',
+    '  <span class="tk-tag">&lt;button</span> <span class="tk-attr">type</span>=<span class="tk-str">"submit"</span><span class="tk-tag">&gt;</span>حفظ الاحتياج<span class="tk-tag">&lt;/button&gt;</span>',
     '<span class="tk-tag">&lt;/form&gt;</span>'
    ]},
    {n:'style.css',lines:[
@@ -13135,58 +13120,55 @@ function projectFiles(){
     '  --a2: <span class="tk-num">'+(warm?'#E8894A':'#8E7BFF')+'</span>;',
     '  --radius: <span class="tk-num">'+(warm?'22px':'16px')+'</span>;',
     '}',
-    '<span class="tk-fn">.facility</span> { border-radius: <span class="tk-kw">var</span>(--radius); padding: <span class="tk-num">13px</span>; }',
+    '<span class="tk-fn">.room</span> { border-radius: <span class="tk-kw">var</span>(--radius); padding: <span class="tk-num">13px</span>; }',
     '<span class="tk-fn">.book-btn</span> { background: <span class="tk-kw">var</span>(--a1); color: <span class="tk-num">#fff</span>; }'
    ]},
    {n:'app.js',lines:[
-    (S.smart?'<span class="tk-com">// تُحفظ التجهيزات المطلوبة مع الحجز وتظهر للأمين</span>':null),
-    '<span class="tk-kw">function</span> <span class="tk-fn">saveBooking</span>(data) {',
-    '  <span class="tk-kw">if</span> (!data.room || !data.date || !data.count)',
+    (S.smart?'<span class="tk-com">// اقتراح الفئة من الوصف يراجعه المنسق</span>':null),
+    '<span class="tk-kw">function</span> <span class="tk-fn">saveNeed</span>(data) {',
+    '  <span class="tk-kw">if</span> (!data.category || !data.quarter || !data.quantity)',
     '    <span class="tk-kw">return</span> <span class="tk-fn">showError</span>(<span class="tk-str">"أكمل الحقول الناقصة"</span>);',
-    (S.capRule?'  <span class="tk-kw">if</span> (data.count &gt; <span class="tk-fn">seatsOf</span>(data.room))':null),
-    (S.capRule?'    <span class="tk-kw">return</span> <span class="tk-fn">showError</span>(<span class="tk-str">"عدد الطلاب أكبر من سعة المرفق"</span>);':null),
-    '  db.bookings.<span class="tk-fn">insert</span>(data);',
-    '  <span class="tk-fn">render</span>(<span class="tk-str">"myBookings"</span>);',
+    (S.search?'  <span class="tk-kw">if</span> (data.cost &lt;= 0 || !data.reason.trim())':null),
+    (S.search?'    <span class="tk-kw">return</span> <span class="tk-fn">showError</span>(<span class="tk-str">"التكلفة موجبة والمبرر مطلوب"</span>);':null),
+    '  db.needs.<span class="tk-fn">insert</span>(data);',
+    '  <span class="tk-fn">render</span>(<span class="tk-str">"departmentNeeds"</span>);',
     '}',
     '',
-    '<span class="tk-kw">function</span> <span class="tk-fn">cancelBooking</span>(id) {',
-    '  db.bookings.<span class="tk-fn">remove</span>(id);',
-    '  <span class="tk-fn">render</span>(<span class="tk-str">"myBookings"</span>);',
+    '<span class="tk-kw">function</span> <span class="tk-fn">updateStatus</span>(id) {',
+    '  db.needs<span class="tk-fn">.updateStatus</span>(id);',
+    '  <span class="tk-fn">render</span>(<span class="tk-str">"departmentNeeds"</span>);',
     '}'
    ]},
-   {n:'facilities.json',lines:[
+   {n:'needs.json',lines:[
     '[',
-    '  { <span class="tk-attr">"name"</span>: <span class="tk-str">"مختبر العلوم"</span>, <span class="tk-attr">"floor"</span>: <span class="tk-num">2</span>, <span class="tk-attr">"seats"</span>: <span class="tk-num">24</span> },',
-    '  { <span class="tk-attr">"name"</span>: <span class="tk-str">"معمل الحاسب"</span>, <span class="tk-attr">"floor"</span>: <span class="tk-num">1</span>, <span class="tk-attr">"seats"</span>: <span class="tk-num">20</span> },',
-    '  { <span class="tk-attr">"name"</span>: <span class="tk-str">"مركز مصادر التعلّم"</span>, <span class="tk-attr">"floor"</span>: <span class="tk-num">1</span>, <span class="tk-attr">"seats"</span>: <span class="tk-num">30</span> }',
+    '  { <span class="tk-attr">"name"</span>: <span class="tk-str">"أدوات مكتبية"</span>, <span class="tk-attr">"quarter"</span>: <span class="tk-num">3</span>, <span class="tk-attr">"cost"</span>: <span class="tk-num">12</span> },',
+    '  { <span class="tk-attr">"name"</span>: <span class="tk-str">"خدمة صيانة"</span>, <span class="tk-attr">"quarter"</span>: <span class="tk-num">2</span>, <span class="tk-attr">"cost"</span>: <span class="tk-num">8</span>  },',
+    '  { <span class="tk-attr">"name"</span>: <span class="tk-str">"تهيئة مكاتب"</span>,  <span class="tk-attr">"quarter"</span>: <span class="tk-num">4</span>, <span class="tk-attr">"cost"</span>: <span class="tk-num">20</span> }',
     ']'
    ]}
   ];
-  if(S.smart)f.push({n:'equipment.js',nw:true,lines:[
-    '<span class="tk-com">// يحفظ التجهيزات المطلوبة مع الحجز</span>',
+  if(S.smart)f.push({n:'category-suggestion.js',nw:true,lines:[
+    '<span class="tk-com">// اقتراح من الوصف فقط، لا تضف رقماً غير وارد في المصدر</span>',
     '<span class="tk-kw">async function</span> <span class="tk-fn">understand</span>(text) {',
     '  <span class="tk-kw">const</span> res = <span class="tk-kw">await</span> ai.<span class="tk-fn">extract</span>(text, {',
-    '    fields: [<span class="tk-str">"facility"</span>, <span class="tk-str">"period"</span>, <span class="tk-str">"equipment"</span>]',
+    '    fields: [<span class="tk-str">"category"</span>, <span class="tk-str">"description"</span>, <span class="tk-str">"reason"</span>]',
     '  });',
     '  <span class="tk-kw">if</span> (!res.ok)',
-    '    <span class="tk-kw">return</span> <span class="tk-fn">showMessage</span>(<span class="tk-str">"أكمل التجهيزات المطلوبة"</span>);',
-    '  <span class="tk-fn">fillForm</span>(res.data);',
+    '    <span class="tk-kw">return</span> <span class="tk-fn">showMessage</span>(<span class="tk-str">"حدّد الفئة يدوياً"</span>);',
+    '  <span class="tk-fn">showSuggestion</span>(res.data);',
     '}'
   ]});
-    if(S.week)f.push({n:'week.js',nw:true,lines:[
-    '<span class="tk-com">// العرض الأسبوعي</span>',
-    '<span class="tk-kw">function</span> <span class="tk-fn">weekOf</span>(facility) {',
-    '  <span class="tk-kw">return</span> DAYS.<span class="tk-fn">map</span>(day =&gt; PERIODS.<span class="tk-fn">map</span>(p =&gt;',
-    '    examDays.<span class="tk-fn">includes</span>(day) ? <span class="tk-str">"closed"</span>',
-    '    : <span class="tk-fn">isBooked</span>(facility, day, p) ? <span class="tk-str">"booked"</span> : <span class="tk-str">"free"</span>));',
-    '}'
+  if(S.totals)f.push({n:'totals.js',nw:true,lines:[
+    '<span class="tk-com">// جمع القيم المدخلة بحسب الربع والفئة فقط</span>',
+    '<span class="tk-kw">const</span> total = needs.<span class="tk-fn">reduce</span>((sum, need) =&gt; sum + need.cost, 0);',
+    '<span class="tk-com">// يعتمد أخصائي التخطيط الإجمالي قبل التقرير</span>'
   ]});
-  if(S.search)f.push({n:'filters.js',nw:true,lines:[
-    '<span class="tk-kw">function</span> <span class="tk-fn">applyFilters</span>(list, q, cap, floor) {',
+  if(S.search)f.push({n:'validation.js',nw:true,lines:[
+    '<span class="tk-kw">function</span> <span class="tk-fn">checkSimilar</span>(list, q, department, quarter) {',
     '  <span class="tk-kw">return</span> list',
     '    .<span class="tk-fn">filter</span>(r =&gt; !q || r.name.<span class="tk-fn">includes</span>(q))',
-    '    .<span class="tk-fn">filter</span>(r =&gt; <span class="tk-fn">matchCapacity</span>(r, cap))',
-    '    .<span class="tk-fn">filter</span>(r =&gt; floor === <span class="tk-str">"all"</span> || r.floor === floor);',
+    '    .<span class="tk-fn">filter</span>(r =&gt; <span class="tk-fn">sameDepartment</span>(r, department))',
+    '    .<span class="tk-fn">filter</span>(r =&gt; quarter === <span class="tk-str">"all"</span> || r.quarter === quarter);',
     '}'
   ]});
   f.forEach(function(x){x.lines=x.lines.filter(function(l){return l!==null})});
@@ -13299,10 +13281,10 @@ async function stNext(){
     var stop=thinking();await wait(1000);stop();
     var planB=bubble('ai','<strong>هذا ما فهمته من وصفك:</strong>'+
       '<div class="plan-grid">'+
-      '<div><small>الصفحات</small><b>المرافق، الحجز، حجوزاتي، لوحة الأمين</b></div>'+
-      '<div><small>المدخلات</small><b>مرفق، تاريخ، حصة، فصل، مادة، تجهيزات</b></div>'+
-      '<div><small>البيانات</small><b>لا أسماء أو بيانات لطلاب</b></div>'+
-      '<div><small>القيود</small><b>عربي، متجاوب، لمنسوبي المدرسة</b></div>'+
+      '<div><small>الصفحات</small><b>احتياج جديد، احتياجات إدارتي، لوحة المشتريات</b></div>'+
+      '<div><small>المدخلات</small><b>إدارة، وصف، فئة، كمية، تكلفة، ربع، مبرر، منسق</b></div>'+
+      '<div><small>البيانات</small><b>يُحفظ الاحتياج بحالة «جديد»</b></div>'+
+      '<div><small>التصميم</small><b>عربي، متجاوب، تجريبي</b></div>'+
       '</div><span style="display:block;margin-top:9px;font-size:10px;color:#93a2ae;font-weight:900">راجع الخطة، ثم اكتب ردّك في الصندوق</span>');
     replyBox.hidden=false;
     spotOn(planB,'راجع هذه الخطة');
@@ -13323,8 +13305,8 @@ async function stNext(){
       var st1=thinking();await wait(900);st1();
       S.capRule=true;
       bubble('ai','<strong>حدّثت الخطة ✓</strong> أضفت هذه القاعدة:'+
-        '<div class="plan-grid"><div><small>قاعدة جديدة</small><b>عدد طلاب الفصل ≤ سعة المرفق</b></div>'+
-        '<div><small>ماذا يحدث لو زاد</small><b>يرفض الحجز ويوضح السعة</b></div></div>'+
+        '<div class="plan-grid"><div><small>قاعدة جديدة</small><b>الإدارة مطلوبة لحفظ الاحتياج</b></div>'+
+        '<div><small>عند نقص الإدارة</small><b>يرفض الحفظ ويظهر تنبيه</b></div></div>'+
         '<span style="display:block;margin-top:9px;font-size:10px;color:#93a2ae;font-weight:900">راجعها، فإن كانت مناسبة اختر «الخطة مناسبة ابدأ البناء»</span>');
       $$('#replyBox button').forEach(function(b){b.hidden=b.dataset.r==='edit'});
       replyBox.hidden=false;
@@ -13332,16 +13314,16 @@ async function stNext(){
     }
     replyBox.hidden=true;
     var host=bubble('ai','<strong>ممتاز يبدأ البناء الآن</strong>');
-    var blog=['<b>+</b> إنشاء المشروع procurement-plan','<b>+</b> index.html','<b>+</b> style.css','<b>+</b> app.js','<b>+</b> facilities.json','<b>+</b> إعداد مخزن الحجوزات'];
-    if(S.capRule)blog.push('<b>+</b> قاعدة: عدد الطلاب ≤ سعة المرفق');
+    var blog=['<b>+</b> إنشاء المشروع procurement-plan','<b>+</b> index.html','<b>+</b> style.css','<b>+</b> app.js','<b>+</b> needs.json','<b>+</b> إعداد سجل الاحتياجات'];
+    if(S.capRule)blog.push('<b>+</b> قاعدة: الإدارة مطلوبة لحفظ الاحتياج');
     blog.push('<b>✓</b> اكتمل البناء في 14.6 ثانية');
     var p=fileLog(host,blog);
-    await runCover(['يُنشئ صفحات الموقع…','يبني حجز المرافق…','يربط الحجوزات بالمخزن…','يفتح المعاينة…']);
+    await runCover(['يُنشئ صفحات الموقع…','يبني نموذج الاحتياج…','يربط الاحتياجات بالسجل…','يفتح المعاينة…']);
     await p;
     S.built=true;renderAll();
     pvState.innerHTML='<em></em> النسخة الأولى تعمل جرّبها';pvState.classList.add('wlive');
     addVersion('النسخة الأولى');
-    bubble('ai','<strong>اكتملت النسخة الأولى ✓</strong> جرّبها في المعاينة: احجز المختبر للحصة الثالثة ثم افتح «حجوزاتي»، وبعدها اختر تحسينًا من قائمة الخطة');
+    bubble('ai','<strong>اكتملت النسخة الأولى ✓</strong> جرّبها في المعاينة: أضف احتياجاً ثم افتح «احتياجات إدارتي»، وبعدها اختر تحسيناً من قائمة الخطة');
     todoBox.hidden=false;
     phase=2;busy=false;navPaint();
   }else if(phase<=3&&impDone<3){
@@ -13385,22 +13367,22 @@ async function stNext(){
       var st3=thinking();await wait(1100);st3();
       bubble('ai','<strong>راجعتُ ملفات المشروع:</strong>'+
         '<div class="rev">'+
-        '<div class="ok">✓ التحقق من الحقول موجود في app.js النموذج يرفض الحفظ عند نقص المرفق أو التاريخ أو عدد الطلاب</div>'+
-        (S.capRule?'<div class="ok">✓ قاعدة السعة مطبَّقة لا يُقبل حجز يتجاوز فيه عدد الطلاب سعة المرفق</div>':'<div class="no">لا توجد قاعدة تمنع حجزًا يتجاوز فيه عدد الطلاب سعة المرفق أضِفها في أمر لاحق إن احتجتها</div>')+
+        '<div class="ok">✓ التحقق من الحقول موجود في app.js النموذج يتحقق من الإدارة والفئة والربع والكمية</div>'+
+        (S.capRule?'<div class="ok">✓ الإدارة مطلوبة ولا تُحفظ معاملة بلا إدارة</div>':'<div class="no">تحقق يدوياً من منع الوصول لاحتياجات إدارة أخرى</div>')+
         '<div class="ok">✓ التنسيق في style.css يتكيّف مع الشاشات الصغيرة</div>'+
-        '<div class="ok">✓ البيانات في facilities.json تجريبية، ولا توجد أسماء أو بيانات لطلاب</div>'+
-        '<div class="no">لكنّي لا أستطيع أن أجرّب الموقع نيابةً عنك: منع الحجز المكرر وصلاحيات المعلم ووضوح جدول الحصص على الجوال تحتاج تجربتك أنت</div>'+
+        '<div class="ok">✓ البيانات في needs.json تجريبية، ولا توجد بيانات أشخاص حقيقية</div>'+
+        '<div class="no">لكنّي لا أستطيع أن أجرّب الموقع نيابةً عنك: اختبار الصلاحيات والمجاميع وحفظ الاحتياج وعرض الجوال يحتاج تجربتك أنت</div>'+
         '</div>');
       manualBox.hidden=false;reviewDone=true;
       spotOn(manualBox,'مطلوب منك أنت');setTimeout(function(){spotOff(manualBox)},3600);
       busy=false;navPaint();
     }else if(!manualAllDone()){
       var miss=[];
-      if(!(S.bookings.length>0))miss.push('حجز المختبر والتأكد من ظهوره');
+      if(!(S.bookings.length>0))miss.push('إضافة احتياج والتأكد من ظهوره');
       if(!triedMobile)miss.push('فتح عرض الجوال');
       bubble('ai','<strong>لم يكتمل التحقق بعد</strong> ما زال عليك: '+miss.join('، ')+'. نفّذه في المعاينة ثم اضغط «التالي»');sSay.dataset.nudge=String(Date.now());
     }else{
-      bubble('ai','<strong>اكتمل التحقق ✓</strong> جرّبتَ حجز المرفق وشاهدتَ جدول الحصص على الجوال، والمراجعة الآلية للأكواد سليمة يمكنك الانتقال إلى النشر');
+      bubble('ai','<strong>اكتمل التحقق ✓</strong> جرّبتَ الإضافة وعرض الجوال، أكمل قائمة التحقق ثم شارك النسخة مع فريق المراجعة فقط');
       pushHist();phase=5;navPaint();
       spotOn($('#dfName'),'اسم الرابط');
       setTimeout(function(){spotOff($('#dfName'));spotOn($('#dfAcl'),'من يفتح الرابط؟');setTimeout(function(){spotOff($('#dfAcl'))},2600)},2600);
@@ -13411,116 +13393,90 @@ async function stNext(){
 }
 sPrev.addEventListener('click',function(){if(!busy&&!stRun)popHist()});
 
-/* ---- الموقع التجريبي «حجز مرافق التعلّم» ---- */
-function capMatch(r){
-  if(S.cap==='all')return true;
-  if(S.cap==='s')return r.s<=6;
-  if(S.cap==='m')return r.s>=7&&r.s<=15;
-  return r.s>15;
+/* ---- الموقع التجريبي لاحتياجات المشتريات ---- */
+function currentNeeds(){
+  return S.bookings.filter(function(b){return S.role==='procurement'||b.department===S.department});
 }
 function visibleRooms(){
-  return ROOMS.filter(function(r){
-    if(!S.search)return true;
-    if(S.q&&r.n.indexOf(S.q)===-1)return false;
-    if(!capMatch(r))return false;
-    if(S.floor!=='all'&&String(r.f)!==String(S.floor))return false;
-    return true;
+  return currentNeeds().filter(function(b){
+    return (!S.q||b.department.indexOf(S.q)>-1)&&(S.cap==='all'||b.category===S.cap)&&(S.floor==='all'||b.quarter===S.floor);
   });
 }
+function money(n){return Number(n).toLocaleString('en-US',{maximumFractionDigits:2})+' ريال'}
+function totalCost(list){return list.reduce(function(sum,b){return sum+Math.round(b.cost*100)},0)/100}
 function navHTML(){
-  return '<div class="app-nav"><div class="app-logo"><i class="fa-solid fa-door-open"></i> حجز مرافق التعلّم</div>'+
-    '<button class="'+(S.page==='home'?'on':'')+'" data-go="home" type="button">المرافق</button>'+
-    '<button class="'+(S.page==='mine'?'on':'')+'" data-go="mine" type="button">حجوزاتي'+(S.bookings.length?' ('+S.bookings.length+')':'')+'</button>'+
-    '<button class="cta" data-go="book" type="button">احجز مرفقًا</button></div>';
+  return '<div class="app-nav"><div class="app-logo"><i class="fa-solid fa-door-open"></i> احتياجات المشتريات</div>'+
+    '<button class="'+(S.page==='home'?'on':'')+'" data-go="home" type="button">لوحة المشتريات</button>'+
+    '<button class="'+(S.page==='mine'?'on':'')+'" data-go="mine" type="button">احتياجات إدارتي</button>'+
+    '<button class="cta" data-go="book" type="button">احتياج جديد</button></div>'+
+    '<div class="filters"><label>الدور التجريبي <select data-role aria-label="الدور التجريبي"><option value="coordinator"'+(S.role==='coordinator'?' selected':'')+'>منسق إدارة</option><option value="procurement"'+(S.role==='procurement'?' selected':'')+'>أخصائي التخطيط بالمشتريات</option></select></label>'+
+    '<label>الإدارة التجريبية <select data-department aria-label="الإدارة التجريبية">'+['إدارة الخدمات','إدارة المشاريع'].map(function(d){return '<option'+(d===S.department?' selected':'')+'>'+d+'</option>'}).join('')+'</select></label></div>';
 }
-function roomCard(r){
-  return '<article class="room"><div class="room-top"><i>'+esc(r.n.replace(/^ال/,'').charAt(0))+'</i><div><h4>'+esc(r.n)+'</h4><small>الدور '+r.f+'</small></div></div>'+
-    '<div class="room-meta"><span>'+r.s+' طالبًا</span>'+r.t.map(function(t){return '<span>'+esc(t)+'</span>'}).join('')+'</div>'+
-    '<div class="room-foot"><span class="state'+(r.busy?' busy':'')+'">'+(r.busy?'محجوز الآن':'متاح')+'</span>'+
-    '<button class="book-btn'+(r.busy?' ghost':'')+'" data-book="'+esc(r.n)+'" type="button">'+(r.busy?'عرض الحصص':'احجز')+'</button></div></article>';
+function roomCard(b){
+  var i=S.bookings.indexOf(b),canEdit=S.role==='coordinator'&&b.department===S.department&&b.status==='جديد';
+  return '<article class="room"><div class="room-top"><i>م</i><div><h4>'+esc(b.description)+'</h4><small>'+esc(b.department)+'</small></div></div>'+
+    '<div class="room-meta"><span>'+esc(b.category)+'</span><span>الربع '+esc(b.quarter)+'</span><span>الكمية: '+esc(b.quantity)+'</span><span>'+money(b.cost)+'</span></div>'+
+    '<p>'+esc(b.reason)+'</p><p>المنسق: '+esc(b.coordinator)+'</p><div class="room-foot"><span class="state">'+esc(b.status)+'</span>'+
+    (canEdit?'<button class="book-btn" data-book="'+i+'" type="button">تعديل</button>':'')+
+    (S.role==='procurement'?'<button class="book-btn" data-cancel="'+i+'" type="button">'+(b.status==='جديد'?'قيد المراجعة':'إعادة إلى جديد')+'</button>':'')+'</div></article>';
+}
+function summaryRows(list){
+  var groups={};
+  list.forEach(function(b){var key=b.quarter+'|'+b.category;groups[key]=(groups[key]||0)+Math.round(b.cost*100)});
+  return Object.keys(groups).sort().map(function(k){var bits=k.split('|');return '<tr><td>'+esc(bits[0])+'</td><td>'+esc(bits[1])+'</td><td>'+money(groups[k]/100)+'</td></tr>'}).join('');
 }
 function homeHTML(){
+  if(S.role!=='procurement')return '<div class="wbody"><div class="app-empty">لوحة المشتريات لأخصائي التخطيط فقط، افتح «احتياجات إدارتي» لمتابعة احتياجاتك</div></div>';
   var list=visibleRooms();
-  var filters=S.search?('<div class="filters">'+
-    '<input class="j-q" placeholder="ابحث باسم المرفق…" value="'+esc(S.q)+'"/>'+
-    '<button class="fchip'+(S.cap==='all'?' on':'')+'" data-cap="all" type="button">كل السعات</button>'+
-    '<button class="fchip'+(S.cap==='s'?' on':'')+'" data-cap="s" type="button">حتى 6</button>'+
-    '<button class="fchip'+(S.cap==='m'?' on':'')+'" data-cap="m" type="button">7 إلى 15</button>'+
-    '<button class="fchip'+(S.cap==='l'?' on':'')+'" data-cap="l" type="button">أكثر من 15</button>'+
-    '<button class="fchip'+(S.floor==='all'?' on':'')+'" data-floor="all" type="button">كل الأدوار</button>'+
-    '<button class="fchip'+(S.floor==='1'?' on':'')+'" data-floor="1" type="button">الدور 1</button>'+
-    '<button class="fchip'+(S.floor==='2'?' on':'')+'" data-floor="2" type="button">الدور 2</button>'+
-    '<button class="fchip'+(S.floor==='3'?' on':'')+'" data-floor="3" type="button">الدور 3</button>'+
-    '<button class="fchip'+(S.floor==='4'?' on':'')+'" data-floor="4" type="button">الدور 4</button>'+
-    '</div>'):'';
-  return '<div class="app-hero"><div><small>حجز مرافق التعلّم نسخة تجريبية</small><h2>احجز المرفق في أقل من دقيقة</h2>'+
-    '<p>تصفّح مرافق المدرسة وتجهيزاتها، واحجز الحصة المناسبة، وتابع حجوزاتك في مكان واحد</p>'+
-    '<div class="hero-badges"><span>6 مرافق</span><span>حجز بالحصة</span><span>لا بيانات لطلاب</span></div></div>'+
-    '<div class="hero-side"><b>'+ROOMS.filter(function(r){return !r.busy}).length+'</b><span>مرافق متاحة الآن</span></div></div>'+
-    '<div class="wbody">'+filters+weekHTML()+
-    '<div class="app-headline"><h3>المرافق</h3><span>'+(S.search?'النتائج: '+list.length+' من '+ROOMS.length:'محدّث الآن')+'</span></div>'+
-    (list.length?'<div class="rooms">'+list.map(roomCard).join('')+'</div>':'<div class="app-empty">لا يوجد مرفق يطابق بحثك، جرّب تغيير الاسم أو إزالة التصفية</div>')+
-    '</div>';
+  var filters='<div class="filters"><input class="j-q" aria-label="تصفية الإدارة" placeholder="ابحث باسم الإدارة…" value="'+esc(S.q)+'"/>'+
+    ['all'].concat(ROOMS).map(function(c){return '<button class="fchip'+(S.cap===c?' on':'')+'" data-cap="'+c+'" type="button">'+(c==='all'?'كل الفئات':c)+'</button>'}).join('')+
+    ['all','1','2','3','4'].map(function(q){return '<button class="fchip'+(S.floor===q?' on':'')+'" data-floor="'+q+'" type="button">'+(q==='all'?'كل الأرباع':'الربع '+q)+'</button>'}).join('')+'</div>';
+  var summary=S.totals?'<div style="overflow-x:auto"><table class="stbl" aria-label="التكلفة التقديرية بحسب الربع والفئة"><caption>التكلفة التقديرية من الاحتياجات الظاهرة</caption><thead><tr><th>الربع</th><th>الفئة</th><th>الإجمالي</th></tr></thead><tbody>'+summaryRows(list)+'</tbody></table></div><button class="book-btn" data-export type="button">تصدير إلى Excel</button><p>تصدير توضيحي: احتياجات-المشتريات.xlsx، يعتمد أخصائي التخطيط الأرقام قبل التقرير الرسمي</p>':'';
+  return '<div class="app-hero"><div><small>الخطة السنوية للمشتريات، نسخة تجريبية</small><h2>احتياجات الإدارات في مكان واحد</h2><p>بيانات تجريبية فقط، بلا موردين أو عروض أسعار أو بيانات بنكية، ولا اتصال بأنظمة رسمية</p><div class="hero-badges"><span>'+list.length+' احتياجات</span><span>للمراجعة فقط</span></div></div><div class="hero-side"><b>'+money(totalCost(list))+'</b><span>التكلفة التقديرية</span></div></div>'+
+    '<div class="wbody">'+filters+summary+'<div class="app-headline"><h3>احتياجات الإدارات</h3><span>'+list.length+' احتياجات</span></div>'+(list.length?'<div class="rooms">'+list.map(roomCard).join('')+'</div>':'<div class="app-empty">لا توجد احتياجات مطابقة، أضف احتياجاً أو غيّر التصفية</div>')+'</div>';
 }
-function stPeriods(v){var o='';for(var i=1;i<=7;i++)o+='<option'+(String(i)===String(v)?' selected':'')+'>'+i+'</option>';return o}
 function bookHTML(){
-  var smart=S.smart?('<div class="smart"><div class="smart-head"><b>التجهيزات المطلوبة</b><span>تظهر لأمين المصادر</span></div>'+
-    '<textarea class="j-free">أحتاج مختبر العلوم غدًا الساعة 10 لفصل عدده 24 مع شاشة عرض</textarea>'+
-    '<div class="smart-row"><button class="smart-go j-understand" type="button">أضف التجهيزات إلى الحجز</button>'+
-    '<button class="smart-alt j-vague" type="button">جرّب وصفًا ناقصًا</button></div>'+
-    '<div class="smart-out j-out">سيظهر هنا ملخص التجهيزات والمرفق المقترح</div></div>'):'';
-  return '<div class="form-wrap"><h3>حجز مرفق</h3><p>املأ البيانات التالية، وسيُحفظ الحجز في «حجوزاتي»</p>'+
-    '<form class="app-form j-form">'+smart+
-    '<div class="wfrow"><div class="wfld"><label>المرفق</label><select class="j-room">'+
-    '<option value="">اختر مرفقًا —</option>'+ROOMS.map(function(r){return '<option'+(S.pick===r.n?' selected':'')+'>'+esc(r.n)+'</option>'}).join('')+'</select></div>'+
-    '<div class="wfld"><label>التاريخ</label><input class="j-date" type="date" value="'+esc(S.pre&&S.pre.date||'')+'"/></div></div>'+
-    '<div class="wfrow"><div class="wfld"><label>من الحصة</label><select class="j-from">'+stPeriods(S.pre&&S.pre.from||'1')+'</select></div>'+
-    '<div class="wfld"><label>إلى الحصة</label><select class="j-to">'+stPeriods(S.pre&&S.pre.to||'2')+'</select></div></div>'+
-    '<div class="wfld"><label>عدد طلاب الفصل</label><input class="j-count" placeholder="مثال: 24" type="number" value="'+esc(S.pre&&S.pre.count||'')+'"/></div>'+
-    '<div class="wfld"><label>اسم المعلم والمادة والفصل</label><textarea class="j-purpose" placeholder="مثال: نورة السبيعي، علوم، 2/3"></textarea></div>'+
-    '<div class="f-err j-err">أكمل المرفق والتاريخ وعدد الطلاب قبل تأكيد الحجز</div>'+
-    '<div class="f-act"><button class="f-submit" type="submit">تأكيد الحجز</button><button class="f-ghost" data-go="home" type="button">رجوع</button></div>'+
-    '</form></div>';
+  if(S.role!=='coordinator')return '<div class="wbody"><div class="app-empty">إضافة الاحتياجات وتعديلها لمنسق الإدارة، غيّر الدور التجريبي لاختبار الإدخال</div></div>';
+  var b=S.pick!==''?S.bookings[Number(S.pick)]:null;
+  if(b&&(b.department!==S.department||b.status!=='جديد'))return '<div class="app-empty">لا يمكنك تعديل هذا الاحتياج</div>';
+  b=b||{};
+  var smart=S.smart?'<div class="smart"><div class="smart-head"><b>اقتراح الفئة من الوصف</b><span>قدرة ذكية تجريبية</span></div><div class="smart-row"><button class="smart-go j-understand" type="button">اقترح الفئة</button><button class="smart-alt j-vague" type="button">جرّب وصفاً غامضاً</button></div><div class="smart-out j-out">راجع الاقتراح ثم اختر الفئة بنفسك</div></div>':'';
+  return '<div class="form-wrap"><h3>'+(S.pick!==''?'تعديل احتياج':'احتياج جديد')+'</h3><p>يظهر الاحتياج في «احتياجات إدارتي» بحالة «جديد»، ببيانات تجريبية فقط</p><form class="app-form j-form" novalidate>'+
+    '<div class="wfrow"><div class="wfld"><label>الإدارة</label><input class="j-from" aria-label="الإدارة" value="'+esc(S.department)+'" readonly/></div><div class="wfld"><label>اسم المنسق التجريبي</label><input name="coordinator" aria-label="اسم المنسق التجريبي" value="'+esc(b.coordinator||'منسق الإدارة')+'"/></div></div>'+
+    '<div class="wfld"><label>وصف الاحتياج</label><textarea class="j-free" aria-label="وصف الاحتياج" placeholder="مثال: أدوات مكتبية">'+esc(b.description||'')+'</textarea></div>'+smart+
+    '<div class="wfrow"><div class="wfld"><label>الفئة</label><select class="j-room" aria-label="الفئة"><option value="">اختر الفئة</option>'+ROOMS.map(function(c){return '<option'+(b.category===c?' selected':'')+'>'+c+'</option>'}).join('')+'</select></div>'+
+    '<div class="wfld"><label>الربع المطلوب</label><select class="j-to" aria-label="الربع المطلوب">'+['1','2','3','4'].map(function(q){return '<option'+(b.quarter===q?' selected':'')+'>'+q+'</option>'}).join('')+'</select></div></div>'+
+    '<div class="wfrow"><div class="wfld"><label>الكمية</label><input class="j-count" aria-label="الكمية" inputmode="numeric" value="'+esc(b.quantity||'')+'"/></div><div class="wfld"><label>التكلفة التقديرية الإجمالية بالريال</label><input class="j-date" aria-label="التكلفة التقديرية" inputmode="decimal" value="'+esc(b.cost==null?'':b.cost)+'"/></div></div>'+
+    '<div class="wfld"><label>المبرر</label><textarea class="j-purpose" aria-label="المبرر">'+esc(b.reason||'')+'</textarea></div><div class="f-err j-err" role="alert">راجع الحقول قبل الحفظ</div>'+
+    '<div class="f-act"><button class="f-submit" type="submit">حفظ الاحتياج</button><button class="f-ghost" data-go="mine" type="button">رجوع</button></div></form></div>';
 }
 function mineHTML(){
-  if(!S.bookings.length)return '<div class="wbody"><div class="app-headline"><h3>حجوزاتي</h3></div><div class="app-empty">لا توجد حجوزات بعد، اضغط «احجز مرفقًا» لإضافة أول حجز</div></div>';
-  return '<div class="wbody"><div class="app-headline"><h3>حجوزاتي</h3><span>'+S.bookings.length+' حجز</span></div><div class="mine-list">'+
-    S.bookings.map(function(b,i){
-      return '<div class="mine"><i>'+esc(b.room.replace(/^ال/,'').charAt(0))+'</i><div><b>'+esc(b.room)+'</b>'+
-        '<span>التاريخ: '+esc(b.date||'غير محدد')+' من الحصة '+esc(b.from)+' إلى '+esc(b.to)+'</span>'+
-        '<span>عدد الطلاب: '+esc(b.count)+(b.purpose?'، '+esc(b.purpose):'')+'</span>'+
-        (b.ai?'<u>أُضيفت التجهيزات المطلوبة</u>':'')+
-        '</div><button data-cancel="'+i+'" type="button">إلغاء</button></div>';
-    }).join('')+'</div></div>';
+  var list=currentNeeds();
+  return '<div class="wbody"><div class="app-headline"><h3>'+(S.role==='procurement'?'جميع الاحتياجات':'احتياجات إدارتي')+'</h3><span>'+list.length+' احتياجات</span></div>'+(list.length?'<div class="rooms">'+list.map(roomCard).join('')+'</div>':'<div class="app-empty">لا توجد احتياجات بعد، اضغط «احتياج جديد» للإضافة</div>')+'</div>';
 }
 function appHTML(){
   var body=S.page==='home'?homeHTML():(S.page==='book'?bookHTML():mineHTML());
-  return '<div class="app'+(S.theme==='warm'?' warm':'')+'">'+navHTML()+body+
-    (S.toast?'<div class="wtoast">'+esc(S.toast)+'</div>':'')+'</div>';
+  return '<div class="app">'+navHTML()+body+(S.toast?'<div class="wtoast">'+esc(S.toast)+'</div>':'')+'</div>';
 }
 function renderInto(host){
   if(!host)return;
-  if(!S.built){
-    host.innerHTML='<div class="vp-empty"><i class="fa-solid fa-window-restore"></i><b>ستظهر معاينة الموقع هنا</b><span>اضغط «التالي» لبدء البناء</span></div>';
-    return;
-  }
+  if(!S.built){host.innerHTML='<div class="vp-empty"><i class="fa-solid fa-window-restore"></i><b>ستظهر معاينة الموقع هنا</b><span>اضغط «التالي» لبدء البناء</span></div>';return}
   if(viewMode==='code'){renderCode(host);return}
   host.innerHTML=appHTML();
-  $$('[data-go]',host).forEach(function(b){b.addEventListener('click',function(){S.page=b.dataset.go;S.toast='';S.wvx=false;renderAll()})});
+  $$('[data-go]',host).forEach(function(b){b.addEventListener('click',function(){S.page=b.dataset.go;S.pick='';S.toast='';renderAll()})});
   $$('[data-book]',host).forEach(function(b){b.addEventListener('click',function(){S.pick=b.dataset.book;S.page='book';renderAll()})});
-  $$('[data-cancel]',host).forEach(function(b){b.addEventListener('click',function(){S.bookings.splice(+b.dataset.cancel,1);S.toast='أُلغي الحجز';renderAll();clearToast()})});
+  $$('[data-cancel]',host).forEach(function(b){b.addEventListener('click',function(){if(S.role!=='procurement')return;var item=S.bookings[+b.dataset.cancel];item.status=item.status==='جديد'?'قيد المراجعة':'جديد';renderAll()})});
   $$('[data-cap]',host).forEach(function(b){b.addEventListener('click',function(){S.cap=b.dataset.cap;renderAll()})});
   $$('[data-floor]',host).forEach(function(b){b.addEventListener('click',function(){S.floor=b.dataset.floor;renderAll()})});
-  var q=$('.j-q',host);
-  if(q)q.addEventListener('input',function(){S.q=q.value.trim();renderAll();
-    var again=$('.j-q',host);if(again){again.focus();again.setSelectionRange(again.value.length,again.value.length)}});
-  if(S.page==='home')bindWeek(host);
+  $('[data-role]',host).addEventListener('change',function(){S.role=this.value;S.page=S.role==='procurement'?'home':'mine';S.pick='';renderAll()});
+  $('[data-department]',host).addEventListener('change',function(){S.department=this.value;S.pick='';renderAll()});
+  var exp=$('[data-export]',host);if(exp)exp.addEventListener('click',function(){S.toast='محاكاة تصدير احتياجات-المشتريات.xlsx، لا يُنشأ ملف في هذا الدرس';renderAll();clearToast()});
+  var q=$('.j-q',host);if(q)q.addEventListener('input',function(){S.q=q.value.trim();renderAll();var again=$('.j-q',host);if(again){again.focus();again.setSelectionRange(again.value.length,again.value.length)}});
   if(S.page==='book')bindForm(host);
 }
 /* the site's capabilities, as «ما نوع الموقع الذي تريد بناءه؟» stacks them (owner, 2026-10-13; icons 2026-10-15): once
-   built, the platform shows its facilities and keeps the bookings (both lit). Since the content of 2026-10-21 the
-   booking platform uses no AI capability (its first improvement is the «التجهيزات المطلوبة» field, no longer «قدرة
-   ذكية»), so the mark holds the two kinds it is. Icons and names are read from the kinds' own heads (round 3, 2026-10-20: the kind's icon and
+   built, the platform shows its rooms and keeps the bookings (two lit); the free-text booking adds a ready AI capability
+   (the third lights). Icons and names are read from the kinds' own heads (round 3, 2026-10-20: the kind's icon and
    its title without «موقع», kept on the kind as data-cap). A small mark in the header, set from the
    studio's own state on every render (back and reset included). */
 var stFloors=null,stFloorsOn={};
@@ -13529,10 +13485,10 @@ function paintFloors(){
   if(!stFloors){
     var brand=$('.st-brand',studio);if(!brand)return;
     stFloors=document.createElement('span');stFloors.className='fl-st';
-    ['read','store'].forEach(function(f){var b=document.createElement('b');b.dataset.f=f;stFloors.appendChild(b)});
+    ['read','store','ai'].forEach(function(f){var b=document.createElement('b');b.dataset.f=f;stFloors.appendChild(b)});
     brand.parentNode.insertBefore(stFloors,brand.nextSibling);
   }
-  var on={read:!!S.built,store:!!S.built},names=[];
+  var on={read:!!S.built,store:!!S.built,ai:!!(S.built&&S.smart)},names=[];
   $$('b',stFloors).forEach(function(b){
     var f=b.dataset.f,lit=on[f],k=capOf(f),ic=k&&k.querySelector('.wk-ic>i'),n=k&&k.dataset.cap;
     if(!b.firstChild&&ic)b.appendChild(ic.cloneNode(true));
@@ -13543,109 +13499,43 @@ function paintFloors(){
   if(names.length){stFloors.setAttribute('role','img');stFloors.setAttribute('aria-label',names.join('، '));stFloors.title=names.join('، ');stFloors.removeAttribute('aria-hidden')}
   else{stFloors.removeAttribute('role');stFloors.removeAttribute('aria-label');stFloors.removeAttribute('title');stFloors.setAttribute('aria-hidden','true')}
 }
-/* «العرض الأسبوعي» (t164): one facility's week — periods down, school days across; booked and free periods in two
-   colours, the exam day closed. A free period opens the booking form with that facility. */
-var WV_DAYS=["الأحد","الاثنين","الثلاثاء","الأربعاء","الخميس"],WV_EXAM=3,WV_PERIODS=7;
-function wvBooked(i,d,p){return (i+d*3+p*2)%7<3}
-function weekHTML(){
-  if(!S.week)return '';
-  var k=0;ROOMS.forEach(function(r,j){if(r.n===S.wv)k=j});var room=ROOMS[k];
-  var head='<span class="wv-c wv-h">الحصة</span>'+WV_DAYS.map(function(d,j){return '<span class="wv-c wv-h'+(j===WV_EXAM?' is-x':'')+'">'+d+(j===WV_EXAM?'<small>يوم اختبار</small>':'')+'</span>'}).join('');
-  var rows='';
-  for(var p=0;p<WV_PERIODS;p++){
-    rows+='<span class="wv-c wv-n">'+(p+1)+'</span>';
-    for(var d=0;d<WV_DAYS.length;d++){
-      var lab='الحصة '+(p+1)+'، '+WV_DAYS[d]+': ';
-      if(d===WV_EXAM)rows+='<button class="wv-c wv-s is-x" data-wvx="1" type="button" aria-label="'+lab+'يوم اختبار"><i class="fa-solid fa-lock"></i></button>';
-      else if(wvBooked(k,d,p))rows+='<span class="wv-c wv-s is-b" role="img" aria-label="'+lab+'محجوز"></span>';
-      else rows+='<button class="wv-c wv-s is-f" data-wvf="'+(p+1)+'" type="button" aria-label="'+lab+'متاح"></button>';
-    }
-  }
-  return '<div class="wv"><div class="app-headline"><h3>العرض الأسبوعي</h3>'+
-    '<select class="j-wv" aria-label="المرفق">'+ROOMS.map(function(r,j){return '<option'+(j===k?' selected':'')+'>'+esc(r.n)+'</option>'}).join('')+'</select></div>'+
-    '<div class="wv-grid" role="group" aria-label="العرض الأسبوعي: '+esc(room.n)+'">'+head+rows+'</div>'+
-    '<div class="wv-key"><span class="is-b">محجوز</span><span class="is-f">متاح</span><span class="is-x"><i class="fa-solid fa-lock"></i> يوم اختبار</span></div>'+
-    (S.wvx?'<p class="wv-msg" role="status"><i class="fa-solid fa-lock"></i> يوم اختبار: يُمنع الحجز</p>':'')+'</div>';
-}
-function bindWeek(host){
-  var sel=$('.j-wv',host);if(!sel)return;
-  sel.addEventListener('change',function(){S.wv=sel.value;S.wvx=false;renderAll();var again=$('.j-wv',viewport);if(again)again.focus()});
-  $$('[data-wvf]',host).forEach(function(b){b.addEventListener('click',function(){S.pick=sel.value;S.pre={from:b.dataset.wvf,to:String(Math.min(7,+b.dataset.wvf+1))};S.page='book';S.toast='';S.wvx=false;renderAll()})});
-  // an exam-day period: the booking is refused there, said under the week (kept until another facility or page)
-  $$('[data-wvx]',host).forEach(function(b){b.addEventListener('click',function(){var y=viewport.scrollTop;S.wvx=true;renderAll();viewport.scrollTop=y;var m=$('.wv-msg',viewport);if(m&&typeof dvReveal==='function')dvReveal(m)})});
-}
 function renderAll(){renderInto(viewport);updateManual();paintFloors()}
 function clearToast(){setTimeout(function(){if(S.toast){S.toast='';renderAll()}},1900)}
-
-var AR_NUM={'واحد':1,'اثنين':2,'اثنان':2,'ثلاثة':3,'أربعة':4,'اربعة':4,'خمسة':5,'ستة':6,'سبعة':7,'ثمانية':8,'تسعة':9,'عشرة':10,'اثني عشر':12,'خمسة عشر':15,'عشرين':20,'ثلاثين':30};
-function toEnDigits(t){return t.replace(/[٠-٩]/g,function(d){return String(d.charCodeAt(0)-1632)})}
 function parseRequest(text){
-  var t=toEnDigits(text),out={};
-  var nums=t.match(/\d+/g)||[];
-  for(var w in AR_NUM){if(t.indexOf(w)>-1){out.count=AR_NUM[w];break}}
-  var timeNum=null;
-  var m=t.match(/الساعة\s*(\d{1,2})/);if(m)timeNum=+m[1];
-  if(!out.count){
-    var pm=t.match(/(\d{1,2})\s*(شخص|أشخاص|اشخاص|حضور|فرد)/);
-    if(pm)out.count=+pm[1];
-    else{nums.forEach(function(n){var v=+n;if(!out.count&&v!==timeNum&&v>=2&&v<=40)out.count=v})}
-  }
-  if(timeNum!==null)out.time=(timeNum<10?'0':'')+timeNum+':00';
-  if(/شاشة|عرض|تقديم/.test(t))out.feat='شاشة عرض';
-  else if(/سبورة/.test(t))out.feat='سبورة';
-  else if(/مرئي|عن بعد|أونلاين|اونلاين/.test(t))out.feat='اتصال مرئي';
-  if(/غدا|غدًا|بكرة|بكره/.test(t))out.tomorrow=true;
-  return out;
+  // shortcut: rule-based teaching suggestion only, replace with an approved service for real use
+  return /صيانة|تدريب|تنظيف/.test(text)?'خدمات':/إنشاء|انشاء|تهيئة|ترميم/.test(text)?'أعمال':/أدوات|اجهزة|أجهزة|أثاث|اثاث|توريد/.test(text)?'سلع':'';
 }
-function pickRoom(p){
-  var c=ROOMS.filter(function(r){return r.s>=(p.count||1)});
-  c.sort(function(a,b){return a.s-b.s});
-  if(p.feat){var f=c.filter(function(r){return r.t.indexOf(p.feat)>-1});if(f.length)return f[0]}
-  return c[0];
+function similarDescription(a,b){
+  // shortcut: token overlap for the teaching demo, validate similarity rules before real use
+  function words(t){return t.replace(/[أإآ]/g,'ا').replace(/[ً-ْ]/g,'').split(/\s+/).filter(function(w){return w.length>2})}
+  var x=words(a),y=words(b);return x.length&&y.length&&x.filter(function(w){return y.indexOf(w)>-1}).length/Math.min(x.length,y.length)>=0.5;
 }
 function bindForm(host){
-  var form=$('.j-form',host),err=$('.j-err',host);
+  var form=$('.j-form',host);if(!form)return;
+  var err=$('.j-err',host),warned='';
   form.addEventListener('submit',function(e){
     e.preventDefault();
-    var room=$('.j-room',host).value,date=$('.j-date',host).value,count=$('.j-count',host).value;
-    if(!room||!date||!count||+count<1){err.textContent='أكمل المرفق والتاريخ وعدد الطلاب قبل تأكيد الحجز';err.classList.add('on');stGuide();return}
-    if(S.capRule){
-      var rr=null;ROOMS.forEach(function(x){if(x.n===room)rr=x});
-      if(rr&&+count>rr.s){err.textContent='سعة '+rr.n+' هي '+rr.s+' طالبًا قلّل عدد الطلاب أو اختر مرفقًا أكبر';err.classList.add('on');stGuide();return}
-    }
-    err.classList.remove('on');
-    S.bookings.unshift({room:room,date:date,from:$('.j-from',host).value,to:$('.j-to',host).value,
-      count:count,purpose:$('.j-purpose',host).value.trim(),ai:!!S.usedAI});
-    S.usedAI=false;S.pick='';S.pre=null;S.page='mine';S.toast='تم حفظ الحجز وظهر في «حجوزاتي»';renderAll();clearToast();
+    var category=$('.j-room',host).value,quarter=$('.j-to',host).value,qty=$('.j-count',host).value.trim(),cost=$('.j-date',host).value.trim(),reason=$('.j-purpose',host).value.trim(),description=$('.j-free',host).value.trim(),coordinator=$('[name="coordinator"]',host).value.trim();
+    function reject(t){err.textContent=t;err.classList.add('on')}
+    if(S.role!=='coordinator')return reject('الإضافة والتعديل لمنسق الإدارة فقط');
+    var old=S.pick!==''?S.bookings[Number(S.pick)]:null;
+    if(old&&(old.department!==S.department||old.status!=='جديد'))return reject('يمكن تعديل احتياجات إدارتك بالحالة «جديد» فقط');
+    if(!description||!category||!quarter||!coordinator||!S.department)return reject('أكمل الإدارة والوصف والفئة والربع واسم المنسق');
+    if(!qty||!Number.isFinite(Number(qty))||+qty<=0)return reject('اكتب كمية رقمية موجبة');
+    if(!cost||!Number.isFinite(Number(cost)))return reject('اكتب التكلفة التقديرية رقماً');
+    if(S.search&&(+cost<=0||!reason))return reject('التكلفة يجب أن تكون موجبة، والمبرر مطلوب');
+    var duplicate=S.search&&S.bookings.some(function(b){return b!==old&&b.department===S.department&&b.quarter===quarter&&similarDescription(description,b.description)});
+    var signature=JSON.stringify([description,quarter,cost,qty,reason,category]);
+    if(duplicate&&warned!==signature){warned=signature;return reject('يوجد وصف مشابه في الإدارة والربع نفسيهما، راجع الحاجة ثم اضغط الحفظ مجدداً إن كانت مستقلة')}
+    var item={department:S.department,description:description,category:category,quantity:+qty,cost:+cost,quarter:quarter,reason:reason,status:'جديد',coordinator:coordinator};
+    if(old)S.bookings[Number(S.pick)]=item;else S.bookings.unshift(item);
+    S.pick='';S.page='mine';S.toast='حُفظ الاحتياج وظهر بحالة «جديد»';renderAll();clearToast();
   });
   if(!S.smart)return;
-  var free=$('.j-free',host),out=$('.j-out',host),go=$('.j-understand',host),vague=$('.j-vague',host);
-  function fill(text){
-    out.className='smart-out j-out';out.textContent='جارٍ فهم طلبك…';
-    setTimeout(function(){
-      var p=parseRequest(text);
-      if(!p.count&&!p.time){
-        out.className='smart-out j-out err';
-        out.innerHTML='الوصف غير مكتمل، اذكر عدد الطلاب والحصة أو عبّئ الحقول يدويًا بالأسفل';
-        return;
-      }
-      var room=pickRoom(p),parts=[];
-      if(p.count)parts.push('عدد الطلاب '+p.count);
-      if(p.time)parts.push('الحصة '+p.time);
-      if(p.feat)parts.push('التجهيزات '+p.feat);
-      if(p.tomorrow)parts.push('التاريخ غدًا');
-      var sel=$('.j-room',host),cnt=$('.j-count',host),from=$('.j-from',host),dt=$('.j-date',host);
-      if(room){sel.value=room.n;sel.classList.add('hit')}
-      if(p.count){cnt.value=p.count;cnt.classList.add('hit')}
-      if(p.time&&$$('option',from).some(function(o){return o.value===p.time})){from.value=p.time;from.classList.add('hit')}
-      if(p.tomorrow){var d=new Date();d.setDate(d.getDate()+1);dt.value=d.toISOString().slice(0,10);dt.classList.add('hit')}
-      S.usedAI=true;
-      out.className='smart-out j-out ok';
-      out.innerHTML='<b>فهمت:</b> '+parts.join('، ')+'<br><b>المرفق المقترح:</b> '+esc(room.n)+' يتسع '+room.s+' طالبًا في الدور '+room.f+'، عُبّئت الحقول بالأسفل ويمكنك تعديلها قبل التأكيد';
-    },800);
-  }
-  go.addEventListener('click',function(){fill(free.value)});
-  vague.addEventListener('click',function(){free.value='أحتاج مرفقًا مناسبًا';fill(free.value)});
+  var free=$('.j-free',host),out=$('.j-out',host);
+  function suggest(){var category=parseRequest(free.value);out.className='smart-out j-out '+(category?'ok':'err');out.textContent=category?'الفئة المقترحة: '+category+'، راجعها ثم اختر الفئة بنفسك':'الوصف غير واضح، حدّد الفئة يدوياً'}
+  $('.j-understand',host).addEventListener('click',suggest);
+  $('.j-vague',host).addEventListener('click',function(){free.value='احتياج مناسب للإدارة';suggest()});
 }
 function setView(v){
   viewMode=v;
@@ -13659,7 +13549,7 @@ function setDevice(d){
   if(d==='mobile'){triedMobile=true;updateManual();navPaint();if(typeof dvReveal==='function')dvReveal(shell)}
 }
 $$('.dev-btn').forEach(function(b){b.addEventListener('click',function(){setDevice(b.dataset.device)})});
-var REPLY_TXT={ok:'الخطة مناسبة ابدأ البناء',edit:'ناقص في الخطة: امنع الحجز إذا تجاوز عدد الطلاب سعة المرفق'};
+var REPLY_TXT={ok:'الخطة مناسبة ابدأ البناء',edit:'ناقص في الخطة: امنع حفظ الاحتياج دون تحديد إدارته'};
 $$('#replyBox button').forEach(function(b){
   b.addEventListener('click',async function(){
     if(busy||phase!==1)return;
@@ -13683,8 +13573,8 @@ $$('#todoBox li').forEach(function(li,i){
 $$('#manualBox [data-fix]').forEach(function(b){
   b.addEventListener('click',function(){
     if(busy)return;
-    if(b.dataset.fix==='save'){S.pick=ROOMS[0].n;S.pre={check:true,from:'3',to:'4',count:String(ROOMS[0].s),date:stToday()};S.toast='';setView('preview');S.page='book';renderAll();stShow('.f-submit')}
-    if(b.dataset.fix==='mobile'){S.page='home';S.toast='';S.wvx=false;setView('preview');setDevice('mobile');stShow('.wv',500)}
+    if(b.dataset.fix==='save'){S.pick='';S.pre={check:true};S.toast='';setView('preview');S.page='book';renderAll();stShow('.f-submit')}
+    if(b.dataset.fix==='mobile'){S.toast='';setView('preview');setDevice('mobile')}
   });
 });
 $$('#depAcl button').forEach(function(b){
@@ -13718,18 +13608,18 @@ $('#stReset').addEventListener('click',function(){if(busy||stRun)return;resetStu
    4 · قائمة التحقق العامة (مرجع)
    ========================================================== */
 var QA=[
- {i:'fa-solid fa-hand-pointer',t:'منع تعارض الحصص',s:'هل يمنع الحجز المكرر؟',
-  d:'احجز المختبر للحصة الثالثة يوم الثلاثاء، ثم حاول حجزه للحصة نفسها من حساب معلم آخر',p:'يُرفض الحجز الثاني برسالة واضحة ولا يُسجّل مرتين'},
- {i:'fa-solid fa-triangle-exclamation',t:'الأيام والحصص غير المتاحة',s:'ماذا لو كان الموعد غير صالح؟',
-  d:'جرّب الحجز يوم الجمعة، وفي حصة ثامنة غير موجودة، وفي تاريخ مضى',p:'يمنع الموقع الحالات الثلاث ويشرح سبب الرفض'},
- {i:'fa-solid fa-database',t:'حفظ الحجز وإلغاؤه',s:'هل تظهر البيانات كما أُدخلت؟',
-  d:'أضف حجزًا ثم افتح «حجوزاتي» وألغِه، ويجب أن يظهر مرة واحدة ثم يختفي',p:'يظهر الحجز بالبيانات نفسها ويختفي فعلًا عند الإلغاء'},
+ {i:'fa-solid fa-hand-pointer',t:'الوظائف الأساسية',s:'هل يظهر الاحتياج؟',
+  d:'أضف احتياجاً تجريبياً، ثم افتح «احتياجات إدارتي» ولوحة المشتريات بالدور المناسب',p:'يظهر الاحتياج فوراً بالحالة «جديد» في الصفحتين دون تكرار'},
+ {i:'fa-solid fa-triangle-exclamation',t:'المدخلات الخاطئة',s:'هل يُرفض الخطأ؟',
+  d:'جرّب تكلفة سالبة، وكمية مكتوبة نصاً، ومبرراً فارغاً، ثم وصفاً مشابهاً في الإدارة والربع نفسيهما',p:'يرفض القيم غير الصحيحة برسالة واضحة، وينبّه إلى التشابه قبل الحفظ'},
+ {i:'fa-solid fa-database',t:'دقة المجاميع',s:'هل يطابق الإجمالي مدخلاتك؟',
+  d:'أدخل خمسة احتياجات تجريبية معروفة المجموع، وقارن إجمالي كل ربع في اللوحة بحسابك اليدوي',p:'تطابق مجاميع الربع والفئة التكاليف المدخلة دون أرقام مضافة'},
  {i:'fa-solid fa-user-lock',t:'الخصوصية والصلاحيات',s:'من يرى ماذا؟',
-  d:'ادخل بحساب معلم وتأكد أنك لا ترى حجوزات زملائك أو لوحة الأمين، وأن النموذج لا يطلب بيانات طلاب',p:'يرى المعلم حجوزاته فقط ولا تُجمع أي بيانات عن الطلاب'},
- {i:'fa-solid fa-mobile-screen',t:'جدول الحصص على الجوال',s:'هل يبقى واضحًا على شاشة صغيرة؟',
-  d:'افتح الموقع على الجوال وتأكد أن جدول الحصص مقروء وأن الأزرار لا تتداخل',p:'الجدول مقروء، والأزرار قابلة للضغط، ولا تتداخل العناصر'},
- {i:'fa-solid fa-plug-circle-exclamation',t:'المرفق غير المتاح',s:'ماذا لو كانت الحصة مغلقة؟',
-  d:'جرّب حصة أغلقها أمين المصادر أو يوم اختبار محدد، ويجب أن تظهر رسالة واضحة',p:'يُمنع الحجز مع توضيح السبب، ويبقى اختيار حصة أخرى ممكنًا'}
+  d:'ادخل بحساب منسق إدارة تجريبية، وتأكد أنه لا يرى احتياجات إدارة أخرى ولا يستطيع تغيير الحالة',p:'يرى المنسق إدارته ويعدّل «جديد» فقط، وأخصائي التخطيط يرى الجميع ويغيّر الحالة'},
+ {i:'fa-solid fa-mobile-screen',t:'الأجهزة والقراءة',s:'هل يعمل على الجوال؟',
+  d:'افتح عرض الجوال وراجع جدول المشتريات والمبالغ وفواصل الآلاف وعملة الريال',p:'يُقرأ الجدول دون تداخل، وتظهر المبالغ بفواصل الآلاف وعملة الريال'},
+ {i:'fa-solid fa-plug-circle-exclamation',t:'الاقتراح والمراجعة',s:'هل يبقى القرار للمنسق؟',
+  d:'جرّب وصفاً غامضاً، ثم راجع اقتراح الفئة واخترها يدوياً قبل الحفظ',p:'يظهر تنبيه مفهوم، ويبقى اختيار الفئة للمنسق واعتماد التقرير لأخصائي التخطيط'}
 ];
 var qaAcc=$('#qaAcc');
 if(qaAcc){
@@ -14013,7 +13903,7 @@ resetStudio();
       });
     });
   }
-  function all(root) { root = root || rootOf(); latinRuns(root); pass(root); options(root); buttons(root); }
+  function all(root) { root = root || rootOf(); latinRuns(root); pass(root); options(root); buttons(root); document.dispatchEvent(new Event("samai:textfirst")); }
   var t = 0;
   function soon(ms) { clearTimeout(t); t = setTimeout(function () { requestAnimationFrame(function () { all(); }); }, ms || 160); }
   window.SAMAI_textFirst = function (root) { all(root); };

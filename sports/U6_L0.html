@@ -184,7 +184,8 @@ ul,ol{margin:0;padding:0;list-style:none}
 .u-head{display:flex;flex-direction:column;width:100%;padding:0;border:0;background:none;text-align:start;cursor:pointer;font:inherit;color:inherit}
 .u-head:focus-visible{outline:3px solid var(--navy-600);outline-offset:-3px;border-radius:var(--radius-md)}
 .u-band{display:flex;align-items:center;justify-content:space-between;padding:var(--space-5) var(--pad);background:var(--navy-100);transition:background var(--dur-3) var(--ease)}
-.u-num{font-size:40px;font-weight:700;line-height:1;color:var(--text-primary);font-variant-numeric:tabular-nums;transition:color var(--dur-3) var(--ease)}
+.u-num{display:inline-flex;align-items:baseline;gap:10px;font-size:40px;font-weight:700;line-height:1;color:var(--text-primary);font-variant-numeric:tabular-nums;transition:color var(--dur-3) var(--ease)}
+.u-num-l{font-size:18px;font-weight:600}
 .u-ic{display:grid;place-items:center;width:var(--control-md);height:var(--control-md);border-radius:var(--radius-sm);background:var(--surface);border:1px solid var(--navy-200);color:var(--text-primary);font-size:17px;transition:background var(--dur-3) var(--ease),color var(--dur-3) var(--ease),border-color var(--dur-3) var(--ease)}
 .u-main{display:block;padding:var(--space-5) var(--pad)}
 /* titles take only the room they need; cards side by side are evened out in the script */
@@ -1104,7 +1105,7 @@ b,strong{font-weight:700}
     </section>
 
     <section class="section" id="outline">
-      <div class="section-head reveal"><div><span class="kicker">الدروس</span><h2>محتوى الوحدة</h2></div></div>
+      <div class="section-head reveal"><div><h2>محتوى الوحدة</h2></div></div>
       <ol class="path" id="path"></ol>
     </section>
 
@@ -1331,7 +1332,7 @@ const bidi = (t) => t.split(/(\(?[A-Za-z][A-Za-z0-9 .\-]*[A-Za-z0-9.]\)?)/).filt
 UNIT.lessons.forEach((l, i) => {
   const id = `lesson-${i + 1}`;
   const head = el("button", { class: "u-head", type: "button", id: `${id}-head`, "aria-expanded": "false", "aria-controls": `${id}-topics` },
-    el("span", { class: "u-band" }, el("span", { class: "u-num", "aria-hidden": "true", text: pad(i + 1) }), el("span", { class: "u-ic" }, icon(l.icon))),
+    el("span", { class: "u-band" }, el("span", { class: "u-num" }, el("small", { class: "u-num-l", text: "الدرس" }), el("span", { text: pad(i + 1) })), el("span", { class: "u-ic" }, icon(l.icon))),
     el("span", { class: "u-main" },
       el("span", { class: "u-title" }, bidi(l.title)),
       el("span", { class: "u-bar" }, el("span", { class: "u-count topics", text: topicsWord(l.items.length) }), el("span", { class: "chev", "aria-hidden": "true" }, icon("chevron-down")))));
@@ -1905,6 +1906,8 @@ if ("IntersectionObserver" in window && !reduced) {
         '<button type="button" class="uv-b uv-fs" aria-label="ملء الشاشة">' + I("expand") + '</button>' +
       '</div></div>';
   var q = function (s) { return frame.querySelector(s); };
+  // a unit with no intro video in its package shows no player
+  q(".uv-video").addEventListener("error", function () { frame.closest("#unit-video").hidden = true; });
   var v = q(".uv-video"), big = q(".uv-big"), hud = q(".uv-hud"), fx = q(".uv-seekfx"), scrub = q(".uv-scrub"), fill = q(".uv-fill"), buf = q(".uv-buf"), thumb = q(".uv-thumb"), tip = q(".uv-tip");
   var bPlay = q(".uv-play"), bMute = q(".uv-mute"), volr = q(".uv-volr"), bRate = q(".uv-rate"), menu = q(".uv-menu"), bFs = q(".uv-fs");
   q(".uv-unit").textContent = unitWord; q(".uv-title").textContent = UNIT.title;
