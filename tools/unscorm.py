@@ -20,7 +20,7 @@ FONT = "https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+Arabic:wght@300;4
 ICONS = "https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css"
 PRECONNECT = ('<link rel="preconnect" href="https://fonts.googleapis.com">\n'
               '<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>\n')
-BOOT = re.compile(r'\n<script>window\.__SAMAI_SCO=[^<]*</script>\n<script id="samai-scorm">\n.*?\n</script>\n', re.S)
+BOOT = re.compile(r'\n<script>window\.__SAMAI_SCO ?= ?[^<]*</script>\n<script id="samai-scorm">\n.*?\n</script>\n', re.S)
 
 
 def page(html):
